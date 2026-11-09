@@ -88,3 +88,12 @@ Prior experience with every technology is not required. Contributors will work i
 A basic understanding of programming, Git, and software development is recommended. More advanced topics such as MCP, RAG, agent orchestration, cloud deployment, and software supply-chain security will be introduced throughout the project.
 
 Bring your curiosity, willingness to learn, and interest in building secure and transparent AI systems.
+
+## 🤝 Contributing
+We welcome contributions from all experience levels! Before you start, please read:
+
+- [Contributing Guide](CONTRIBUTING.md): setup, claiming issues, branch and commit conventions, pull requests, testing, and code review
+- [Code of Conduct](CODE_OF_CONDUCT.md): how we treat each other
+- [Security Policy](SECURITY.md): how to privately report vulnerabilities
+
+Found a bug or have an idea? [Open an issue](https://github.com/DSC-McMaster-U/sentinel/issues/new/choose) using one of our templates.
