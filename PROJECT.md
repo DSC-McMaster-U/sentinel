@@ -2,26 +2,37 @@
 
 ## Table of Contents
 
-- [Project Description](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#-project-description)
-- [Objectives](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#objectives)
-- [Stakeholders](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#stakeholders)
-- [Scope](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#scope)
-- [System Workflow](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#system-workflow)
-- [Implementation Plan](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#-implementation-plan)
-- [Project Timeline](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#project-timeline)
-- [Technical Architecture](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#technical-architecture)
-- [Agent Design](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#agent-design)
-- [Tech Stack](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#tech-stack)
-- [Project Structure](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#project-structure)
-- [MCP Tool Design](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#mcp-tool-design)
-- [API Design](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#api-design)
-- [Testing and Evaluation](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#testing-and-evaluation)
-- [CI/CD and Hosting](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#cicd-and-hosting)
-- [Team Management](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#-team-management)
-- [Roles and Responsibilities](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#roles-and-responsibilities)
-- [Communication](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#communication)
-- [Definition of Done](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#definition-of-done)
-- [Sprint Planning](https://chatgpt.com/g/g-p-68d86d526e508191ad3ddd09399a432e/c/69d34de7-3ac8-8328-bd08-4c7cb3d93926#-sprint-planning)
+- [Project Description](#-project-description)
+  - [Objectives](#objectives)
+  - [Stakeholders](#stakeholders)
+- [Scope](#scope)
+  - [Minimum Viable Product](#minimum-viable-product)
+  - [Initial Supported Ecosystems](#initial-supported-ecosystems)
+  - [Stretch Goals](#stretch-goals)
+- [System Workflow](#system-workflow)
+- [Implementation Plan](#-implementation-plan)
+  - [Project Timeline](#project-timeline)
+- [Technical Architecture](#technical-architecture)
+  - [Main Services](#main-services)
+- [Agent Design](#agent-design)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [MCP Tool Design](#mcp-tool-design)
+- [API Design](#api-design)
+- [Testing and Evaluation](#testing-and-evaluation)
+- [CI/CD and Hosting](#cicd-and-hosting)
+- [Team Management](#-team-management)
+  - [Team Members](#team-members)
+  - [Roles and Responsibilities](#roles-and-responsibilities)
+  - [Communication](#communication)
+- [Definition of Done](#definition-of-done)
+- [Sprint Planning](#-sprint-planning)
+  - [Working Model](#working-model)
+  - [Sprint 1 — November 9–22, 2026](#sprint-1--november-922-2026)
+  - [Sprint 1 Deliverables by Workstream](#sprint-1-deliverables-by-workstream)
+  - [Sprint 1 Definition of Success](#sprint-1-definition-of-success)
+  - [Sprint Planning Template](#sprint-planning-template)
+  - [Definition of Done for Issues](#definition-of-done-for-issues)
 
 ---
 
@@ -150,83 +161,81 @@ This prevents the model from guessing when security analysis is required.
 ## 🧭 Implementation Plan
 
 ## Project Timeline
-The project will be divided into six major milestones.
 
-### Milestone 1: Foundations and Onboarding
-**Target:** September to early October
+Sentinel will follow six two-week sprints beginning November 9, 2026, with an optional holiday buffer. Dates and deliverables are planning targets and may be adjusted based on team capacity, exams, integration progress, and technical discoveries.
 
-- Introduce contributors to Git, GitHub, pull requests, and open-source workflows.
-- Finalize project architecture and supported ecosystems.
-- Set up frontend, backend, MCP server, and infrastructure repositories.
-- Configure GitHub Projects and contribution guidelines.
-- Build a basic GitHub webhook receiver.
-- Create initial UI wireframes.
-- Define shared data models and tool schemas.
+| Period | Dates | Primary focus | Target outcome |
+|---|---|---|---|
+| Sprint 1 | Nov 9–22, 2026 | Foundation and shared contracts | Sample PR flows through FastAPI, mock LangGraph agents, and structured findings |
+| Sprint 2 | Nov 23–Dec 6, 2026 | Real dependency and CI/CD checks; GitHub intake | First deterministic security findings with evidence on real or representative PR inputs |
+| Sprint 3 | Dec 7–20, 2026 | End-to-end MVP integration | Working PR-to-report flow, with core checks and reproducible tests |
+| Holiday buffer | Dec 21, 2026–Jan 3, 2027 | Optional async fixes, documentation and rest | No mandatory sprint commitments |
+| Sprint 4 | Jan 4–17, 2027 | Human review, dashboard and release risk | Reviewable findings, reviewer decisions, initial release checks |
+| Sprint 5 | Jan 18–31, 2027 | Security hardening and evaluation | Prompt-injection safeguards, tracing, improved precision and reliability |
+| Sprint 6 | Feb 1–14, 2027 | Beta, deployment and demo | Deployed beta candidate, documentation, evaluation summary and demonstration |
 
-### Milestone 2: Deterministic Pull Request Analysis
-**Target:** October
+### Sprint 1: Foundations and Vertical Slice (November 9–22)
 
-- Retrieve pull request metadata and file diffs.
-- Classify changed files.
-- Detect package manifests, lockfiles, workflow files, and release files.
-- Implement npm dependency parsing.
-- Normalize dependency changes into a shared schema.
-- Add support for a second package ecosystem.
-- Store review sessions in PostgreSQL.
+- Establish shared PR context, agent input/output, and security finding schemas by November 11.
+- Build deterministic file classification and a LangGraph workflow with placeholder Dependency, CI/CD, and Release nodes.
+- Set up FastAPI endpoints and a read-only MCP repository tool prototype.
+- Prototype source-aware repository ingestion and keyword retrieval.
+- Configure Docker, GitHub Actions CI, and contributor documentation.
+- Design a findings interface and create labelled evaluation fixtures.
+- Integrate a sample PR → FastAPI → LangGraph → mock agents → synthesis → structured findings demo by November 22.
 
-### Milestone 3: Custom MCP Server
-**Target:** November
+**Out of scope for Sprint 1:** production-grade LLM analysis, full vulnerability intelligence, live GitHub publication, production deployment, and a fully integrated frontend. Mock data is acceptable for the first vertical slice.
 
-- Build the Sentinel MCP server.
-- Expose structured repository and security tools.
-- Deploy the MCP server using Streamable HTTP.
-- Add authentication and authorization.
-- Connect the workflow backend to the MCP server.
-- Integrate one existing MCP server where useful.
-Initial tools may include:
+### Sprint 2: Security Checks and GitHub Intake (November 23–December 6)
 
-- `get_pull_request_diff`
-- `get_changed_files`
-- `get_dependency_changes`
-- `get_workflow_changes`
-- `get_repository_security_policy`
-- `get_previous_findings`
-- `lookup_package_metadata`
-- `lookup_vulnerability_data`
+- Receive and validate GitHub webhook events; retrieve PR metadata and diffs with least-privilege access.
+- Implement initial deterministic dependency and GitHub Actions checks using Sprint 1 rules and fixtures.
+- Expand MCP tools for changed files, workflow inspection and dependency metadata.
+- Add npm/Node.js parsing first, with Python support as capacity allows.
+- Attach source paths, line references, tool evidence and uncertainty to findings.
+- Extend integration tests to exercise realistic PR changes.
 
-### Milestone 4: MVP Agent Workflow
-**Target:** January to February
+### Sprint 3: End-to-End MVP (December 7–20)
 
-- Implement the Intake Agent.
-- Implement the Dependency Agent.
-- Implement the CI/CD Agent.
-- Implement the Repository Context Agent.
-- Implement the Risk Synthesis Agent.
-- Build the LangGraph state machine.
-- Add retries, checkpoints, and error handling.
-- Produce a structured security report.
+- Connect GitHub intake, file classification, real security checks, repository context and risk synthesis.
+- Normalize findings, deduplicate repeated results, and distinguish verified facts from inferred risks.
+- Produce an evidence-backed review report from a representative pull request.
+- Add failure handling, timeouts and basic workflow tracing.
+- Test safe and unsafe PR examples; document known limitations.
+- Keep commitments flexible during December exams.
 
-### Milestone 5: RAG, Transparency, and Human Approval
-**Target:** February to March
+### Holiday Buffer (December 21–January 3)
 
-- Build the repository indexing pipeline.
-- Add hybrid semantic and keyword retrieval.
-- Index security policies, architecture docs, and prior findings.
-- Show evidence for each finding.
-- Build the human approval dashboard.
-- Allow findings to be approved, edited, dismissed, or escalated.
-- Add workflow and tool-call traces.
+- No mandatory work or meetings.
+- Optional documentation, bug fixes, review of open PRs and preparation for January.
 
-### Milestone 6: Evaluation, Deployment, and Final Release
-**Target:** March to April
+### Sprint 4: Human Review and Release Analysis (January 4–17)
 
-- Create vulnerable pull request test cases.
-- Measure false-positive and false-negative rates.
-- Improve agent routing and prompts.
-- Harden cloud deployment.
-- Improve documentation and onboarding.
-- Prepare the final demo.
-- Publish the project as an open-source release.
+- Implement dashboard views for findings, evidence, severity and uncertainty.
+- Add human review actions: confirm, dismiss, request changes or escalate.
+- Persist review decisions where needed.
+- Add initial build/release configuration checks.
+- Prototype publishing approved findings to GitHub, with appropriate permissions and safeguards.
+
+### Sprint 5: Hardening and Evaluation (January 18–31)
+
+- Treat repository content, diffs and tool responses as untrusted inputs.
+- Add prompt-injection and unsafe tool-use tests; keep MCP tools read-only by default.
+- Expand labelled PR fixtures and evaluate precision, recall and false positives.
+- Improve observability, tool-call tracing, error handling and review latency.
+- Refine evidence quality and reduce unsupported security claims.
+
+### Sprint 6: Beta and Demonstration (February 1–14)
+
+- Prepare a reproducible cloud deployment, with secure secrets management.
+- Run end-to-end regression tests and a small beta evaluation.
+- Polish the dashboard, API documentation and contributor onboarding.
+- Publish deployment and architecture instructions, known limitations and a demo walkthrough.
+- Present the beta and prioritize follow-on work based on feedback.
+
+### Post-Beta Backlog
+
+Additional ecosystems, richer package provenance and maintainer analysis, sandboxed behavior analysis, repository security memory, infrastructure-as-code checks, advanced release artifact analysis, GitHub Marketplace distribution and broader public release work are future options, not commitments for the six-sprint beta timeline.
 
 ---
 
@@ -500,10 +509,16 @@ sentinel/
 │   ├── mcp/
 │   └── security/
 │
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   ├── CODEOWNERS
+│   └── PULL_REQUEST_TEMPLATE.md
+│
 ├── README.md
 ├── CONTRIBUTING.md
+├── CODE_OF_CONDUCT.md
 ├── SECURITY.md
-└── PROJECT_PLAN.md
+└── PROJECT.md
 ```
 
 ---
@@ -685,16 +700,21 @@ GitHub Actions will be used for:
 ## 📋 Team Management
 
 ## Team Members
-The project is intended for approximately 10 contributors.
 
-- **Project Lead / Scrum Master / Product Owner:** Lukhsaan Elankumaran
-- **Frontend Developers:** 2
-- **Backend Developers:** 2
-- **MCP and Integration Developers:** 2
-- **Agent Workflow Developers:** 2
-- **Retrieval and Evaluation Developers:** 1
-- **Cloud and DevOps Developer:** 1
-Roles may overlap depending on contributor interests and experience.
+Sentinel is led by Lukhsaan Elankumaran with twelve contributors organized into six initial pairs. Assignments are proposed starting points and can change based on contributor preferences and sprint planning.
+
+| Primary workstream | Initial pair | Sprint 1 focus |
+|---|---|---|
+| Agent Architecture | Sarthak Kulashari and Alex Melnbardis | LangGraph state, routing and mock agents |
+| Security Agents | Rohit Suryadevara and Ronn Philip | Dependency and CI/CD detection rules |
+| Backend and MCP | Megh Joshi and Behzad Janjua | FastAPI, Pydantic contracts and read-only MCP tool |
+| Repository Context | Yug Vashisth and Toheeb Eji | Repository ingestion and retrieval |
+| Cloud and DevOps | Neel Oza and Parmeet Abbat | Local Docker, GitHub Actions and setup docs |
+| Product and Evaluation | Saqib Khan and Nana Appiagyei Poku | Findings UI and labelled test fixtures |
+
+**Cross-team coordination:** Megh and Sarthak coordinate shared schemas; Neel and Parmeet coordinate contribution guidelines; Sarthak and Behzad coordinate the Sprint 1 integration demo. These are additional responsibilities, not separate full-time teams.
+
+Contributors may collaborate beyond their primary issue, while allowing the assigned owners to lead implementation and receive meaningful credit. Across future sprints, members should have opportunities to explore other areas while developing ownership of a specific Sentinel subsystem.
 
 ---
 
@@ -775,23 +795,25 @@ Roles may overlap depending on contributor interests and experience.
 - **Project tracking:** GitHub Projects
 - **Meetings:** Google Meet and in-person sessions
 
-### Suggested Schedule
+### Meeting and Update Cadence
 
-- Weekly sprint review
-- Biweekly sprint retrospective
-- Biweekly in-person work session
-- Monthly project demo
-- Additional technical workshops during onboarding
+- **Weekly team meeting:** Sundays, 3:30–4:00 PM Eastern Time, subject to team confirmation.
+- **Sprint length:** Two weeks, Monday through the second Sunday.
+- **Midweek asynchronous update:** Thursday in Discord, noting completed work, next steps and blockers.
+- **Mid-sprint check-in:** Sunday meeting after the first week.
+- **Sprint review and planning:** Sunday meeting at the end of the second week; demonstrate working artifacts and select the next sprint's issues.
+- **Code and task tracking:** GitHub Issues, pull requests and GitHub Projects; Discord is for coordination and unblock requests.
 
-### In-Person Sessions
-In-person work sessions will be used to:
+For Sprint 1, the key checkpoints are November 11 (shared contracts), November 12 (first async update), November 13 (contribution workflow), November 15 (mid-sprint review), November 19 (integration checkpoint), and November 22 (demo and retrospective).
 
-- Help contributors work through blockers.
-- Pair newer and more experienced developers.
-- Review architecture decisions.
-- Test integrations.
-- Demo completed work.
-- Build stronger team collaboration.
+### Collaboration Expectations
+
+- Each issue has clear owners and an expected deliverable; cross-team help is welcome.
+- Open draft PRs early when possible, rather than integrating everything on the last day.
+- Raise blockers in Discord promptly and link related GitHub issues or PRs.
+- Every contributor is accountable for code they submit, including AI-assisted work. AI tools are encouraged as accelerators, but contributors should understand, test and be able to explain their changes.
+- Security-related code and findings must be validated; do not treat generated outputs as verified evidence.
+- Optional in-person work sessions and technical workshops can be organized when useful and feasible.
 
 ---
 
@@ -814,142 +836,69 @@ A pull request is considered complete when:
 
 ## 👟 Sprint Planning
 
-### Sprint Length
+### Working Model
 
-- Standard sprint length: two weeks
-- Weekly check-ins may be used within each sprint
+- **Standard sprint:** Two weeks.
+- **Board columns:** Backlog, Ready, In Progress, In Review, Done.
+- **Issue ownership:** Usually two contributors per implementation issue, with a clear lead for cross-team coordination issues.
+- **Priority:** P0 for critical dependencies and integration; P1 for important supporting work.
+- **Review:** At least one other contributor reviews implementation PRs before merge.
+- **Sprint review:** Demo completed functionality, note unfinished work and blockers, and revise the next sprint's scope.
 
-## High-Level Sprint Goals
+### Sprint 1 — November 9–22, 2026
 
-### Sprint 1: Onboarding and Architecture
+**Sprint goal:** Demonstrate a sample pull request passing through a FastAPI review endpoint, deterministic LangGraph routing, mock security agents and risk synthesis, returning a validated structured finding. Supporting teams will deliver repository retrieval, CI, UI design and evaluation fixtures.
 
-- Introduce Git and GitHub workflow.
-- Finalize architecture.
-- Create repository structure.
-- Configure GitHub Projects.
-- Create starter issues.
-- Set up local development.
+| Issue title | Suggested owners | Priority | Target |
+|---|---|---|---|
+| Implement Initial LangGraph Agent Orchestration | Sarthak + Alex | P0 | Nov 22 |
+| Research and Define Initial Dependency and CI/CD Security Checks | Rohit + Ronn | P0 | Nov 22 |
+| Set Up FastAPI Backend and Initial MCP Tool Integration | Megh + Behzad | P0 | Nov 22 |
+| Prototype Repository Context Ingestion and Retrieval | Yug + Toheeb | P1 | Nov 22 |
+| Configure Local Development Environment, Docker, and GitHub Actions CI | Neel + Parmeet | P0 | Nov 22 |
+| Design Security Findings Dashboard and Initial Evaluation Framework | Saqib + Nana | P1 | Nov 22 |
+| Finalize Shared API Schemas and Agent Communication Contracts | Megh + Sarthak | P0 | Nov 11 |
+| Establish GitHub Contribution Guidelines and Pull Request Templates | Neel + Parmeet | P1 | Nov 13 |
+| Integrate Sprint 1 Components into an End-to-End Sentinel Demo | Sarthak + Behzad | P0 | Nov 22 |
 
-### Sprint 2: GitHub Integration
+These assignments are initial recommendations; GitHub issue assignees are the source of truth after contributors confirm ownership.
 
-- Receive pull request webhooks.
-- Fetch pull request metadata.
-- Retrieve changed files.
-- Store review sessions.
+### Sprint 1 Deliverables by Workstream
 
-### Sprint 3: File Classification
+**Agent Architecture:** Shared LangGraph state, deterministic classification, conditional routing, mock Dependency/CI/CD/Release nodes, synthesis and tests.
 
-- Detect dependency files.
-- Detect workflow files.
-- Detect release configuration.
-- Add routing rules.
-- Create normalized change schemas.
+**Security Agents:** At least three dependency and three CI/CD checks documented with detection criteria, evidence, safe/unsafe fixtures and false-positive limitations.
 
-### Sprint 4: Dependency Parsing
+**Backend and MCP:** Running FastAPI application, health and mock review endpoints, validated Pydantic models, one read-only repository/diff MCP tool and tests.
 
-- Build npm parser.
-- Compare manifest and lockfile changes.
-- Add Python parser.
-- Write parser tests.
+**Repository Context:** Sample repository ingestion, keyword retrieval, file-path references and a reproducible demonstration.
 
-### Sprint 5: MCP Server Foundations
+**Cloud and DevOps:** Docker-based local setup, automated GitHub Actions lint/test, contributor instructions and a Cloud Run deployment proposal.
 
-- Set up MCP server.
-- Create repository tools.
-- Create dependency tools.
-- Add structured schemas.
-- Deploy a development instance.
+**Product and Evaluation:** Findings dashboard wireframe, evidence/uncertainty and human-review design, at least six labelled PR fixtures and a basic evaluation harness.
 
-### Sprint 6: Package Risk Lookups
+**Coordination:** Shared schemas by November 11, contribution process by November 13, and end-to-end integration demo by November 22.
 
-- Query registry metadata.
-- Query vulnerability sources.
-- Detect install scripts.
-- Normalize risk signals.
-- Add caching and error handling.
+### Sprint 1 Definition of Success
 
-### Sprint 7: Agent Workflow Foundations
+A reproducible local demo follows this path:
 
-- Build Intake Agent.
-- Build Dependency Agent.
-- Define LangGraph state.
-- Add agent traces.
-- Add basic report generation.
 
-### Sprint 8: CI/CD Review
+a sample PR → FastAPI → LangGraph Intake → appropriate mock agents → Risk Synthesis → structured findings.
 
-- Build CI/CD Agent.
-- Detect broad permissions.
-- Detect unpinned actions.
-- Detect unsafe commands.
-- Add workflow policy retrieval.
+The demonstration must include a sample request/response, passing integration test and instructions for running it. Production deployment, live GitHub publishing, complete RAG and fully implemented AI agents are not required in Sprint 1.
 
-### Sprint 9: Repository RAG
+### Sprint Planning Template
 
-- Index repository policies.
-- Build hybrid retrieval.
-- Add metadata filters.
-- Build Repository Context Agent.
-- Display retrieved evidence.
+For each future sprint, record:
 
-### Sprint 10: Risk Synthesis
+- **Dates and sprint goal**
+- **Issues, priorities and assignees**
+- **Dependencies and early checkpoints**
+- **Expected demo or measurable deliverable**
+- **Risks and capacity constraints**
+- **Retrospective:** what shipped, what slipped, blockers and what to improve
 
-- Build Risk Synthesis Agent.
-- Combine duplicate findings.
-- Assign severity and confidence.
-- Generate recommended actions.
+### Definition of Done for Issues
 
-### Sprint 11: Human Approval UI
-
-- Display findings.
-- Show evidence.
-- Add approve, dismiss, edit, and escalate actions.
-- Persist reviewer decisions.
-
-### Sprint 12: GitHub Reporting
-
-- Publish approved findings.
-- Add pull request summaries.
-- Handle retries and permissions.
-- Test the full workflow.
-
-### Sprint 13: Evaluation
-
-- Create vulnerable test PRs.
-- Measure precision and recall.
-- Track false positives.
-- Improve routing and prompts.
-
-### Sprint 14: Deployment and Final Release
-
-- Harden Cloud Run services.
-- Finalize CI/CD.
-- Improve documentation.
-- Prepare final presentation.
-- Publish the open-source release.
-
----
-
-## Sprint Planning Template
-
-### Sprint Duration
-
-- **Sprint Length:** Two weeks
-- **Start Date:** TBD
-- **End Date:** TBD
-
-### Sprint Goals
-
-1. Goal 1
-2. Goal 2
-3. Goal 3
-
-### User Stories
-IDUser StoryPriorityStory PointsAssigneeUS01As a maintainer, I want Sentinel to detect changed dependency files so that dependency reviews are triggered reliably.High5TBDUS02As an agent, I want normalized package metadata so that I do not need to interpret raw lockfiles.High5TBDUS03As a maintainer, I want to see supporting evidence for a finding so that I can decide whether to approve it.High3TBDUS04As a contributor, I want clear local setup instructions so that I can begin development quickly.Medium2TBD
-### Sprint Review Questions
-
-- What was completed?
-- What remains unfinished?
-- What technical blockers were discovered?
-- What should be changed in the next sprint?
-- Are contributors receiving enough support and ownership?
+An issue is complete when its acceptance criteria are met, relevant tests and documentation are included, the work is demonstrated where appropriate, and the corresponding PR has passed review. Research and design issues may be completed with reviewed documentation, fixtures or wireframes rather than production code.
