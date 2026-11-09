@@ -1,0 +1,13 @@
+# CODEOWNERS
+#
+# GitHub automatically requests a review from the owners listed here
+# whenever a pull request changes matching files.
+# Combined with the "Require review from Code Owners" branch protection rule,
+# a code owner must approve a PR before it can be merged into main.
+#
+# Syntax: <file pattern> <@user or @org/team> ...
+# Later rules take precedence over earlier ones.
+# Docs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for everything in the repository
+* @lukhsaankumar
