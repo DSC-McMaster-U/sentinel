@@ -14,6 +14,8 @@ __pycache__/
 *.py[cod]
 .venv/
 venv/
+.venv-1/
+venv-1/
 *.egg-info/
 .eggs/
 .pytest_cache/
@@ -66,3 +68,5 @@ Thumbs.db
 
 # Local GitHub sprint management tools
 /.local/github-management/
+
+.vibe-wise/
