@@ -19,6 +19,8 @@ All contributors must follow our [Code of Conduct](CODE_OF_CONDUCT.md). Please b
 
 ## Getting Started
 
+> New to the codebase? Start with [docs/onboarding/GETTING_STARTED.md](docs/onboarding/GETTING_STARTED.md) and see [where your code goes](docs/architecture/REPOSITORY_STRUCTURE.md).
+
 1. **Fork or clone the repository.** Team members with write access can clone directly. Everyone else should [fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) the repo first.
 
    ```bash
