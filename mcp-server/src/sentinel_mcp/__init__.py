@@ -1,1 +1,1 @@
-"""Sentinel MCP server package. Owners: Megh + Behzad. See mcp-server/README.md."""
+"""Sentinel MCP server package. Owners: Toheeb + Parmeet (#3). See mcp-server/README.md."""

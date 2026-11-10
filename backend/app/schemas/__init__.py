@@ -1,1 +1,1 @@
-"""Shared Pydantic schemas and agent contracts. Coordinated by Megh + Sarthak. See README.md."""
+"""Shared Pydantic schemas and agent contracts. Owners: Ronn + Neel (#7). See README.md."""

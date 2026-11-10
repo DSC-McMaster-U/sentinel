@@ -1,1 +1,1 @@
-"""Risk synthesis: combine, deduplicate and score findings. Owners: Rohit + Ronn with Sarthak + Alex."""
+"""Risk synthesis: combine, deduplicate and score findings. Owners: Neel + Alex (#1)."""

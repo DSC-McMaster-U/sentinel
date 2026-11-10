@@ -12,6 +12,6 @@ Each check should document:
 - **Safe and unsafe examples**, linked to `evaluation/fixtures/`
 - **False-positive limitations**
 
-**Primary owners:** Rohit + Ronn
+**Primary owners:** Jin + Behzad (#2)
 
-> **TODO (Sprint 1, Rohit + Ronn: "Research and Define Initial Dependency and CI/CD Security Checks"):** at least three dependency checks and three CI/CD checks.
+> **TODO (Sprint 1, Jin + Behzad, #2: "Research and Define Initial Dependency and CI/CD Security Checks"):** at least three dependency checks and three CI/CD checks.

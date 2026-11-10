@@ -10,6 +10,6 @@ The Sentinel MCP server, built with the Model Context Protocol Python SDK. It gi
 
 Tools should return **structured facts** (normalized JSON), not raw data for the model to interpret. Tools call adapters and never make raw HTTP calls themselves.
 
-**Primary owners:** Megh + Behzad
+**Primary owners:** Toheeb + Parmeet (#3)
 
-> **TODO (Sprint 1, Megh + Behzad: "Set Up FastAPI Backend and Initial MCP Tool Integration"):** one read-only repository/diff tool with tests, and packaging (`pyproject.toml`) for this server.
+> **TODO (Sprint 1, Toheeb + Parmeet, #3: "Set Up FastAPI Backend and Initial MCP Tool Integration"):** one read-only repository/diff tool with tests, and packaging (`pyproject.toml`) for this server.

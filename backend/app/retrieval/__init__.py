@@ -1,1 +1,1 @@
-"""Repository context retrieval. Owners: Yug + Toheeb. See README.md."""
+"""Repository context retrieval. Owners: Yug + Nana (#4). See README.md."""

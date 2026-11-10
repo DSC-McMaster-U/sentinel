@@ -851,15 +851,15 @@ A pull request is considered complete when:
 
 | Issue title | Suggested owners | Priority | Target |
 |---|---|---|---|
-| Implement Initial LangGraph Agent Orchestration | Sarthak + Alex | P0 | Nov 22 |
-| Research and Define Initial Dependency and CI/CD Security Checks | Rohit + Ronn | P0 | Nov 22 |
-| Set Up FastAPI Backend and Initial MCP Tool Integration | Megh + Behzad | P0 | Nov 22 |
-| Prototype Repository Context Ingestion and Retrieval | Yug + Toheeb | P1 | Nov 22 |
-| Configure Local Development Environment, Docker, and GitHub Actions CI | Neel + Parmeet | P0 | Nov 22 |
-| Design Security Findings Dashboard and Initial Evaluation Framework | Saqib + Nana | P1 | Nov 22 |
-| Finalize Shared API Schemas and Agent Communication Contracts | Megh + Sarthak | P0 | Nov 11 |
-| Establish GitHub Contribution Guidelines and Pull Request Templates | Neel + Parmeet | P1 | Nov 13 |
-| Integrate Sprint 1 Components into an End-to-End Sentinel Demo | Sarthak + Behzad | P0 | Nov 22 |
+| Implement Initial LangGraph Agent Orchestration | Neel + Alex | P0 | Nov 22 |
+| Research and Define Initial Dependency and CI/CD Security Checks | Jin + Behzad | P0 | Nov 22 |
+| Set Up FastAPI Backend and Initial MCP Tool Integration | Toheeb + Parmeet | P0 | Nov 22 |
+| Prototype Repository Context Ingestion and Retrieval | Yug + Nana | P1 | Nov 22 |
+| Configure Local Development Environment, Docker, and GitHub Actions CI | Saqib + Megh | P0 | Nov 22 |
+| Design Security Findings Dashboard and Initial Evaluation Framework | Sarthak + Rohit | P1 | Nov 22 |
+| Finalize Shared API Schemas and Agent Communication Contracts | Ronn + Neel | P0 | Nov 11 |
+| Establish GitHub Contribution Guidelines and Pull Request Templates | Lukhsaan | P1 | Nov 13 |
+| Integrate Sprint 1 Components into an End-to-End Sentinel Demo | Parmeet | P0 | Nov 22 |
 
 These assignments are initial recommendations; GitHub issue assignees are the source of truth after contributors confirm ownership.
 

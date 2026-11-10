@@ -23,7 +23,7 @@ cp .env.example .env              # macOS / Linux
 Copy-Item .env.example .env       # Windows PowerShell
 ```
 
-> **TODO (Neel + Parmeet):** add dependency install and run instructions once `requirements.txt` / `pyproject.toml` and Docker are set up.
+> **TODO (Saqib + Megh, #5):** add dependency install and run instructions once `requirements.txt` / `pyproject.toml` and Docker are set up.
 
 ## 3. Find Your Directory
 
@@ -31,12 +31,14 @@ Find your group in [REPOSITORY_STRUCTURE.md](../architecture/REPOSITORY_STRUCTUR
 
 | Group | Start here |
 | --- | --- |
-| Sarthak + Alex | `backend/app/workflows/` |
-| Rohit + Ronn | `backend/app/agents/`, `docs/security-checks/` |
-| Megh + Behzad | `backend/app/api/`, `backend/app/schemas/`, `mcp-server/` |
-| Yug + Toheeb | `backend/app/retrieval/` |
-| Neel + Parmeet | `infrastructure/`, `.github/workflows/` |
-| Saqib + Nana | `frontend/`, `evaluation/` |
+| Neel + Alex (#1) | `backend/app/workflows/`, `backend/app/agents/` |
+| Jin + Behzad (#2) | `docs/security-checks/`, `evaluation/fixtures/` |
+| Toheeb + Parmeet (#3) | `backend/app/api/`, `mcp-server/` |
+| Yug + Nana (#4) | `backend/app/retrieval/` |
+| Saqib + Megh (#5) | `infrastructure/`, `.github/workflows/`, `.env.example` |
+| Sarthak + Rohit (#6) | `frontend/`, `evaluation/` |
+| Ronn + Neel (#7) | `backend/app/schemas/` |
+| Parmeet (#9) | `backend/app/services/`, `backend/tests/integration/` |
 
 ## 4. Create a Feature Branch
 

@@ -4,15 +4,15 @@ The Sentinel backend: a Python FastAPI service that accepts pull request data, r
 
 | Path | What goes here | Primary owners |
 | --- | --- | --- |
-| `app/api/routes/` | FastAPI routers (HTTP layer only) | Megh + Behzad |
-| `app/schemas/` | Shared Pydantic models and contracts | Megh + Behzad (contracts with Sarthak) |
-| `app/github/` | GitHub webhook and API integration | Megh + Behzad |
-| `app/workflows/` | LangGraph state, routing and graphs | Sarthak + Alex |
-| `app/agents/` | Security agents and checks | Rohit + Ronn |
-| `app/retrieval/` | Repository context ingestion and search | Yug + Toheeb |
-| `app/services/` | Business logic between API and workflows | Megh + Behzad |
-| `app/core/` | Config, logging and shared errors | Megh + Behzad (env config with Neel + Parmeet) |
-| `tests/unit/`, `tests/integration/` | Tests | Everyone; integration coordinated by Sarthak + Behzad |
+| `app/api/routes/` | FastAPI routers (HTTP layer only) | Toheeb + Parmeet (#3); demo wiring by Parmeet (#9) |
+| `app/schemas/` | Shared Pydantic models and contracts | Ronn + Neel (#7) |
+| `app/github/` | GitHub webhook and API integration | Not assigned in Sprint 1 (GitHub intake starts in Sprint 2) |
+| `app/workflows/` | LangGraph state, routing and graphs | Neel + Alex (#1) |
+| `app/agents/` | Security agents and checks | Neel + Alex (#1) (Sprint 1 placeholder nodes); check definitions by Jin + Behzad (#2) |
+| `app/retrieval/` | Repository context ingestion and search | Yug + Nana (#4) |
+| `app/services/` | Business logic between API and workflows | Toheeb + Parmeet (#3); API-to-workflow wiring by Parmeet (#9) |
+| `app/core/` | Config, logging and shared errors | Toheeb + Parmeet (#3) (env config with Saqib + Megh (#5)) |
+| `tests/unit/`, `tests/integration/` | Tests | Everyone (unit tests with each issue); integration by Parmeet (#9) |
 
 ## Imports
 
@@ -22,6 +22,6 @@ Run Python commands from inside `backend/` so the `app` package is importable:
 from app.schemas import ...
 ```
 
-> **TODO (Sprint 1, Megh + Behzad: "Set Up FastAPI Backend and Initial MCP Tool Integration"):** create the FastAPI application entry point (e.g. `app/main.py`) with health and mock review endpoints.
+> **TODO (Sprint 1, Toheeb + Parmeet, #3: "Set Up FastAPI Backend and Initial MCP Tool Integration"):** create the FastAPI application entry point (e.g. `app/main.py`) with health and mock review endpoints.
 >
-> **TODO (Sprint 1, Neel + Parmeet: "Configure Local Development Environment, Docker, and GitHub Actions CI"):** add dependency management (`requirements.txt` or `pyproject.toml`) and run instructions here.
+> **TODO (Sprint 1, Saqib + Megh, #5: "Configure Local Development Environment, Docker, and GitHub Actions CI"):** add dependency management (`requirements.txt` or `pyproject.toml`) and run instructions here.

@@ -6,4 +6,4 @@ Repository-wide developer helper scripts, such as local setup, seeding sample da
 - Contributors use Windows, macOS and Linux. Prefer Python scripts, or provide both `.sh` and `.ps1` versions.
 - Evaluation scripts go in `evaluation/scripts/`, not here.
 
-**Ownership:** Shared. Neel + Parmeet review scripts that affect the dev environment or CI.
+**Ownership:** Shared. Saqib + Megh (#5) review scripts that affect the dev environment or CI.

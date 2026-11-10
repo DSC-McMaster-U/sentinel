@@ -6,28 +6,28 @@ Owners have **primary responsibility** for a directory: they review changes and 
 
 | Directory | Purpose | Primary owners |
 | --- | --- | --- |
-| `backend/app/api/` | FastAPI routes (HTTP layer) | Megh + Behzad |
-| `backend/app/schemas/` | Shared Pydantic models and agent contracts | Megh + Behzad (contracts: Megh + Sarthak) |
-| `backend/app/github/` | GitHub webhook and API integration | Megh + Behzad |
-| `backend/app/services/` | Application logic between API and workflows | Megh + Behzad |
-| `backend/app/core/` | Config, logging and shared errors | Megh + Behzad |
-| `backend/app/workflows/` | LangGraph state, routing and orchestration | Sarthak + Alex |
-| `backend/app/agents/` | Dependency, CI/CD, release and synthesis agents | Rohit + Ronn |
-| `backend/app/retrieval/` | Repository context ingestion and search | Yug + Toheeb |
-| `backend/tests/` | Backend unit and integration tests | Everyone (integration: Sarthak + Behzad) |
-| `mcp-server/` | Sentinel MCP server: tools and adapters | Megh + Behzad |
-| `frontend/` | Next.js findings dashboard | Saqib + Nana |
-| `evaluation/` | Labelled PR fixtures, expected findings and harness | Saqib + Nana |
-| `infrastructure/` | Docker, Cloud Run and Terraform | Neel + Parmeet |
-| `.github/workflows/` | GitHub Actions CI | Neel + Parmeet |
-| `docs/security-checks/` | Security check specifications | Rohit + Ronn |
+| `backend/app/api/` | FastAPI routes (HTTP layer) | Toheeb + Parmeet (#3); demo wiring by Parmeet (#9) |
+| `backend/app/schemas/` | Shared Pydantic models and agent contracts | Ronn + Neel (#7) |
+| `backend/app/github/` | GitHub webhook and API integration | Not assigned in Sprint 1 |
+| `backend/app/services/` | Application logic between API and workflows | Toheeb + Parmeet (#3); API-to-workflow wiring by Parmeet (#9) |
+| `backend/app/core/` | Config, logging and shared errors | Toheeb + Parmeet (#3) |
+| `backend/app/workflows/` | LangGraph state, routing and orchestration | Neel + Alex (#1) |
+| `backend/app/agents/` | Dependency, CI/CD, release and synthesis agents | Neel + Alex (#1) (Sprint 1 placeholders); checks by Jin + Behzad (#2) |
+| `backend/app/retrieval/` | Repository context ingestion and search | Yug + Nana (#4) |
+| `backend/tests/` | Backend unit and integration tests | Everyone (integration: Parmeet (#9)) |
+| `mcp-server/` | Sentinel MCP server: tools and adapters | Toheeb + Parmeet (#3) |
+| `frontend/` | Next.js findings dashboard | Sarthak + Rohit (#6) |
+| `evaluation/` | Labelled PR fixtures, expected findings and harness | Sarthak + Rohit (#6); check fixtures by Jin + Behzad (#2) |
+| `infrastructure/` | Docker, Cloud Run and Terraform | Saqib + Megh (#5) |
+| `.github/workflows/` | GitHub Actions CI | Saqib + Megh (#5) |
+| `docs/security-checks/` | Security check specifications | Jin + Behzad (#2) |
 | `docs/` (other) | Architecture, ADRs, onboarding, sprints | Project lead and everyone |
 | `scripts/` | Developer helper scripts | Shared |
 
 ## Coordination Roles
 
-- **Shared schemas:** Megh + Sarthak. Any change to `backend/app/schemas/` affects the workflow, the agents and the frontend types.
-- **End-to-end integration:** Sarthak + Behzad. They own the Sprint 1 demo path: sample PR → FastAPI → LangGraph intake → mock agents → risk synthesis → structured findings.
+- **Shared schemas:** Ronn + Neel (#7). Any change to `backend/app/schemas/` affects the workflow, the agents and the frontend types.
+- **End-to-end integration:** Parmeet (#9), who owns the Sprint 1 demo path: sample PR → FastAPI → LangGraph intake → mock agents → risk synthesis → structured findings.
 
 ## How the Pieces Connect
 

@@ -7,6 +7,6 @@ Repository context for agents.
 
 Every result must include a file-path reference so findings can cite their evidence.
 
-**Primary owners:** Yug + Toheeb
+**Primary owners:** Yug + Nana (#4)
 
-> **TODO (Sprint 1, Yug + Toheeb: "Prototype Repository Context Ingestion and Retrieval"):** ingest a sample repository, add keyword retrieval with file-path references, and provide a reproducible demo.
+> **TODO (Sprint 1, Yug + Nana, #4: "Prototype Repository Context Ingestion and Retrieval"):** ingest a sample repository, add keyword retrieval with file-path references, and provide a reproducible demo.

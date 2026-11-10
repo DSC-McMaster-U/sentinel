@@ -63,3 +63,6 @@ crash.log
 *.swo
 .DS_Store
 Thumbs.db
+
+# Local GitHub sprint management tools
+/.local/github-management/
