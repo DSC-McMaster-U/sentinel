@@ -57,7 +57,7 @@ class PullRequestInput(BaseModel):
     """
 
     repository: Repository
-    number: int = Field(ge=1)
+    pr_number: int = Field(ge=1)
     title: str = Field(min_length=1)
     description: str | None = None
     author: str = Field(min_length=1)

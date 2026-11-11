@@ -20,7 +20,7 @@ def _sample_payload() -> dict:
             "url": "https://github.com/DSC-McMaster-U/sentinel",
             "default_branch": "main",
         },
-        "number": 42,
+        "pr_number": 42,
         "title": "Bump lodash to 4.17.21",
         "description": "Routine dependency bump",
         "author": "ronnphil",
@@ -46,7 +46,7 @@ def _sample_payload() -> dict:
 def test_valid_payload_round_trips():
     pr = PullRequestInput.model_validate(_sample_payload())
 
-    assert pr.number == 42
+    assert pr.pr_number == 42
     assert pr.repository.full_name == "DSC-McMaster-U/sentinel"
     assert len(pr.files_changed) == 1
     assert pr.files_changed[0].status is FileChangeStatus.modified
@@ -100,7 +100,7 @@ def test_invalid_repository_url_is_rejected():
 
 def test_non_positive_pr_number_is_rejected():
     payload = _sample_payload()
-    payload["number"] = 0
+    payload["pr_number"] = 0
 
     with pytest.raises(ValidationError):
         PullRequestInput.model_validate(payload)

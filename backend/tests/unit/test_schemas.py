@@ -3,7 +3,7 @@
 import pytest
 from pydantic import ValidationError
 
-from app.schemas import AgentChangedFile, AgentInput, AgentOutput, Evidence, SecurityFinding
+from app.schemas import AgentInput, AgentOutput, ChangedFile, Evidence, SecurityFinding
 
 
 @pytest.fixture
@@ -36,7 +36,10 @@ def input_payload():
         "repo_url": "https://github.com/example/repo",
         "changed_files": [
             {
-                "file_path": ".github/workflows/build.yml",
+                "path": ".github/workflows/build.yml",
+                "status": "modified",
+                "additions": 1,
+                "deletions": 1,
                 "patch": '@@ -12 +12 @@\n- run: echo safe\n+ run: echo "${{ github.event.pull_request.title }}"',
             }
         ],
@@ -45,7 +48,7 @@ def input_payload():
 
 def test_agent_input_example_round_trip(input_payload):
     context = AgentInput.model_validate(input_payload)
-    assert isinstance(context.changed_files[0], AgentChangedFile)
+    assert isinstance(context.changed_files[0], ChangedFile)
     assert context.changed_files[0].patch == input_payload["changed_files"][0]["patch"]
     assert AgentInput.model_validate_json(context.model_dump_json()) == context
 
@@ -105,10 +108,10 @@ def test_agent_input_rejects_invalid_fields(input_payload, field, value):
 
 
 def test_changed_file_rejects_empty_path(input_payload):
-    input_payload["changed_files"][0]["file_path"] = ""
+    input_payload["changed_files"][0]["path"] = ""
     with pytest.raises(ValidationError) as exc:
         AgentInput.model_validate(input_payload)
-    assert exc.value.errors()[0]["loc"] == ("changed_files", 0, "file_path")
+    assert exc.value.errors()[0]["loc"] == ("changed_files", 0, "path")
 
 
 @pytest.mark.parametrize("confidence", [0.0, 1.0])

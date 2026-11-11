@@ -3,11 +3,7 @@ from typing import Literal
 from pydantic import BaseModel, Field, model_validator
 
 from .finding import SecurityFinding
-
-
-class AgentChangedFile(BaseModel):
-    file_path: str = Field(min_length=1)
-    patch: str
+from .pull_request import ChangedFile
 
 
 class AgentInput(BaseModel):
@@ -18,7 +14,7 @@ class AgentInput(BaseModel):
     repo_url: str = Field(
         min_length=1, description="The URL of the repository containing the pull request."
     )
-    changed_files: list[AgentChangedFile] = Field(
+    changed_files: list[ChangedFile] = Field(
         min_length=1, description="Relevant files and patches selected for this agent."
     )
 

@@ -32,7 +32,7 @@ request the review workflow operates on.
     "url": "https://github.com/DSC-McMaster-U/sentinel",
     "default_branch": "main"
   },
-  "number": 42,
+  "pr_number": 42,
   "title": "Bump lodash to 4.17.21",
   "description": "Routine dependency bump",
   "author": "ronnphil",
@@ -61,11 +61,12 @@ request the review workflow operates on.
 Defined in `backend/app/schemas/agent.py`. The slice of a PR that one agent
 sees: just the files relevant to that agent's check.
 
-> Note: `AgentInput.changed_files` uses `AgentChangedFile` (`file_path`,
-> `patch`), a deliberately smaller shape than `PullRequestInput`'s
-> `ChangedFile` (`path`, `status`, `additions`, `deletions`, `patch`,
-> `previous_path`). The workflow is responsible for narrowing the full PR's
-> file list down to this shape per agent.
+> Note: `AgentInput.changed_files` reuses the same `ChangedFile` as
+> `PullRequestInput.files_changed` (`path`, `status`, `additions`,
+> `deletions`, `patch`, `previous_path`), so there is one shared shape. The
+> workflow only narrows the list down to the files each agent cares about.
+> `AgentInput.commit_sha` is the single commit under review, which is the
+> PR's `head_sha`.
 
 ```json
 {
@@ -74,8 +75,12 @@ sees: just the files relevant to that agent's check.
   "repo_url": "https://github.com/DSC-McMaster-U/sentinel",
   "changed_files": [
     {
-      "file_path": "package.json",
-      "patch": "-  \"lodash\": \"4.17.20\"\n+  \"lodash\": \"4.17.21\""
+      "path": "package.json",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "patch": "-  \"lodash\": \"4.17.20\"\n+  \"lodash\": \"4.17.21\"",
+      "previous_path": null
     }
   ]
 }
