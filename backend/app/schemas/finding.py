@@ -23,11 +23,16 @@ class SecurityFinding(BaseModel):
 
     agent: str = Field(min_length=1)
     title: str = Field(min_length=1)
-    description: str = Field(min_length=1)
+    description: str = Field(
+        min_length=1, description="The security issue and how it occurs in the code."
+    )
     severity: Literal["critical", "high", "medium", "low"] = Field(
         description="Potential impact if the finding is true."
     )
-    risks: str = Field(min_length=1)
+    risks: str = Field(
+        min_length=1,
+        description="Potential security consequences if the finding is true, including affected assets or capabilities.",
+    )
     evidence: list[Evidence] = Field(
         min_length=1, description="At least one observation supporting the finding."
     )
