@@ -3,11 +3,7 @@ from typing import Literal
 from pydantic import BaseModel, Field, model_validator
 
 from .finding import SecurityFinding
-
-
-class ChangedFile(BaseModel):
-    file_path: str = Field(min_length=1)
-    patch: str
+from .pull_request import ChangedFile
 
 
 class AgentInput(BaseModel):
