@@ -39,6 +39,16 @@ Closes #
 
 <!-- Anything incomplete, out of scope, or planned for a follow-up issue? -->
 
+## Tracking
+
+<!-- Set these in the PR sidebar on GitHub so the PR shows up on the board. -->
+
+- [ ] I assigned myself under **Assignees**
+- [ ] I added the same **Labels** as the linked issue (one `priority:`, the `area:` labels and one `type:` label)
+- [ ] I set the **Milestone** to the current sprint
+- [ ] I added the PR to **Projects → Sentinel - Development Board** with Status set to **In review**
+- [ ] I linked the issue under **Development** (or used `Closes #N` above)
+
 ## Checklist
 
 - [ ] I have read and followed [CONTRIBUTING.md](https://github.com/DSC-McMaster-U/sentinel/blob/main/CONTRIBUTING.md)
