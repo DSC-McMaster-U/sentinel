@@ -9,7 +9,7 @@ from __future__ import annotations
 from datetime import datetime
 from enum import Enum
 
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field, HttpUrl, model_validator
 
 
 class FileChangeStatus(str, Enum):
@@ -28,7 +28,7 @@ class Repository(BaseModel):
 
 
 class ChangedFile(BaseModel):
-    path: str
+    path: str = Field(min_length=1)
     status: FileChangeStatus
     additions: int = Field(ge=0)
     deletions: int = Field(ge=0)
@@ -41,6 +41,12 @@ class ChangedFile(BaseModel):
         description="Set when status is 'renamed'.",
     )
 
+    @model_validator(mode="after")
+    def validate_rename_has_previous_path(self) -> ChangedFile:
+        if self.status is FileChangeStatus.renamed and not self.previous_path:
+            raise ValueError("A renamed file requires previous_path")
+        return self
+
 
 class PullRequestInput(BaseModel):
     """The normalized pull request the review workflow operates on.
@@ -51,14 +57,14 @@ class PullRequestInput(BaseModel):
     """
 
     repository: Repository
-    number: int
-    title: str
+    number: int = Field(ge=1)
+    title: str = Field(min_length=1)
     description: str | None = None
-    author: str
-    base_branch: str
-    head_branch: str
-    base_sha: str
-    head_sha: str
+    author: str = Field(min_length=1)
+    base_branch: str = Field(min_length=1)
+    head_branch: str = Field(min_length=1)
+    base_sha: str = Field(min_length=1)
+    head_sha: str = Field(min_length=1)
     url: HttpUrl
     created_at: datetime
     updated_at: datetime

@@ -2,5 +2,16 @@
 
 from .agent import AgentChangedFile, AgentInput, AgentOutput
 from .finding import Evidence, SecurityFinding
+from .pull_request import ChangedFile, FileChangeStatus, PullRequestInput, Repository
 
-__all__ = ["AgentChangedFile", "AgentInput", "AgentOutput", "Evidence", "SecurityFinding"]
+__all__ = [
+    "AgentChangedFile",
+    "AgentInput",
+    "AgentOutput",
+    "ChangedFile",
+    "Evidence",
+    "FileChangeStatus",
+    "PullRequestInput",
+    "Repository",
+    "SecurityFinding",
+]

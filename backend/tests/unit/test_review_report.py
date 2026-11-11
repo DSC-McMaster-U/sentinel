@@ -2,9 +2,9 @@
 
 from datetime import datetime, timezone
 
-from backend.app.schemas.agent import AgentOutput
-from backend.app.schemas.finding import Evidence, SecurityFinding
-from backend.app.schemas.review_report import combine_findings
+from app.schemas.agent import AgentOutput
+from app.schemas.finding import Evidence, SecurityFinding
+from app.schemas.review_report import combine_findings
 
 
 def _finding(
