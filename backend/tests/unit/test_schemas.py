@@ -3,8 +3,7 @@
 import pytest
 from pydantic import ValidationError
 
-from app.schemas.agent import AgentInput, AgentOutput, ChangedFile
-from app.schemas.finding import Evidence, SecurityFinding
+from app.schemas import AgentInput, AgentOutput, ChangedFile, Evidence, SecurityFinding
 
 
 @pytest.fixture
@@ -13,7 +12,7 @@ def finding_payload():
         "agent": "cicd",
         "title": "Untrusted input in a shell command",
         "description": "A workflow interpolates the PR title into a shell command.",
-        "severity": "High",
+        "severity": "critical",
         "risks": "An attacker could execute commands in the CI runner.",
         "evidence": [
             {
@@ -57,6 +56,7 @@ def test_agent_output_example_round_trip(finding_payload):
     )
     assert isinstance(output.findings[0], SecurityFinding)
     assert isinstance(output.findings[0].evidence[0], Evidence)
+    assert output.model_dump(mode="json")["findings"][0]["severity"] == "critical"
     assert AgentOutput.model_validate_json(output.model_dump_json()) == output
 
 
@@ -106,9 +106,40 @@ def test_confidence_includes_bounds(finding_payload, confidence):
 
 
 @pytest.mark.parametrize(
+    ("severity", "expected"),
+    [
+        ("critical", "critical"),
+        ("CRITICAL", "critical"),
+        ("Critical", "critical"),
+        ("high", "high"),
+        ("HIGH", "high"),
+        ("High", "high"),
+        ("medium", "medium"),
+        ("MEDIUM", "medium"),
+        ("Medium", "medium"),
+        ("low", "low"),
+        ("LOW", "low"),
+        ("Low", "low"),
+    ],
+)
+def test_severity_is_case_insensitive(finding_payload, severity, expected):
+    finding_payload["severity"] = severity
+    finding = SecurityFinding.model_validate(finding_payload)
+    assert finding.severity == expected
+    assert finding.model_dump(mode="json")["severity"] == expected
+
+
+@pytest.mark.parametrize("severity", ["Severe", "unknown", "", None, 1])
+def test_severity_rejects_invalid_values(finding_payload, severity):
+    finding_payload["severity"] = severity
+    with pytest.raises(ValidationError) as exc:
+        SecurityFinding.model_validate(finding_payload)
+    assert exc.value.errors()[0]["loc"] == ("severity",)
+
+
+@pytest.mark.parametrize(
     ("field", "value"),
-    [("confidence", -0.1), ("confidence", 1.1),
-     ("severity", "Unknown"), ("evidence", [])],
+    [("confidence", -0.1), ("confidence", 1.1), ("evidence", [])],
 )
 def test_finding_rejects_invalid_fields(finding_payload, field, value):
     finding_payload[field] = value
@@ -146,4 +177,60 @@ def test_finding_requires_explicit_review_context(finding_payload, field):
 
 def test_agent_output_rejects_unknown_status():
     with pytest.raises(ValidationError):
-        AgentOutput(agent_name="cicd", findings=[], status="unknown")
+        AgentOutput(agent_name="cicd", findings=[], status="unknown") # type: ignore
+
+
+def test_evidence_rejects_reversed_line_range(finding_payload):
+    finding_payload["evidence"][0].update(line_start=5, line_end=2)
+    with pytest.raises(ValidationError, match="line_end must be greater than or equal"):
+        SecurityFinding.model_validate(finding_payload)
+
+
+@pytest.mark.parametrize("line_end", [12, 14, None])
+def test_evidence_accepts_valid_line_ranges(finding_payload, line_end):
+    evidence = finding_payload["evidence"][0]
+    evidence["line_end"] = line_end
+    assert Evidence.model_validate(evidence).line_end == line_end
+
+
+@pytest.mark.parametrize("status", ["failure", "partial"])
+def test_unsuccessful_output_requires_error_message(status):
+    with pytest.raises(ValidationError, match="requires a nonblank error_message"):
+        AgentOutput(agent_name="cicd", findings=[], status=status)
+
+
+@pytest.mark.parametrize("status", ["failure", "partial"])
+@pytest.mark.parametrize("error_message", [None, "", " \t"])
+def test_unsuccessful_output_rejects_blank_errors(status, error_message):
+    with pytest.raises(ValidationError, match="requires a nonblank error_message"):
+        AgentOutput(
+            agent_name="cicd", findings=[], status=status, error_message=error_message
+        )
+
+
+@pytest.mark.parametrize("error_message", ["Unexpected failure", ""])
+def test_successful_output_rejects_error_message(error_message):
+    with pytest.raises(ValidationError, match="must not include an error_message"):
+        AgentOutput(
+            agent_name="cicd", findings=[], status="success", error_message=error_message
+        )
+
+
+def test_agent_output_rejects_mismatched_finding_agent(finding_payload):
+    other_finding = {**finding_payload, "agent": "dependency"}
+    with pytest.raises(ValidationError, match="agent must match agent_name"):
+        AgentOutput(
+            agent_name="cicd", findings=[finding_payload, other_finding], status="success"
+        )
+
+
+def test_partial_output_preserves_findings_and_error(finding_payload):
+    output = AgentOutput(
+        agent_name="cicd",
+        findings=[finding_payload],
+        status="partial",
+        error_message="Could not retrieve another file.",
+    )
+    assert len(output.findings) == 1
+    assert output.error_message == "Could not retrieve another file."
+    assert AgentOutput.model_validate_json(output.model_dump_json()) == output
