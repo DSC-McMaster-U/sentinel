@@ -172,5 +172,5 @@ completed.
 ## Dependency note
 
 `review_report.py` imports `SecurityFinding` from `finding.py` and
-`AgentOutput` from `agent.py` (#10, Neel). Until #10 merges, this file and
-its tests only run locally against that branch's copies of those files.
+`AgentOutput` from `agent.py`, so a change to either schema can affect
+`combine_findings()` and the `ReviewReport` example above.

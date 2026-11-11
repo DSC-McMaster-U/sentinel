@@ -1,8 +1,7 @@
 """Combining multiple agents' findings into one review report (#7).
 
-Depends on Neel's SecurityFinding / AgentOutput schemas (#10). Once #10
-merges, `finding.py` and `agent.py` land in this package for real and this
-file needs no changes.
+Builds on the SecurityFinding and AgentOutput schemas in `finding.py` and
+`agent.py`.
 """
 
 from __future__ import annotations
