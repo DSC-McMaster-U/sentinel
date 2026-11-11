@@ -13,7 +13,7 @@ def finding_payload():
         "title": "Untrusted input in a shell command",
         "description": "A workflow interpolates the PR title into a shell command.",
         "severity": "critical",
-        "risks": "An attacker could execute commands in the CI runner.",
+        "recommendation": "Pass the PR title through an environment variable and quote it in the shell command.",
         "evidence": [
             {
                 "file_path": ".github/workflows/build.yml",
@@ -56,7 +56,10 @@ def test_agent_output_example_round_trip(finding_payload):
     )
     assert isinstance(output.findings[0], SecurityFinding)
     assert isinstance(output.findings[0].evidence[0], Evidence)
-    assert output.model_dump(mode="json")["findings"][0]["severity"] == "critical"
+    serialized_finding = output.model_dump(mode="json")["findings"][0]
+    assert serialized_finding["severity"] == "critical"
+    assert serialized_finding["recommendation"] == finding_payload["recommendation"]
+    assert "risks" not in serialized_finding
     assert AgentOutput.model_validate_json(output.model_dump_json()) == output
 
 
@@ -72,12 +75,21 @@ def test_agent_output_statuses(status):
     assert output.status == status
 
 
-@pytest.mark.parametrize("field", ["agent", "title", "description", "risks"])
+@pytest.mark.parametrize("field", ["agent", "title", "description", "recommendation"])
 def test_finding_rejects_empty_required_strings(finding_payload, field):
     finding_payload[field] = ""
     with pytest.raises(ValidationError) as exc:
         SecurityFinding.model_validate(finding_payload)
     assert exc.value.errors()[0]["loc"] == (field,)
+
+
+def test_legacy_risks_does_not_replace_recommendation(finding_payload):
+    del finding_payload["recommendation"]
+    finding_payload["risks"] = "An attacker could execute commands in the CI runner."
+    with pytest.raises(ValidationError) as exc:
+        SecurityFinding.model_validate(finding_payload)
+    assert exc.value.errors()[0]["loc"] == ("recommendation",)
+    assert exc.value.errors()[0]["type"] == "missing"
 
 
 @pytest.mark.parametrize(

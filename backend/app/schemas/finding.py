@@ -29,9 +29,9 @@ class SecurityFinding(BaseModel):
     severity: Literal["critical", "high", "medium", "low"] = Field(
         description="Potential impact if the finding is true."
     )
-    risks: str = Field(
+    recommendation: str = Field(
         min_length=1,
-        description="Potential security consequences if the finding is true, including affected assets or capabilities.",
+        description="Suggested action to fix or mitigate the security issue.",
     )
     evidence: list[Evidence] = Field(
         min_length=1, description="At least one observation supporting the finding."
