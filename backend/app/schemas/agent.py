@@ -6,7 +6,7 @@ from .finding import SecurityFinding
 
 
 class ChangedFile(BaseModel):
-    file_path: str
+    file_path: str = Field(min_length=1)
     patch: str
 
 
@@ -14,7 +14,7 @@ class AgentInput(BaseModel):
     """PR context selected by the workflow for this agent."""
 
     pr_number: int = Field(ge=1)
-    commit_sha: str
+    commit_sha: str = Field(min_length=1)
     repo_url: str = Field(min_length=1, description="The URL of the repository containing the pull request.")
     changed_files: list[ChangedFile] = Field(
         min_length=1, description="Relevant files and patches selected for this agent."

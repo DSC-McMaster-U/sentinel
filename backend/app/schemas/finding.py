@@ -15,13 +15,13 @@ class Evidence(BaseModel):
 class SecurityFinding(BaseModel):
     """A security claim with supporting evidence and explicit review needs."""
 
-    agent: str
-    title: str
-    description: str
+    agent: str = Field(min_length=1)
+    title: str = Field(min_length=1)
+    description: str = Field(min_length=1)
     severity: Literal["Severe", "High", "Medium", "Low"] = Field(
         description="Potential impact if the finding is true."
     )
-    risks: str
+    risks: str = Field(min_length=1)
     evidence: list[Evidence] = Field(
         min_length=1, description="At least one observation supporting the finding."
     )
