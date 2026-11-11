@@ -6,4 +6,19 @@ Shared Pydantic models: the contracts between the API, the LangGraph workflow, t
 
 Many teams depend on these models. Tag both owners on any PR that changes an existing schema.
 
-> **TODO (Sprint 1, Ronn + Neel, #7: "Finalize Shared API Schemas and Agent Communication Contracts" (due Nov 11)):** define the initial review request, finding and report schemas.
+## Finding text fields
+
+`SecurityFinding` describes the issue and the recommended remediation:
+
+- `description` explains the security issue and how it occurs in the code. Example: "A workflow interpolates the PR title into a shell command."
+- `recommendation` suggests an action to fix or mitigate the issue. Example: "Pass the PR title through an environment variable and quote it in the shell command."
+
+Both fields are required, nonempty strings. `recommendation` replaces the former `risks` field.
+
+`severity` accepts `critical`, `high`, `medium`, and `low`, case-insensitively: `Critical`, `high`, and `High` all work. Values are serialized in lowercase. `Severe` is no longer accepted.
+
+Working example payloads are in [test_schemas.py](../../tests/unit/test_schemas.py).
+
+The incoming PR schema (`pull_request.py`) is tracked separately in [PR #11](https://github.com/DSC-McMaster-U/sentinel/pull/11).
+
+> **Remaining work for #7 (Ronn + Neel):** define the combined review report and finding aggregation rules, and document component communication and JSON examples in `docs/architecture/CONTRACTS.md`.
