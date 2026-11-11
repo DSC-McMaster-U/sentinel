@@ -3,7 +3,7 @@
 import pytest
 from pydantic import ValidationError
 
-from app.schemas import AgentInput, AgentOutput, ChangedFile, Evidence, SecurityFinding
+from app.schemas import AgentChangedFile, AgentInput, AgentOutput, Evidence, SecurityFinding
 
 
 @pytest.fixture
@@ -45,7 +45,7 @@ def input_payload():
 
 def test_agent_input_example_round_trip(input_payload):
     context = AgentInput.model_validate(input_payload)
-    assert isinstance(context.changed_files[0], ChangedFile)
+    assert isinstance(context.changed_files[0], AgentChangedFile)
     assert context.changed_files[0].patch == input_payload["changed_files"][0]["patch"]
     assert AgentInput.model_validate_json(context.model_dump_json()) == context
 

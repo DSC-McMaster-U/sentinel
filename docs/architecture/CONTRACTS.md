@@ -61,11 +61,11 @@ request the review workflow operates on.
 Defined in `backend/app/schemas/agent.py`. The slice of a PR that one agent
 sees: just the files relevant to that agent's check.
 
-> Note: `AgentInput.changed_files` uses its own `ChangedFile` (`file_path`,
-> `patch`), separate from `PullRequestInput.ChangedFile` (`path`, `status`,
-> `additions`, `deletions`, `patch`, `previous_path`). The workflow is
-> responsible for narrowing the full PR's file list down to this smaller
-> shape per agent.
+> Note: `AgentInput.changed_files` uses `AgentChangedFile` (`file_path`,
+> `patch`), a deliberately smaller shape than `PullRequestInput`'s
+> `ChangedFile` (`path`, `status`, `additions`, `deletions`, `patch`,
+> `previous_path`). The workflow is responsible for narrowing the full PR's
+> file list down to this shape per agent.
 
 ```json
 {
