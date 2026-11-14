@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sentinel-mcp"
+version = "0.1.0"
+description = "Sentinel MCP server"
+requires-python = ">=3.11"
+dependencies = [
+    "httpx2",
+    "mcp",
+    "pydantic"
+]
+
