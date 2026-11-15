@@ -10,7 +10,13 @@ requires-python = ">=3.11"
 dependencies = [
     "httpx2",
     "mcp",
-    "pydantic"
+    "pydantic",
+]
+
+[project.optional-dependencies]
+dev = [
+    "mcp[cli]",
+    "pytest",
 ]
 
 [tool.setuptools.packages.find]
