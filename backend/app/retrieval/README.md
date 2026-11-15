@@ -11,7 +11,7 @@ Every result must include a file-path reference so findings can cite their evide
 
 > **TODO (Sprint 1, Yug + Nana, #4: "Prototype Repository Context Ingestion and Retrieval"):** ingest a sample repository, add keyword retrieval with file-path references, and provide a reproducible demo.
 
-## Ingestion prototype (Yug's portion of #4)
+## Ingestion prototype
 
 Run from `backend/` (Python 3.10+, no runtime dependencies):
 
