@@ -16,6 +16,9 @@ class FileChangeStatus(str, Enum):
     modified = "modified"
     removed = "removed"
     renamed = "renamed"
+    copied = "copied"
+    changed = "changed"
+    unchanged = "unchanged"
 
 
 class ChangedFile(BaseModel):

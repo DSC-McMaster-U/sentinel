@@ -28,7 +28,9 @@ class GitHubAdapter:
         )
 
     async def get_pr_files(self, repo: str, pull_number: int) -> list[dict[str, Any]]:
-        res = await self.http_client.get(f"/repos/{repo}/pulls/{pull_number}/files")
+        res = await self.http_client.get(
+            f"/repos/{repo}/pulls/{pull_number}/files?per_page=100"
+        )
         res.raise_for_status()
         return res.json()
 
