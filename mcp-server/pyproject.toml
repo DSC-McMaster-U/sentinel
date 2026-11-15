@@ -12,4 +12,4 @@ dependencies = [
     "mcp",
     "pydantic"
 ]
-
+tests = ["test_*.py"]
