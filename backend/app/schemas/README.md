@@ -19,6 +19,19 @@ Both fields are required, nonempty strings. `recommendation` replaces the former
 
 Working example payloads are in [test_schemas.py](../../tests/unit/test_schemas.py).
 
-The incoming PR schema (`pull_request.py`) is tracked separately in [PR #11](https://github.com/DSC-McMaster-U/sentinel/pull/11).
+## Pull request file statuses
+
+`pull_request.py` defines `PullRequestInput`, `ChangedFile`, and
+`FileChangeStatus`. Accepted file statuses are `added`, `modified`, `removed`,
+`renamed`, `copied`, `changed`, and `unchanged`. They are serialized as the
+same lowercase strings; unknown statuses are rejected.
+
+`ChangedFile` accepts zero additions and deletions. Its `patch` can be
+omitted or explicitly `null`. A `renamed` file requires a nonempty
+`previous_path`; the other statuses do not require it.
+
+See [Shared Contracts](../../../docs/architecture/CONTRACTS.md#changedfile)
+for an example and [test_pull_request_schema.py](../../tests/unit/test_pull_request_schema.py)
+for status validation, mixed-status lists, and JSON round-trip coverage.
 
 > **Remaining work for #7 (Ronn + Neel):** define the combined review report and finding aggregation rules, and document component communication and JSON examples in `docs/architecture/CONTRACTS.md`.
