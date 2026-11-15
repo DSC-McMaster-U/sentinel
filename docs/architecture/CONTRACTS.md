@@ -56,6 +56,34 @@ request the review workflow operates on.
 }
 ```
 
+## `ChangedFile`
+
+Defined in `backend/app/schemas/pull_request.py` and shared by
+`PullRequestInput.files_changed` and `AgentInput.changed_files`.
+
+`status` accepts these exact lowercase values: `added`, `modified`,
+`removed`, `renamed`, `copied`, `changed`, and `unchanged`. Unknown values
+are rejected. A single file list can contain different statuses, and each
+status is preserved when serialized to JSON.
+
+`path` must be nonempty. `additions` and `deletions` must be nonnegative;
+zero is valid, including for a file with `status: "changed"` and no text
+diff. `patch` may be omitted or explicitly `null`. A `renamed` file
+requires a nonempty `previous_path`; the other statuses do not require it.
+
+For example, this file entry is valid:
+
+```json
+{
+  "path": "scripts/build.sh",
+  "status": "changed",
+  "additions": 0,
+  "deletions": 0,
+  "patch": null,
+  "previous_path": null
+}
+```
+
 ## `AgentInput`
 
 Defined in `backend/app/schemas/agent.py`. The slice of a PR that one agent

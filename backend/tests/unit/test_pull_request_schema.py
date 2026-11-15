@@ -55,6 +55,66 @@ def test_valid_payload_round_trips():
     assert dumped["files_changed"][0]["previous_path"] is None
 
 
+@pytest.mark.parametrize(
+    "status", ["added", "modified", "removed", "renamed", "copied", "changed", "unchanged"]
+)
+def test_github_file_statuses_round_trip(status):
+    payload = _sample_payload()
+    payload["files_changed"] = [
+        {
+            "path": "src/file.py",
+            "status": status,
+            "additions": 0,
+            "deletions": 0,
+            **({"previous_path": "src/old_file.py"} if status == "renamed" else {}),
+        }
+    ]
+
+    pr = PullRequestInput.model_validate(payload)
+
+    assert pr.files_changed[0].status is FileChangeStatus(status)
+    assert pr.files_changed[0].patch is None
+    assert pr.model_dump(mode="json")["files_changed"][0]["status"] == status
+    assert PullRequestInput.model_validate_json(pr.model_dump_json()) == pr
+
+
+def test_mixed_file_statuses_round_trip():
+    payload = _sample_payload()
+    for status in ["copied", "changed", "unchanged"]:
+        payload["files_changed"].append(
+            {
+                "path": f"src/{status}.py",
+                "status": status,
+                "additions": 0,
+                "deletions": 0,
+            }
+        )
+
+    pr = PullRequestInput.model_validate(payload)
+
+    assert [file.status.value for file in pr.files_changed] == [
+        "modified", "copied", "changed", "unchanged"
+    ]
+    assert [file.path for file in pr.files_changed] == [
+        file["path"] for file in payload["files_changed"]
+    ]
+    assert PullRequestInput.model_validate_json(pr.model_dump_json()) == pr
+
+
+@pytest.mark.parametrize("status", ["copied", "changed", "unchanged"])
+def test_file_accepts_explicit_null_patch(status):
+    payload = _sample_payload()
+    payload["files_changed"][0].update(
+        status=status, additions=0, deletions=0, patch=None
+    )
+
+    pr = PullRequestInput.model_validate(payload)
+
+    assert pr.files_changed[0].patch is None
+    assert pr.model_dump(mode="json")["files_changed"][0]["patch"] is None
+    assert PullRequestInput.model_validate_json(pr.model_dump_json()) == pr
+
+
 def test_files_changed_defaults_to_empty_list():
     payload = _sample_payload()
     del payload["files_changed"]
