@@ -34,4 +34,3 @@ See [Shared Contracts](../../../docs/architecture/CONTRACTS.md#changedfile)
 for an example and [test_pull_request_schema.py](../../tests/unit/test_pull_request_schema.py)
 for status validation, mixed-status lists, and JSON round-trip coverage.
 
-> **Remaining work for #7 (Ronn + Neel):** define the combined review report and finding aggregation rules, and document component communication and JSON examples in `docs/architecture/CONTRACTS.md`.
