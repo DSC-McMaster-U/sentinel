@@ -18,8 +18,8 @@ Owners have **primary responsibility** for a directory: they review changes and 
 | `mcp-server/` | Sentinel MCP server: tools and adapters | Toheeb + Parmeet (#3) |
 | `frontend/` | Next.js findings dashboard | Sarthak + Rohit (#6) |
 | `evaluation/` | Labelled PR fixtures, expected findings and harness | Sarthak + Rohit (#6); check fixtures by Jin + Behzad (#2) |
-| `infrastructure/` | Docker, Cloud Run and Terraform | Saqib + Megh (#5) |
-| `.github/workflows/` | GitHub Actions CI | Saqib + Megh (#5) |
+| `infrastructure/` | Docker, Cloud Run and Terraform | Saqib + Ronn (#5) |
+| `.github/workflows/` | GitHub Actions CI | Saqib + Ronn (#5) |
 | `docs/security-checks/` | Security check specifications | Jin + Behzad (#2) |
 | `docs/` (other) | Architecture, ADRs, onboarding, sprints | Project lead and everyone |
 | `scripts/` | Developer helper scripts | Shared |
