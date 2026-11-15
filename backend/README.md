@@ -14,6 +14,49 @@ The Sentinel backend: a Python FastAPI service that accepts pull request data, r
 | `app/core/` | Config, logging and shared errors | Toheeb + Parmeet (#3) (env config with Saqib + Megh (#5)) |
 | `tests/unit/`, `tests/integration/` | Tests | Everyone (unit tests with each issue); integration by Parmeet (#9) |
 
+## Run tests
+
+From the repository root, activate your virtual environment and run pytest
+from `backend/`:
+
+```bash
+source .venv/bin/activate
+cd backend
+python -m pytest -q
+```
+
+The tests use `TestClient` and run without a server. If you're setting up from
+scratch, run `uv venv` from the repository root and install dependencies in
+the activated environment with `uv pip install fastapi pydantic uvicorn pytest httpx2`.
+Issue #5 tracks the shared dependency setup.
+
+## Try the API manually (optional)
+
+From `backend/` with the same environment active:
+
+```bash
+python -m uvicorn app.main:app --reload
+```
+
+In the [interactive API docs](http://127.0.0.1:8000/docs), use **Try it out**
+on either endpoint:
+
+- `GET /health` returns `200` with `{"status":"ok"}`.
+- For `POST /reviews`, paste the
+  [sample PR JSON](../docs/architecture/CONTRACTS.md#pullrequestinput).
+  Expect `200` with one mock dependency finding for `package.json`.
+
+**Or use `curl`.** Leave the server running and open a second terminal.
+Save the sample PR JSON linked above as `sample_pr.json` in that terminal's
+current directory, then run:
+
+```bash
+curl -i http://127.0.0.1:8000/health
+curl -i -X POST http://127.0.0.1:8000/reviews \
+  -H 'Content-Type: application/json' \
+  --data-binary @sample_pr.json
+```
+
 ## Imports
 
 Run Python commands from inside `backend/` so the `app` package is importable:
@@ -21,7 +64,5 @@ Run Python commands from inside `backend/` so the `app` package is importable:
 ```python
 from app.schemas import ...
 ```
-
-> **TODO (Sprint 1, Toheeb + Parmeet, #3: "Set Up FastAPI Backend and Initial MCP Tool Integration"):** create the FastAPI application entry point (e.g. `app/main.py`) with health and mock review endpoints.
->
 > **TODO (Sprint 1, Saqib + Megh, #5: "Configure Local Development Environment, Docker, and GitHub Actions CI"):** add dependency management (`requirements.txt` or `pyproject.toml`) and run instructions here.
+
