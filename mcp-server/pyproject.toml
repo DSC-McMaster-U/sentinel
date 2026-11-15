@@ -12,4 +12,10 @@ dependencies = [
     "mcp",
     "pydantic"
 ]
-tests = ["test_*.py"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+python_files = ["test_*.py"]
+testpaths = ["tests"]

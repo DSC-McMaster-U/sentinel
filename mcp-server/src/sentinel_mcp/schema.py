@@ -6,10 +6,9 @@ Owners: Ronn + Neel (#7).
 
 from __future__ import annotations
 
-from datetime import datetime
 from enum import Enum
 
-from pydantic import BaseModel, Field, HttpUrl, model_validator
+from pydantic import BaseModel, Field, model_validator
 
 
 class FileChangeStatus(str, Enum):
@@ -17,14 +16,6 @@ class FileChangeStatus(str, Enum):
     modified = "modified"
     removed = "removed"
     renamed = "renamed"
-
-
-class Repository(BaseModel):
-    owner: str
-    name: str
-    full_name: str
-    url: HttpUrl
-    default_branch: str
 
 
 class ChangedFile(BaseModel):
@@ -46,26 +37,3 @@ class ChangedFile(BaseModel):
         if self.status is FileChangeStatus.renamed and not self.previous_path:
             raise ValueError("A renamed file requires previous_path")
         return self
-
-
-class PullRequestInput(BaseModel):
-    """The normalized pull request the review workflow operates on.
-
-    This is what a GitHub webhook payload, or a seeded fixture in
-    evaluation/fixtures/, gets mapped into before anything touches the
-    LangGraph workflow or an agent.
-    """
-
-    repository: Repository
-    pr_number: int = Field(ge=1)
-    title: str = Field(min_length=1)
-    description: str | None = None
-    author: str = Field(min_length=1)
-    base_branch: str = Field(min_length=1)
-    head_branch: str = Field(min_length=1)
-    base_sha: str = Field(min_length=1)
-    head_sha: str = Field(min_length=1)
-    url: HttpUrl
-    created_at: datetime
-    updated_at: datetime
-    files_changed: list[ChangedFile] = Field(default_factory=list)
