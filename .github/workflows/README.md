@@ -8,6 +8,6 @@ Sentinel's own CI should pass Sentinel's checks:
 - Pin third-party actions to a full commit SHA.
 - Avoid `pull_request_target` with untrusted code, and never expose secrets to fork PRs.
 
-**Primary owners:** Saqib + Megh (#5)
+**Primary owners:** Saqib + Ronn (#5)
 
-> **TODO (Sprint 1, Saqib + Megh, #5: "Configure Local Development Environment, Docker, and GitHub Actions CI"):** automated lint and test workflow. Once it exists, mark it as a required status check on `main`.
+> **TODO (Sprint 1, Saqib + Ronn, #5: "Configure Local Development Environment, Docker, and GitHub Actions CI"):** automated lint and test workflow. Once it exists, mark it as a required status check on `main`.

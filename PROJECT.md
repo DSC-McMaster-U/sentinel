@@ -701,18 +701,18 @@ GitHub Actions will be used for:
 
 ## Team Members
 
-Sentinel is led by Lukhsaan Elankumaran with twelve contributors organized into six initial pairs. Assignments are proposed starting points and can change based on contributor preferences and sprint planning.
+Sentinel is led by Lukhsaan Elankumaran with twelve contributors organized into six pairs. Assignments can change based on contributor preferences and sprint planning; GitHub issue assignees are the source of truth.
 
-| Primary workstream | Initial pair | Sprint 1 focus |
+| Primary workstream | Pair | Sprint 1 focus |
 |---|---|---|
-| Agent Architecture | Sarthak Kulashari and Alex Melnbardis | LangGraph state, routing and mock agents |
-| Security Agents | Rohit Suryadevara and Ronn Philip | Dependency and CI/CD detection rules |
-| Backend and MCP | Megh Joshi and Behzad Janjua | FastAPI, Pydantic contracts and read-only MCP tool |
-| Repository Context | Yug Vashisth and Toheeb Eji | Repository ingestion and retrieval |
-| Cloud and DevOps | Neel Oza and Parmeet Abbat | Local Docker, GitHub Actions and setup docs |
-| Product and Evaluation | Saqib Khan and Nana Appiagyei Poku | Findings UI and labelled test fixtures |
+| Agent Orchestration (#1) | Neel Oza and Alex Melnbardis | LangGraph state, routing and mock agents |
+| Security Checks (#2) | Jindo (Jin) Kim and Behzad Janjua | Dependency and CI/CD detection rules |
+| Backend and MCP (#3) | Toheeb Eji and Parmeet Abbat | FastAPI endpoints and read-only MCP tool |
+| Repository Context (#4) | Yug Vashisth and Nana Appiagyei Poku | Repository ingestion and retrieval (Alex builds the LangGraph retrieval adapter) |
+| Cloud and DevOps (#5) | Saqib Khan and Ronn Philip | Local Docker, GitHub Actions and setup docs |
+| Dashboard and Evaluation (#6) | Sarthak Kulashari and Rohit Suryadevara | Findings UI and labelled test fixtures |
 
-**Cross-team coordination:** Megh and Sarthak coordinate shared schemas; Neel and Parmeet coordinate contribution guidelines; Sarthak and Behzad coordinate the Sprint 1 integration demo. These are additional responsibilities, not separate full-time teams.
+**Cross-team coordination:** Ronn and Neel own the shared schemas (#7, done); Lukhsaan owns the contribution guidelines (#8, done); Parmeet leads the Sprint 1 integration demo (#9). These are additional responsibilities, not separate full-time teams.
 
 Contributors may collaborate beyond their primary issue, while allowing the assigned owners to lead implementation and receive meaningful credit. Across future sprints, members should have opportunities to explore other areas while developing ownership of a specific Sentinel subsystem.
 
@@ -855,7 +855,7 @@ A pull request is considered complete when:
 | Research and Define Initial Dependency and CI/CD Security Checks | Jin + Behzad | P0 | Nov 22 |
 | Set Up FastAPI Backend and Initial MCP Tool Integration | Toheeb + Parmeet | P0 | Nov 22 |
 | Prototype Repository Context Ingestion and Retrieval | Yug + Nana | P1 | Nov 22 |
-| Configure Local Development Environment, Docker, and GitHub Actions CI | Saqib + Megh | P0 | Nov 22 |
+| Configure Local Development Environment, Docker, and GitHub Actions CI | Saqib + Ronn | P0 | Nov 22 |
 | Design Security Findings Dashboard and Initial Evaluation Framework | Sarthak + Rohit | P1 | Nov 22 |
 | Finalize Shared API Schemas and Agent Communication Contracts | Ronn + Neel | P0 | Nov 11 |
 | Establish GitHub Contribution Guidelines and Pull Request Templates | Lukhsaan | P1 | Nov 13 |

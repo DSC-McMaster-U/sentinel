@@ -11,7 +11,7 @@ The Sentinel backend: a Python FastAPI service that accepts pull request data, r
 | `app/agents/` | Security agents and checks | Neel + Alex (#1) (Sprint 1 placeholder nodes); check definitions by Jin + Behzad (#2) |
 | `app/retrieval/` | Repository context ingestion and search | Yug + Nana (#4) |
 | `app/services/` | Business logic between API and workflows | Toheeb + Parmeet (#3); API-to-workflow wiring by Parmeet (#9) |
-| `app/core/` | Config, logging and shared errors | Toheeb + Parmeet (#3) (env config with Saqib + Megh (#5)) |
+| `app/core/` | Config, logging and shared errors | Toheeb + Parmeet (#3) (env config with Saqib + Ronn (#5)) |
 | `tests/unit/`, `tests/integration/` | Tests | Everyone (unit tests with each issue); integration by Parmeet (#9) |
 
 ## Run tests
