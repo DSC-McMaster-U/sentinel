@@ -21,7 +21,7 @@ Copy-Item .env.example .env       # Windows PowerShell
 
 ## Reference
 
-"Read by code" means a line of code on `main` or in an open pull request reads the variable. Status is current as of the date this page was written, so check the code if it matters.
+"Read by code" means a line of code on `main` reads the variable. Status is current as of the date this page was written, so check the code if it matters.
 
 | Variable | Example value | Used by | Needed in Sprint 1? | Read by code? |
 | --- | --- | --- | --- | --- |
@@ -32,7 +32,7 @@ Copy-Item .env.example .env       # Windows PowerShell
 | `MCP_SERVER_URL` | `http://localhost:8001/mcp` | Backend (MCP client) | No | No |
 | `NEXT_PUBLIC_API_BASE_URL` | `http://localhost:8000` | Frontend | No | No |
 | `DATABASE_URL` | `postgresql://sentinel:change-me@localhost:5432/sentinel` | Backend | No | No |
-| `GITHUB_TOKEN` | *(empty)* | MCP server | Optional | Yes (`mcp-server`, PR #13) |
+| `GITHUB_TOKEN` | *(empty)* | MCP server | Optional | Yes (`mcp-server`) |
 | `GITHUB_WEBHOOK_SECRET` | *(empty)* | Backend | No | No |
 | `LLM_API_KEY` | *(empty)* | Agents | No | No |
 
@@ -45,7 +45,7 @@ Copy-Item .env.example .env       # Windows PowerShell
 
 ### Backend (FastAPI)
 
-- **`BACKEND_HOST`**, **`BACKEND_PORT`**: where the backend listens. The backend does not read these yet. Today you start it by hand and it uses uvicorn's defaults, `127.0.0.1` and port `8000`:
+- **`BACKEND_HOST`**, **`BACKEND_PORT`**: where the backend listens. The backend does not read these yet. When you start it by hand it uses uvicorn's defaults, `127.0.0.1` and port `8000` (the dev Dockerfile proposed in PR #19 passes `--host 0.0.0.0 --port 8000` on the command line instead):
 
   ```bash
   cd backend
