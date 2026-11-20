@@ -53,7 +53,7 @@ def test_rare_terms_and_repeated_terms_rank_higher():
         chunk("b.md", "policy policy policy policy overview"),
         chunk("c.md", "policy overview"),
     ])
-    assert [r.file_path for r in index.search("signing policy")][0] == "a.md"
+    assert next(r.file_path for r in index.search("signing policy")) == "a.md"
 
 
 def test_ties_are_ordered_by_path_and_line_and_repeatable():

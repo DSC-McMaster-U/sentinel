@@ -1,9 +1,9 @@
 """Keyword retrieval over ingested chunks using BM25 (standard library only)."""
 
-from collections import Counter
-from collections.abc import Iterable
 import math
 import re
+from collections import Counter
+from collections.abc import Iterable
 
 from app.retrieval.ingestion import RepositoryChunk, ingest_repository
 
