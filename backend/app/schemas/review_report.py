@@ -6,7 +6,7 @@ Builds on the SecurityFinding and AgentOutput schemas in `finding.py` and
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from pydantic import BaseModel, Field
 
@@ -96,7 +96,7 @@ def combine_findings(
         pr_number=pr_number,
         repo_url=repo_url,
         commit_sha=commit_sha,
-        generated_at=generated_at or datetime.now(timezone.utc),
+        generated_at=generated_at or datetime.now(UTC),
         findings=merged,
         agents_run=agents_run,
         agents_failed=agents_failed,

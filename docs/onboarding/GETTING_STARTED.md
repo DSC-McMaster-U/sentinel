@@ -5,9 +5,10 @@ This guide gets you from zero to your first pull request. For the full rules (co
 ## 1. Prerequisites
 
 - [Git](https://git-scm.com/downloads) and a GitHub account with access to the repository
-- Python 3 for backend, MCP and retrieval work (the exact version will be pinned by the DevOps workstream)
+- Python 3.12 for running the backend checks directly
+- Python 3.11 or newer for MCP development
 - Node.js LTS for frontend work, once the frontend app is initialized
-- Docker, once the local Docker setup lands
+- Docker if you want to run the backend tests in a container
 
 ## 2. Clone the Repository
 
@@ -16,14 +17,47 @@ git clone https://github.com/DSC-McMaster-U/sentinel.git
 cd sentinel
 ```
 
-Copy the example environment file. **Never commit `.env`.**
+The backend lint and unit tests can run without a `.env` file. If you are
+setting up an integration that needs one, copy `.env.example` to `.env`.
+**Never commit `.env`.**
 
 ```bash
 cp .env.example .env              # macOS / Linux
 Copy-Item .env.example .env       # Windows PowerShell
 ```
 
-> **TODO (Saqib + Ronn, #5):** add dependency install and run instructions once `requirements.txt` / `pyproject.toml` and Docker are set up.
+### Install and run the backend checks
+
+From the repository root, create and activate a virtual environment. This
+keeps Sentinel's Python packages separate from your other projects.
+
+On macOS, Linux or WSL:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+On Windows PowerShell:
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+With the environment active, run these commands from the repository root:
+
+```sh
+python -m pip install -r backend/requirements.txt
+cd backend
+ruff check .
+python -m pytest
+```
+
+Ruff checks the Python source for lint issues. pytest runs the automated
+tests. See the [backend README](../../backend/README.md) to start the API
+directly, or the [Docker instructions](../../infrastructure/docker/README.md)
+to start the API or run its tests in a container.
 
 ## 3. Find Your Directory
 
@@ -67,7 +101,7 @@ Commit often and keep each commit focused. Don't commit secrets, `.env` files or
 1. On GitHub, open a pull request from your branch into `main`. Open it as a **Draft** if it's still a work in progress.
 2. Fill in the PR template and include `Closes #<issue-number>`.
 3. Self-review the diff, make sure tests pass, then mark it **Ready for review**.
-4. Address every review comment. After approval, the PR is squash-merged and the branch is deleted.
+4. Address every review comment. Once it's approved and CI passes, the PR is squash- or rebase-merged and the branch is deleted automatically.
 
 `main` is protected, so all changes go through pull requests.
 
