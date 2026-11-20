@@ -120,7 +120,7 @@ def test_safe_fixture_with_expected_findings_is_rejected(tmp_path):
 
 def test_evidence_outside_the_diff_is_rejected(tmp_path):
     dataset = _copy_dataset(tmp_path)
-    path = dataset / "expected-findings" / "cicd-unpinned-third-party-action.json"
+    path = dataset / "expected-findings" / "cicd-pull-request-target-head-checkout.json"
     doc = json.loads(path.read_text())
     doc["findings"][0]["evidence"][0]["line_start"] = 500
     path.write_text(json.dumps(doc))

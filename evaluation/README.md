@@ -42,13 +42,13 @@ The harness tests run in backend CI (`backend/tests/unit/test_evaluation_harness
 | `safe/cicd-pinned-actions-read-only` | safe | none: SHA-pinned actions, `contents: read`, no persisted credentials |
 | `safe/docs-readme-typo` | safe | none: docs-only change, no agent should run |
 | `safe/release-dockerfile-digest-bump` | safe | none: base image stays pinned by digest |
-| `risky/cicd-unpinned-third-party-action` | risky | **high** (cicd): third-party action moved from a SHA to `@main` and given a secret |
+| `safe/cicd-third-party-action-sha-bump` | safe | none: a third-party action that receives a secret moves to a newer release and stays pinned to a full SHA |
 | `risky/cicd-pull-request-target-head-checkout` | risky | **critical** (cicd): `pull_request_target` runs PR code with secrets; **medium** (cicd): `permissions: write-all` |
 | `risky/dep-new-package-install-script` | risky | **high** (dependency): new dependency with `hasInstallScript: true` |
 | `risky/release-dockerfile-latest-and-curl-bash` | risky | **high** (release): `curl \| bash` during build; **medium** (release): `FROM node:latest` replaces a digest pin |
 
-That is 8 pull requests (4 safe, 4 risky) with 6 expected findings across
-all three agents. The safe cases are deliberately close to the risky ones
+That is 8 pull requests (5 safe, 3 risky) with 5 expected findings across
+all three agents. The CI/CD set is 2 safe + 1 risky. The safe cases are deliberately close to the risky ones
 (the same files and agents), so a check that only looks at file names
 produces false positives.
 
@@ -67,27 +67,27 @@ Sentinel should report, as `SecurityFinding` objects:
 
 ```json
 {
-  "fixture": "risky/cicd-unpinned-third-party-action.json",
+  "fixture": "risky/cicd-pull-request-target-head-checkout.json",
   "label": "risky",
   "summary": "One sentence on why this PR is safe or risky.",
   "findings": [
     {
       "agent": "cicd",
-      "title": "Third-party action pinned to a mutable branch",
+      "title": "Workflow grants write-all token permissions",
       "description": "...",
-      "severity": "high",
+      "severity": "medium",
       "recommendation": "...",
       "evidence": [
         {
-          "file_path": ".github/workflows/deploy.yml",
-          "line_start": 16,
+          "file_path": ".github/workflows/preview.yml",
+          "line_start": 7,
           "line_end": null,
-          "observation": "Action reference changed from a commit SHA to the 'main' branch."
+          "observation": "Top-level permissions set to write-all."
         }
       ],
       "confidence": 0.9,
-      "uncertainty": [],
-      "requires_human_review": true
+      "uncertainty": ["Did not check repository-level default token permissions."],
+      "requires_human_review": false
     }
   ]
 }
@@ -166,7 +166,8 @@ Notes:
   undefined. Per PR, it matches what reviewers experience: a clean PR that
   gets flagged.
 - The per-finding miss rate is 1 − recall, so it isn't reported separately.
-- With 8 cases, one case moves a rate by 12.5 to 25 points. Treat the
+- With 8 cases (5 safe, 3 risky), one case moves the false-positive rate
+  by 20 points and the false-negative rate by 33. Treat the
   numbers as a regression signal, not a benchmark, until the dataset grows
   (PROJECT.md plans that for Sprint 5).
 
@@ -179,15 +180,15 @@ change to the root `package.json` at line 1 and nothing else:
 ```text
 case                                     label  exp  act  TP  FP  FN  result
 cicd-pinned-actions-read-only            safe     0    0   0   0   0  PASS
+cicd-third-party-action-sha-bump         safe     0    0   0   0   0  PASS
 dep-lodash-patch-bump                    safe     0    1   0   1   0  FAIL
 docs-readme-typo                         safe     0    0   0   0   0  PASS
 release-dockerfile-digest-bump           safe     0    0   0   0   0  PASS
 cicd-pull-request-target-head-checkout   risky    2    0   0   0   2  FAIL
-cicd-unpinned-third-party-action         risky    1    0   0   0   1  FAIL
 dep-new-package-install-script           risky    1    1   0   1   1  FAIL
 release-dockerfile-latest-and-curl-bash  risky    2    0   0   0   2  FAIL
 
-precision 0.00 · recall 0.00 · false-positive rate 0.25 · false-negative rate 1.00
+precision 0.00 · recall 0.00 · false-positive rate 0.20 · false-negative rate 1.00
 ```
 
 This is the expected result for a mock. It shows the harness catching both
