@@ -1,0 +1,2 @@
+# Keep lint suggestions compatible with the Python version verified locally.
+target-version = "py312"

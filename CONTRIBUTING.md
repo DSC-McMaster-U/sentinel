@@ -28,20 +28,7 @@ All contributors must follow our [Code of Conduct](CODE_OF_CONDUCT.md). Please b
    cd sentinel
    ```
 
-2. **Create a Python virtual environment and install dependencies.** See the [README](README.md) for project context.
-
-   ```bash
-   python -m venv .venv
-
-   # macOS / Linux
-   source .venv/bin/activate
-   # Windows (PowerShell)
-   .venv\Scripts\Activate.ps1
-
-   pip install -r requirements.txt
-   ```
-
-   > **Note:** The project is still being set up. `requirements.txt`, environment variables (`.env`), and Docker instructions will be added as the backend and MCP server take shape. <!-- TODO: update once setup is final -->
+2. **Set up the backend.** Follow the [onboarding guide](docs/onboarding/GETTING_STARTED.md#install-and-run-the-backend-checks) to create a virtual environment and install dependencies.
 
 3. **Keep your local `main` up to date** before starting new work:
 
@@ -130,11 +117,12 @@ Use `Fixes` for bugs, `Closes` for features and tasks, and `Relates to` for part
 Run the test suite before pushing:
 
 ```bash
-pytest
+cd backend
+ruff check .
+python -m pytest
 ```
 
 - Add or update tests for any behaviour you change.
-- **Linting and formatting:** <!-- TODO: add commands (e.g. `ruff check .` / `ruff format .`) once tooling is configured --> Not configured yet. This section will be updated when lint and format tools are added.
 - **Your PR must pass CI** (GitHub Actions) before it can be merged, once CI is set up.
 
 ## Code Review Expectations
