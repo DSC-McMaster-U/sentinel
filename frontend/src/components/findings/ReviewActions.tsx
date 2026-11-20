@@ -49,6 +49,15 @@ export function ReviewActions({ findingKey, status, onDecision, disabled }: Revi
     setError(null);
   }
 
+  // Switching between dismiss and investigate starts a fresh form: a note
+  // written for one action must not be submitted as the other.
+  function choose(action: ReviewAction) {
+    setPending(action);
+    setReason(null);
+    setNote("");
+    setError(null);
+  }
+
   function submit(action: ReviewAction) {
     const draft: ReviewDecisionDraft = {
       finding_key: findingKey,
@@ -91,7 +100,7 @@ export function ReviewActions({ findingKey, status, onDecision, disabled }: Revi
               disabled={disabled}
               aria-pressed={pending === action}
               className={`rounded px-3 py-1.5 text-sm font-medium disabled:opacity-50 ${className}`}
-              onClick={() => (action === "confirm" ? submit("confirm") : setPending(action))}
+              onClick={() => (action === "confirm" ? submit("confirm") : choose(action))}
             >
               {label}
             </button>
