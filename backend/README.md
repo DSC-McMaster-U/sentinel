@@ -26,9 +26,8 @@ python -m pytest -q
 ```
 
 The tests use `TestClient` and run without a server. If you're setting up from
-scratch, run `uv venv` from the repository root and install dependencies in
-the activated environment with `uv pip install fastapi pydantic uvicorn pytest httpx2`.
-Issue #5 tracks the shared dependency setup.
+scratch, follow the [onboarding guide](../docs/onboarding/GETTING_STARTED.md)
+to create an environment and install the backend dependencies.
 
 ## Try the API manually (optional)
 
@@ -64,5 +63,3 @@ Run Python commands from inside `backend/` so the `app` package is importable:
 ```python
 from app.schemas import ...
 ```
-> **TODO (Sprint 1, Saqib + Megh, #5: "Configure Local Development Environment, Docker, and GitHub Actions CI"):** add dependency management (`requirements.txt` or `pyproject.toml`) and run instructions here.
-

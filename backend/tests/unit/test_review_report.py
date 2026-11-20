@@ -1,6 +1,6 @@
 """Tests for backend/app/schemas/review_report.py (#7)."""
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from app.schemas.agent import AgentOutput
 from app.schemas.finding import Evidence, SecurityFinding
@@ -162,8 +162,8 @@ def test_no_review_required_when_everything_succeeds_cleanly():
         pr_number=1,
         repo_url="https://github.com/DSC-McMaster-U/sentinel",
         commit_sha="abc123",
-        generated_at=datetime(2026, 11, 11, tzinfo=timezone.utc),
+        generated_at=datetime(2026, 11, 11, tzinfo=UTC),
     )
 
     assert report.requires_human_review is False
-    assert report.generated_at == datetime(2026, 11, 11, tzinfo=timezone.utc)
+    assert report.generated_at == datetime(2026, 11, 11, tzinfo=UTC)
