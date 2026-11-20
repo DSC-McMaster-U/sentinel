@@ -1,0 +1,31 @@
+{
+  "fixture": "risky/cicd-unpinned-third-party-action.json",
+  "label": "risky",
+  "summary": "A third-party deploy action that receives a production secret is moved from a commit SHA to the mutable main branch.",
+  "findings": [
+    {
+      "agent": "cicd",
+      "title": "Third-party action pinned to a mutable branch",
+      "description": "The deploy workflow now runs example-org/deploy-to-cloud@main. Anyone who can push to that repository's main branch can change the code that runs in this job, and the job passes the DEPLOY_TOKEN secret to the action.",
+      "severity": "high",
+      "recommendation": "Pin the action to a full commit SHA (with a version comment) and update it through reviewed dependency bumps.",
+      "evidence": [
+        {
+          "file_path": ".github/workflows/deploy.yml",
+          "line_start": 16,
+          "line_end": null,
+          "observation": "Action reference changed from a commit SHA to the 'main' branch."
+        },
+        {
+          "file_path": ".github/workflows/deploy.yml",
+          "line_start": 18,
+          "line_end": null,
+          "observation": "The action receives the DEPLOY_TOKEN secret as an input."
+        }
+      ],
+      "confidence": 0.9,
+      "uncertainty": [],
+      "requires_human_review": true
+    }
+  ]
+}

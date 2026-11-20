@@ -1,0 +1,6 @@
+{
+  "fixture": "safe/release-dockerfile-digest-bump.json",
+  "label": "safe",
+  "summary": "Base image moves to a newer patch release and stays pinned by digest.",
+  "findings": []
+}

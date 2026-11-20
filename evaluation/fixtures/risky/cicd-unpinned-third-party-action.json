@@ -1,0 +1,30 @@
+{
+  "repository": {
+    "owner": "sentinel-fixtures",
+    "name": "demo-app",
+    "full_name": "sentinel-fixtures/demo-app",
+    "url": "https://github.com/sentinel-fixtures/demo-app",
+    "default_branch": "main"
+  },
+  "pr_number": 201,
+  "title": "Use latest deploy action",
+  "description": "Switch to main so we always get the newest deploy fixes.",
+  "author": "contributor-c",
+  "base_branch": "main",
+  "head_branch": "ci/latest-deploy-action",
+  "base_sha": "201aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "head_sha": "201eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "url": "https://github.com/sentinel-fixtures/demo-app/pull/201",
+  "created_at": "2026-11-18T14:00:00Z",
+  "updated_at": "2026-11-18T14:30:00Z",
+  "files_changed": [
+    {
+      "path": ".github/workflows/deploy.yml",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "patch": "@@ -14,6 +14,6 @@\n     steps:\n       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2\n-      - uses: example-org/deploy-to-cloud@3f1c2a7b9e4d5c6f8a0b1c2d3e4f5a6b7c8d9e0f # v2.3.1\n+      - uses: example-org/deploy-to-cloud@main\n         with:\n           api-token: ${{ secrets.DEPLOY_TOKEN }}\n           environment: production",
+      "previous_path": null
+    }
+  ]
+}

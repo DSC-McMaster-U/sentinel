@@ -1,0 +1,6 @@
+{
+  "fixture": "safe/docs-readme-typo.json",
+  "label": "safe",
+  "summary": "Documentation-only change; no dependency, workflow or release files are touched.",
+  "findings": []
+}
