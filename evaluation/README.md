@@ -46,8 +46,11 @@ The harness tests run in backend CI (`backend/tests/unit/test_evaluation_harness
 | `risky/cicd-pull-request-target-head-checkout` | risky | **critical** (cicd): `pull_request_target` runs PR code with secrets; **medium** (cicd): `permissions: write-all` |
 | `risky/dep-new-package-install-script` | risky | **high** (dependency): new dependency with `hasInstallScript: true` |
 | `risky/release-dockerfile-latest-and-curl-bash` | risky | **high** (release): `curl \| bash` during build; **medium** (release): `FROM node:latest` replaces a digest pin |
+| `safe/dep-safe-local-install-script` | safe | none: supplied local install script only prints a message |
+| `risky/dep-risky-remote-install-script` | risky | **high** (dependency): install hook downloads and executes remote code |
+| `risky/dep-risky-http-tarball` | risky | **medium** (dependency): manifest downloads a tarball over HTTP |
 
-That is 8 pull requests (5 safe, 3 risky) with 5 expected findings across
+That is 11 pull requests (6 safe, 5 risky) with 7 expected findings across
 all three agents. The CI/CD set is 2 safe + 1 risky. The safe cases are deliberately close to the risky ones
 (the same files and agents), so a check that only looks at file names
 produces false positives.
@@ -119,18 +122,29 @@ must not flag. Pairs are what measure false positives.
 
 ## How actual findings are matched
 
-For each fixture, the harness pairs each expected finding with **at most
-one** actual finding when both of these hold:
+The default `--matching-mode exact` uses Sarthak's
+`scripts/matching.py:compare_findings(expected, actual)`. It matches exact agent,
+title and the **set** of evidence `(file_path, line_start, line_end)` locations,
+the same identity used by `combine_findings`. Evidence order and repeated
+locations do not matter; case, whitespace and line ranges do. Duplicate expected
+identities are rejected as annotation errors. Inputs are not mutated.
 
-1. **Same `agent`**.
-2. **Overlapping evidence:** some evidence item in each points at the same
-   `file_path`, with line ranges within `--line-tolerance` lines of each
-   other (default 2).
+The helper returns `matched` (expected/actual pairs), `missed`, `unexpected`,
+`duplicates` and `passed`. The runner includes duplicate actual occurrences in
+`unexpected` for scoring: every extra reported finding is an FP. This deliberately
+adapts the ZIP's separate duplicate accounting to the combined runner's policy.
 
-Titles, descriptions and wording are **not** compared, because agents phrase
-the same claim differently. When several actual findings qualify, one with
-the same severity is preferred. Expected findings are matched from most to
-least severe, so the most important claims get their best candidate first.
+Exact matching is a deterministic regression baseline, **not semantic LLM
+accuracy**. Paraphrases can produce FP + FN. Severity, confidence, observations,
+uncertainty, recommendation and review flags are not part of detection identity.
+
+Rohit's original matcher remains available with `--matching-mode location`.
+It requires the same agent and overlapping evidence in the same file, with
+`--line-tolerance` (default 2); it prefers equal severity and ignores titles.
+This mode is exploratory: an unrelated claim at the same location can match.
+Do not compare scores across modes. Console output and JSON configuration
+identify the mode. Agree check IDs with #2/#7 before interpreting flexible
+matching as claim accuracy.
 
 After matching:
 
@@ -150,11 +164,11 @@ threshold.
 | --- | --- | --- |
 | **Precision** | TP / (TP + FP) | When Sentinel reports something, how often is it real? |
 | **Recall** | TP / (TP + FN) | Of the real issues, how many does Sentinel find? |
-| **F1** | 2 · P · R / (P + R) | One number balancing both, for tracking over time |
-| **False-positive rate** | safe PRs with ≥ 1 finding / safe PRs | How often does Sentinel bother reviewers on a clean PR? |
-| **False-negative rate** | risky PRs where no expected finding was matched / risky PRs | How often does a risky PR go completely unflagged? |
+| **F1** | 2TP / (2TP + FP + FN) | One number balancing both, for tracking over time |
+| **False-positive rate** | successfully evaluated safe PRs with ≥ 1 finding / successfully evaluated safe PRs | How often does Sentinel bother reviewers on a clean PR? |
+| **False-negative rate** | successfully evaluated risky PRs with no match / evaluated risky PRs with expected findings at the selected threshold | How often does a risky PR go completely unflagged? |
 | **Severity agreement** | matched pairs with equal severity / TP | Are real issues rated at the right severity? |
-| **Human-review agreement** | matched pairs with equal `requires_human_review` / TP | Does the agent ask for review when it should? |
+| **Human-review agreement** | labelled matched pairs with equal `requires_human_review` / labelled matched pairs | Does the agent ask for review when it should? |
 | **Mean confidence (TP vs FP)** | average `confidence` of matched vs unexpected findings | Is confidence informative? TP confidence should be clearly higher than FP confidence. |
 
 Notes:
@@ -166,10 +180,16 @@ Notes:
   undefined. Per PR, it matches what reviewers experience: a clean PR that
   gets flagged.
 - The per-finding miss rate is 1 − recall, so it isn't reported separately.
-- With 8 cases (5 safe, 3 risky), one case moves the false-positive rate
-  by 20 points and the false-negative rate by 33. Treat the
-  numbers as a regression signal, not a benchmark, until the dataset grows
-  (PROJECT.md plans that for Sprint 5).
+- Errors, including failed/partial reports, are excluded from detection metrics.
+  Always show `evaluated_cases / cases` and `errors`; an entirely failed run has
+  undefined rates, not a clean score. Risky cases with no expected findings above
+  `--min-severity` are excluded from the PR-level miss-rate denominator.
+- `score_human_review: false` on an expected-file envelope excludes that case
+  from human-review agreement. Sarthak's three fixtures use this because their
+  expected flags are placeholders; no shared schema fields are changed.
+- With all 11 cases evaluated, one safe case changes FPR by about 16.7 points;
+  one risky case changes PR-level miss rate by 20 points. This is a small
+  regression dataset, not a reliable accuracy estimate.
 
 ### Current baseline
 
@@ -177,24 +197,10 @@ The default runner is the mock review from #3
 (`app.services.review_service:build_mock_review_report`). It flags any
 change to the root `package.json` at line 1 and nothing else:
 
-```text
-case                                     label  exp  act  TP  FP  FN  result
-cicd-pinned-actions-read-only            safe     0    0   0   0   0  PASS
-cicd-third-party-action-sha-bump         safe     0    0   0   0   0  PASS
-dep-lodash-patch-bump                    safe     0    1   0   1   0  FAIL
-docs-readme-typo                         safe     0    0   0   0   0  PASS
-release-dockerfile-digest-bump           safe     0    0   0   0   0  PASS
-cicd-pull-request-target-head-checkout   risky    2    0   0   0   2  FAIL
-dep-new-package-install-script           risky    1    1   0   1   1  FAIL
-release-dockerfile-latest-and-curl-bash  risky    2    0   0   0   2  FAIL
-
-precision 0.00 · recall 0.00 · false-positive rate 0.20 · false-negative rate 1.00
-```
-
-This is the expected result for a mock. It shows the harness catching both
-failure modes: a false positive on a safe dependency bump, and a finding on
-the right file at the wrong place (line 1 instead of the new dependency on
-line 13), which counts as one FP plus one FN.
+Against the current mock, the combined exact-mode baseline is TP=0, FP=5,
+FN=7, precision=0, recall=0, F1=0, FPR=2/6 and PR-level miss rate=5/5.
+This measures mock behavior, not security-agent accuracy. Replaying expected
+files against themselves is only a wiring check.
 
 ## Plugging in the real workflow
 
@@ -216,11 +222,26 @@ be added once the agents are real.
 
 ## Limitations
 
-- Matching is greedy, not an optimal assignment. That is fine at this size.
-  Revisit it if fixtures start having many overlapping findings.
+- Exploratory location matching is greedy and can confuse nearby claims.
+  Exact matching remains the default.
 - Evidence must point at the right file and lines. A correct claim with
   evidence somewhere else counts as FP + FN. This is deliberate, because
   Sentinel's findings must be grounded, but `--line-tolerance` can be raised
-  for exploratory runs.
+  for exploratory location-mode runs.
 - Expected findings describe today's checks. When #2 finalizes check IDs and
   severity guidance, the expected severities here should be aligned with it.
+
+
+## Combined contribution and tests
+
+Sarthak contributes the overview SVG, coverage-state specification, three
+dependency fixtures, exact matching helper and matching regression tests.
+Rohit contributes the expanded review interface, runner, validation, metrics,
+frontend types/components and the original eight fixtures. See
+[dependency criteria](fixtures/dependency-examples.md); #2 owners still need
+to approve the proposed criteria and severity labels.
+
+Both test modules live under `backend/tests/unit/`, so existing backend CI
+runs them. From `backend/`, run `python -m pytest` and `ruff check .`.
+From the repository root, run `ruff check evaluation/scripts` and
+`python evaluation/scripts/run_evaluation.py --check-fixtures`.

@@ -36,10 +36,14 @@ BACKEND_DIR = REPO_ROOT / "backend"
 if str(BACKEND_DIR) not in sys.path:
     sys.path.insert(0, str(BACKEND_DIR))
 
-from pydantic import TypeAdapter, ValidationError
+from pydantic import TypeAdapter, ValidationError  # noqa: E402 - imports follow standalone path setup
 
-from app.schemas import PullRequestInput, SecurityFinding
-from app.schemas.review_report import ReviewReport
+from app.schemas import PullRequestInput, SecurityFinding  # noqa: E402 - imports follow standalone path setup
+from app.schemas.review_report import ReviewReport  # noqa: E402 - imports follow standalone path setup
+
+if str(Path(__file__).resolve().parent) not in sys.path:
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+from matching import compare_findings  # noqa: E402 - imports follow standalone path setup
 
 DEFAULT_RUNNER = "app.services.review_service:build_mock_review_report"
 LABELS = ("safe", "risky")
@@ -70,6 +74,7 @@ class Case:
     pull_request: PullRequestInput
     expected: list[SecurityFinding]
     summary: str = ""
+    score_human_review: bool = True
 
 
 def load_cases(evaluation_dir: Path = EVALUATION_DIR) -> list[Case]:
@@ -96,22 +101,37 @@ def load_cases(evaluation_dir: Path = EVALUATION_DIR) -> list[Case]:
             seen[name] = fixture_path
 
             try:
-                pull_request = PullRequestInput.model_validate_json(fixture_path.read_text())
+                pull_request = PullRequestInput.model_validate_json(
+                    fixture_path.read_text()
+                )
             except ValidationError as exc:
                 problems.append(f"{fixture_path}: not a valid PullRequestInput: {exc}")
                 continue
 
             expected_path = expected_dir / f"{name}.json"
             if not expected_path.exists():
-                problems.append(f"{fixture_path}: missing expected findings {expected_path}")
+                problems.append(
+                    f"{fixture_path}: missing expected findings {expected_path}"
+                )
                 continue
 
             try:
                 expected_doc = json.loads(expected_path.read_text())
-                expected = _FINDINGS_ADAPTER.validate_python(expected_doc.get("findings"))
+                expected = _FINDINGS_ADAPTER.validate_python(
+                    expected_doc.get("findings")
+                )
             except (json.JSONDecodeError, AttributeError, ValidationError) as exc:
-                problems.append(f"{expected_path}: 'findings' is not a SecurityFinding list: {exc}")
+                problems.append(
+                    f"{expected_path}: 'findings' is not a SecurityFinding list: {exc}"
+                )
                 continue
+
+            if not isinstance(expected_doc.get("score_human_review", True), bool):
+                problems.append(f"{expected_path}: score_human_review must be boolean")
+            try:
+                compare_findings(expected, [])
+            except ValueError as exc:
+                problems.append(f"{expected_path}: {exc}")
 
             if expected_doc.get("label") != label:
                 problems.append(
@@ -119,9 +139,13 @@ def load_cases(evaluation_dir: Path = EVALUATION_DIR) -> list[Case]:
                     f"fixture directory {label!r}"
                 )
             if label == "safe" and expected:
-                problems.append(f"{expected_path}: safe fixtures must expect no findings")
+                problems.append(
+                    f"{expected_path}: safe fixtures must expect no findings"
+                )
             if label == "risky" and not expected:
-                problems.append(f"{expected_path}: risky fixtures must expect at least one finding")
+                problems.append(
+                    f"{expected_path}: risky fixtures must expect at least one finding"
+                )
 
             case = Case(
                 name=name,
@@ -130,8 +154,11 @@ def load_cases(evaluation_dir: Path = EVALUATION_DIR) -> list[Case]:
                 pull_request=pull_request,
                 expected=expected,
                 summary=expected_doc.get("summary", ""),
+                score_human_review=expected_doc.get("score_human_review", True),
             )
-            problems.extend(f"{expected_path}: {p}" for p in check_evidence_locations(case))
+            problems.extend(
+                f"{expected_path}: {p}" for p in check_evidence_locations(case)
+            )
             cases.append(case)
 
     fixture_names = set(seen)
@@ -139,6 +166,8 @@ def load_cases(evaluation_dir: Path = EVALUATION_DIR) -> list[Case]:
         if expected_path.stem not in fixture_names:
             problems.append(f"{expected_path}: no fixture with this base name")
 
+    if not seen:
+        problems.append("No fixtures found")
     if problems:
         raise EvaluationError("\n".join(problems))
     return cases
@@ -204,13 +233,23 @@ def load_runner(spec: str) -> Runner:
 def findings_from_output(output: Any) -> list[SecurityFinding]:
     """Accept a ReviewReport, a {'findings': [...]} mapping or a bare finding list."""
     if isinstance(output, ReviewReport):
+        if output.agents_failed or output.agents_partial:
+            raise EvaluationError("Review did not complete: failed or partial agents")
         return list(output.findings)
     if isinstance(output, dict):
+        if (
+            output.get("agents_failed")
+            or output.get("agents_partial")
+            or output.get("status") in {"failure", "partial"}
+        ):
+            raise EvaluationError("Review did not complete: failed or partial agents")
         output = output.get("findings")
     try:
         return _FINDINGS_ADAPTER.validate_python(output)
     except ValidationError as exc:
-        raise EvaluationError(f"output is not a list of SecurityFinding: {exc}") from exc
+        raise EvaluationError(
+            f"output is not a list of SecurityFinding: {exc}"
+        ) from exc
 
 
 def actual_from_runner(runner: Runner) -> Callable[[Case], list[SecurityFinding]]:
@@ -249,7 +288,10 @@ def locations_overlap(
             if a.file_path != e.file_path:
                 continue
             a_end = a.line_end or a.line_start
-            if a.line_start <= e_end + line_tolerance and e.line_start <= a_end + line_tolerance:
+            if (
+                a.line_start <= e_end + line_tolerance
+                and e.line_start <= a_end + line_tolerance
+            ):
                 return True
     return False
 
@@ -266,15 +308,20 @@ def match_findings(
     actual: list[SecurityFinding],
     *,
     line_tolerance: int = 2,
+    matching_mode: str = "exact",
 ) -> MatchResult:
-    """Pair each expected finding with at most one actual finding.
+    """Use exact claim identity by default; location mode is exploratory only.
 
-    A pair must come from the same agent and point at overlapping evidence.
-    Titles and wording are not compared, because agents phrase the same
-    claim differently. When several actual findings qualify, one with the
-    same severity is preferred. Expected findings are matched from most to
-    least severe so the important claims claim their best candidate first.
+    Duplicates are separately detected by compare_findings, then included in
+    unexpected findings so repeated reports reduce precision consistently.
     """
+    if matching_mode == "exact":
+        exact = compare_findings(expected, actual)
+        return MatchResult(
+            exact.matched, exact.missed, exact.unexpected + exact.duplicates
+        )
+    if matching_mode != "location":
+        raise EvaluationError(f"Unknown matching mode: {matching_mode}")
     result = MatchResult()
     available = list(actual)
     for exp in sorted(expected, key=lambda f: _SEVERITY_RANK[f.severity]):
@@ -286,7 +333,9 @@ def match_findings(
         if not candidates:
             result.missed.append(exp)
             continue
-        best = next((c for c in candidates if c.severity == exp.severity), candidates[0])
+        best = next(
+            (c for c in candidates if c.severity == exp.severity), candidates[0]
+        )
         available.remove(best)
         result.matched.append((exp, best))
     result.unexpected = available
@@ -308,10 +357,14 @@ class CaseResult:
 
     @property
     def passed(self) -> bool:
-        return self.error is None and not self.match.missed and not self.match.unexpected
+        return (
+            self.error is None and not self.match.missed and not self.match.unexpected
+        )
 
 
-def at_or_above(findings: list[SecurityFinding], min_severity: str) -> list[SecurityFinding]:
+def at_or_above(
+    findings: list[SecurityFinding], min_severity: str
+) -> list[SecurityFinding]:
     limit = _SEVERITY_RANK[min_severity]
     return [f for f in findings if _SEVERITY_RANK[f.severity] <= limit]
 
@@ -322,6 +375,7 @@ def evaluate_case(
     *,
     line_tolerance: int = 2,
     min_severity: str = "low",
+    matching_mode: str = "exact",
 ) -> CaseResult:
     expected = at_or_above(case.expected, min_severity)
     try:
@@ -335,7 +389,9 @@ def evaluate_case(
             match=MatchResult(missed=list(expected)),
             error=f"{type(exc).__name__}: {exc}",
         )
-    match = match_findings(expected, actual, line_tolerance=line_tolerance)
+    match = match_findings(
+        expected, actual, line_tolerance=line_tolerance, matching_mode=matching_mode
+    )
     return CaseResult(case=case, expected=expected, actual=actual, match=match)
 
 
@@ -350,28 +406,30 @@ def _mean(values: list[float]) -> float | None:
 def compute_metrics(results: list[CaseResult]) -> dict[str, Any]:
     """Aggregate finding-level and PR-level metrics. Ratios with a zero
     denominator are None (undefined), never silently 0 or 1."""
+    all_results = results
+    results = [r for r in all_results if r.error is None]
     tp = sum(len(r.match.matched) for r in results)
     fp = sum(len(r.match.unexpected) for r in results)
     fn = sum(len(r.match.missed) for r in results)
     precision = _ratio(tp, tp + fp)
     recall = _ratio(tp, tp + fn)
-    f1 = (
-        2 * precision * recall / (precision + recall)
-        if precision is not None and recall is not None and precision + recall
-        else None
-    )
+    f1 = _ratio(2 * tp, 2 * tp + fp + fn)
 
     safe = [r for r in results if r.case.label == "safe"]
-    risky = [r for r in results if r.case.label == "risky"]
+    risky = [r for r in results if r.case.label == "risky" and r.expected]
     safe_flagged = sum(1 for r in safe if r.actual)
     risky_missed = sum(1 for r in risky if r.expected and not r.match.matched)
     pairs = [pair for r in results for pair in r.match.matched]
 
+    review_pairs = [
+        pair for r in results if r.case.score_human_review for pair in r.match.matched
+    ]
     return {
-        "cases": len(results),
+        "cases": len(all_results),
+        "evaluated_cases": len(results),
         "safe_cases": len(safe),
         "risky_cases": len(risky),
-        "errors": sum(1 for r in results if r.error),
+        "errors": sum(1 for r in all_results if r.error),
         "passed": sum(1 for r in results if r.passed),
         "true_positives": tp,
         "false_positives": fp,
@@ -381,9 +439,17 @@ def compute_metrics(results: list[CaseResult]) -> dict[str, Any]:
         "f1": f1,
         "false_positive_rate": _ratio(safe_flagged, len(safe)),
         "false_negative_rate": _ratio(risky_missed, len(risky)),
-        "severity_agreement": _ratio(sum(1 for e, a in pairs if e.severity == a.severity), tp),
+        "severity_agreement": _ratio(
+            sum(1 for e, a in pairs if e.severity == a.severity), tp
+        ),
+        "human_review_pairs": len(review_pairs),
         "human_review_agreement": _ratio(
-            sum(1 for e, a in pairs if e.requires_human_review == a.requires_human_review), tp
+            sum(
+                1
+                for e, a in review_pairs
+                if e.requires_human_review == a.requires_human_review
+            ),
+            len(review_pairs),
         ),
         "mean_confidence_true_positives": _mean([a.confidence for _, a in pairs]),
         "mean_confidence_false_positives": _mean(
@@ -446,7 +512,7 @@ def format_report(results: list[CaseResult], metrics: dict[str, Any]) -> str:
         (
             "cases",
             (
-                f"{m['cases']} ({m['safe_cases']} safe, {m['risky_cases']} risky), "
+                f"{m['evaluated_cases']}/{m['cases']} evaluated ({m['safe_cases']} safe, {m['risky_cases']} risky), "
                 f"{m['passed']} passed, {m['errors']} errors"
             ),
         ),
@@ -457,8 +523,14 @@ def format_report(results: list[CaseResult], metrics: dict[str, Any]) -> str:
         ("precision", _fmt(m["precision"])),
         ("recall", _fmt(m["recall"])),
         ("f1", _fmt(m["f1"])),
-        ("false-positive rate", f"{_fmt(m['false_positive_rate'])}  (safe PRs with any finding)"),
-        ("false-negative rate", f"{_fmt(m['false_negative_rate'])}  (risky PRs with no match)"),
+        (
+            "false-positive rate",
+            f"{_fmt(m['false_positive_rate'])}  (safe PRs with any finding)",
+        ),
+        (
+            "false-negative rate",
+            f"{_fmt(m['false_negative_rate'])}  (risky PRs with no match)",
+        ),
         ("severity agreement", _fmt(m["severity_agreement"])),
         ("human-review agreement", _fmt(m["human_review_agreement"])),
         (
@@ -474,7 +546,9 @@ def format_report(results: list[CaseResult], metrics: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def results_to_json(results: list[CaseResult], metrics: dict[str, Any]) -> dict[str, Any]:
+def results_to_json(
+    results: list[CaseResult], metrics: dict[str, Any]
+) -> dict[str, Any]:
     def dump(findings: list[SecurityFinding]) -> list[dict[str, Any]]:
         return [f.model_dump(mode="json") for f in findings]
 
@@ -487,7 +561,10 @@ def results_to_json(results: list[CaseResult], metrics: dict[str, Any]) -> dict[
                 "passed": r.passed,
                 "error": r.error,
                 "matched": [
-                    {"expected": e.model_dump(mode="json"), "actual": a.model_dump(mode="json")}
+                    {
+                        "expected": e.model_dump(mode="json"),
+                        "actual": a.model_dump(mode="json"),
+                    }
                     for e, a in r.match.matched
                 ],
                 "missed": dump(r.match.missed),
@@ -524,6 +601,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="directory containing fixtures/ and expected-findings/",
     )
     parser.add_argument(
+        "--matching-mode",
+        choices=("exact", "location"),
+        default="exact",
+        help="exact claim identity (default), or exploratory location matching",
+    )
+    parser.add_argument(
         "--line-tolerance",
         type=int,
         default=2,
@@ -535,7 +618,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default="low",
         help="ignore expected and actual findings below this severity (default: low)",
     )
-    parser.add_argument("--json-out", type=Path, help="also write the full results as JSON")
+    parser.add_argument(
+        "--json-out", type=Path, help="also write the full results as JSON"
+    )
     parser.add_argument(
         "--check-fixtures",
         action="store_true",
@@ -557,7 +642,9 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.check_fixtures:
         safe = sum(1 for c in cases if c.label == "safe")
-        print(f"OK: {len(cases)} fixtures ({safe} safe, {len(cases) - safe} risky) are valid.")
+        print(
+            f"OK: {len(cases)} fixtures ({safe} safe, {len(cases) - safe} risky) are valid."
+        )
         return 0
 
     try:
@@ -572,16 +659,27 @@ def main(argv: list[str] | None = None) -> int:
 
     results = [
         evaluate_case(
-            case, produce, line_tolerance=args.line_tolerance, min_severity=args.min_severity
+            case,
+            produce,
+            line_tolerance=args.line_tolerance,
+            min_severity=args.min_severity,
+            matching_mode=args.matching_mode,
         )
         for case in cases
     ]
     metrics = compute_metrics(results)
+    print(f"Matching mode: {args.matching_mode}")
     print(format_report(results, metrics))
 
     if args.json_out:
         args.json_out.parent.mkdir(parents=True, exist_ok=True)
-        args.json_out.write_text(json.dumps(results_to_json(results, metrics), indent=2) + "\n")
+        payload = results_to_json(results, metrics)
+        payload["configuration"] = {
+            "matching_mode": args.matching_mode,
+            "line_tolerance": args.line_tolerance,
+            "min_severity": args.min_severity,
+        }
+        args.json_out.write_text(json.dumps(payload, indent=2) + "\n")
         print(f"\nWrote {args.json_out}")
 
     # Imperfect scores are the expected state of a work-in-progress system, so

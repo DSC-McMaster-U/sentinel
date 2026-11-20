@@ -1,0 +1,7 @@
+{
+  "fixture": "safe/dep-safe-local-install-script.json",
+  "label": "safe",
+  "summary": "Synthetic safe example for the proposed dependency fixture criteria. No real package or network operation is required.",
+  "score_human_review": false,
+  "findings": []
+}

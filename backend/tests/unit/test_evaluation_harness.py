@@ -19,7 +19,9 @@ from app.schemas.review_report import ReviewReport
 EVALUATION_DIR = Path(__file__).resolve().parents[3] / "evaluation"
 if not (EVALUATION_DIR / "scripts" / "run_evaluation.py").exists():
     # The backend Docker image copies only backend/, so there is nothing to test.
-    pytest.skip("evaluation/ is not available in this checkout", allow_module_level=True)
+    pytest.skip(
+        "evaluation/ is not available in this checkout", allow_module_level=True
+    )
 
 _SPEC = importlib.util.spec_from_file_location(
     "run_evaluation", EVALUATION_DIR / "scripts" / "run_evaluation.py"
@@ -55,6 +57,10 @@ def _finding(
         uncertainty=[],
         requires_human_review=False,
     )
+
+
+def location_match(expected, actual, **kwargs):
+    return harness.match_findings(expected, actual, matching_mode="location", **kwargs)
 
 
 # ---------------------------------------------------------------- dataset
@@ -111,10 +117,14 @@ def test_safe_fixture_with_expected_findings_is_rejected(tmp_path):
     dataset = _copy_dataset(tmp_path)
     path = dataset / "expected-findings" / "docs-readme-typo.json"
     doc = json.loads(path.read_text())
-    doc["findings"] = [_finding(file_path="README.md", line_start=20).model_dump(mode="json")]
+    doc["findings"] = [
+        _finding(file_path="README.md", line_start=20).model_dump(mode="json")
+    ]
     path.write_text(json.dumps(doc))
 
-    with pytest.raises(harness.EvaluationError, match="safe fixtures must expect no findings"):
+    with pytest.raises(
+        harness.EvaluationError, match="safe fixtures must expect no findings"
+    ):
         harness.load_cases(dataset)
 
 
@@ -138,7 +148,7 @@ def test_diff_new_lines_skips_removed_lines():
 
 
 def test_matches_same_agent_with_overlapping_evidence():
-    result = harness.match_findings([_finding(line_start=10)], [_finding(line_start=11)])
+    result = location_match([_finding(line_start=10)], [_finding(line_start=11)])
 
     assert len(result.matched) == 1
     assert result.missed == []
@@ -146,7 +156,7 @@ def test_matches_same_agent_with_overlapping_evidence():
 
 
 def test_does_not_match_a_different_agent():
-    result = harness.match_findings([_finding(agent="cicd")], [_finding(agent="release")])
+    result = location_match([_finding(agent="cicd")], [_finding(agent="release")])
 
     assert result.matched == []
     assert len(result.missed) == 1
@@ -154,7 +164,7 @@ def test_does_not_match_a_different_agent():
 
 
 def test_does_not_match_a_different_file():
-    result = harness.match_findings(
+    result = location_match(
         [_finding(file_path="a.yml")], [_finding(file_path="b.yml")]
     )
 
@@ -165,19 +175,21 @@ def test_line_tolerance_controls_matching():
     expected = [_finding(line_start=10)]
     actual = [_finding(line_start=14)]
 
-    assert harness.match_findings(expected, actual, line_tolerance=2).matched == []
-    assert len(harness.match_findings(expected, actual, line_tolerance=4).matched) == 1
+    assert location_match(expected, actual, line_tolerance=2).matched == []
+    assert len(location_match(expected, actual, line_tolerance=4).matched) == 1
 
 
 def test_line_ranges_overlap():
     expected = [_finding(line_start=10, line_end=20)]
     actual = [_finding(line_start=18)]
 
-    assert len(harness.match_findings(expected, actual, line_tolerance=0).matched) == 1
+    assert len(location_match(expected, actual, line_tolerance=0).matched) == 1
 
 
 def test_titles_are_not_compared():
-    result = harness.match_findings([_finding(title="A")], [_finding(title="Different wording")])
+    result = location_match(
+        [_finding(title="A")], [_finding(title="Different wording")]
+    )
 
     assert len(result.matched) == 1
 
@@ -186,14 +198,14 @@ def test_each_actual_finding_matches_at_most_one_expected():
     expected = [_finding(line_start=10), _finding(line_start=11)]
     actual = [_finding(line_start=10)]
 
-    result = harness.match_findings(expected, actual)
+    result = location_match(expected, actual)
 
     assert len(result.matched) == 1
     assert len(result.missed) == 1
 
 
 def test_duplicate_actual_findings_count_as_false_positives():
-    result = harness.match_findings([_finding()], [_finding(), _finding()])
+    result = location_match([_finding()], [_finding(), _finding()])
 
     assert len(result.matched) == 1
     assert len(result.unexpected) == 1
@@ -203,7 +215,7 @@ def test_prefers_candidate_with_the_same_severity():
     expected = [_finding(severity="critical")]
     actual = [_finding(severity="low"), _finding(severity="critical")]
 
-    result = harness.match_findings(expected, actual)
+    result = location_match(expected, actual)
 
     assert result.matched[0][1].severity == "critical"
     assert result.unexpected[0].severity == "low"
@@ -220,7 +232,9 @@ def test_expected_findings_score_perfectly():
     cases = harness.load_cases()
     produce = _produce_from({case.name: case.expected for case in cases})
 
-    metrics = harness.compute_metrics([harness.evaluate_case(c, produce) for c in cases])
+    metrics = harness.compute_metrics(
+        [harness.evaluate_case(c, produce) for c in cases]
+    )
 
     assert metrics["precision"] == 1.0
     assert metrics["recall"] == 1.0
@@ -248,7 +262,9 @@ def test_flagging_a_safe_pr_raises_false_positive_rate():
     safe = [c for c in cases if c.label == "safe"]
     produce = _produce_from({safe[0].name: [_finding()]})
 
-    metrics = harness.compute_metrics([harness.evaluate_case(c, produce) for c in cases])
+    metrics = harness.compute_metrics(
+        [harness.evaluate_case(c, produce) for c in cases]
+    )
 
     assert metrics["false_positives"] == 1
     assert metrics["false_positive_rate"] == pytest.approx(1 / len(safe))
@@ -261,7 +277,9 @@ def test_min_severity_ignores_lower_findings_on_both_sides():
     results = [harness.evaluate_case(c, produce, min_severity="high") for c in cases]
 
     for result in results:
-        assert all(f.severity in {"critical", "high"} for f in result.expected + result.actual)
+        assert all(
+            f.severity in {"critical", "high"} for f in result.expected + result.actual
+        )
     assert harness.compute_metrics(results)["recall"] == 1.0
 
 
@@ -319,7 +337,12 @@ def test_cli_reads_actual_outputs_from_a_directory(tmp_path):
     out = tmp_path / "results.json"
 
     code = harness.main(
-        ["--actual-dir", str(EVALUATION_DIR / "expected-findings"), "--json-out", str(out)]
+        [
+            "--actual-dir",
+            str(EVALUATION_DIR / "expected-findings"),
+            "--json-out",
+            str(out),
+        ]
     )
 
     assert code == 0
@@ -332,3 +355,67 @@ def test_cli_missing_actual_output_is_an_error(tmp_path):
 
 def test_cli_rejects_a_bad_runner_spec():
     assert harness.main(["--runner", "not-a-spec"]) == 2
+
+
+def test_default_match_rejects_different_claim_at_same_location():
+    result = harness.match_findings(
+        [_finding(title="Remote code")], [_finding(title="Other issue")]
+    )
+    assert not result.matched
+    assert len(result.missed) == len(result.unexpected) == 1
+
+
+def test_exact_duplicate_output_counts_as_false_positive():
+    result = harness.match_findings([_finding()], [_finding(), _finding()])
+    assert len(result.matched) == len(result.unexpected) == 1
+
+
+def test_failed_safe_run_is_excluded_from_rates():
+    case = next(c for c in harness.load_cases() if c.label == "safe")
+
+    def broken(_case):
+        raise RuntimeError("failed")
+
+    metrics = harness.compute_metrics([harness.evaluate_case(case, broken)])
+    assert metrics["errors"] == 1
+    assert metrics["evaluated_cases"] == 0
+    assert metrics["false_positive_rate"] is None
+
+
+def test_zero_true_positives_with_errors_in_detection_has_zero_f1():
+    case = next(c for c in harness.load_cases() if c.label == "risky")
+    metrics = harness.compute_metrics(
+        [harness.evaluate_case(case, lambda _: [_finding(agent="wrong")])]
+    )
+    assert metrics["precision"] == metrics["recall"] == metrics["f1"] == 0
+
+
+def test_placeholder_review_flags_are_not_scored():
+    case = next(c for c in harness.load_cases() if c.name == "dep-risky-http-tarball")
+    metrics = harness.compute_metrics(
+        [harness.evaluate_case(case, lambda _: case.expected)]
+    )
+    assert metrics["recall"] == 1
+    assert metrics["human_review_pairs"] == 0
+    assert metrics["human_review_agreement"] is None
+
+
+@pytest.mark.parametrize("field", ["agents_failed", "agents_partial"])
+def test_incomplete_report_is_not_successful_empty_output(field):
+    with pytest.raises(harness.EvaluationError, match="did not complete"):
+        harness.findings_from_output({"findings": [], field: ["dependency"]})
+
+
+def test_empty_dataset_is_rejected(tmp_path):
+    with pytest.raises(harness.EvaluationError, match="No fixtures"):
+        harness.load_cases(tmp_path)
+
+
+def test_duplicate_expected_identity_is_rejected(tmp_path):
+    dataset = _copy_dataset(tmp_path)
+    path = dataset / "expected-findings/dep-risky-http-tarball.json"
+    doc = json.loads(path.read_text())
+    doc["findings"] *= 2
+    path.write_text(json.dumps(doc))
+    with pytest.raises(harness.EvaluationError, match="duplicate identity"):
+        harness.load_cases(dataset)

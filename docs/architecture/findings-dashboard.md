@@ -261,3 +261,40 @@ import alias should map to `./src/*` (the `create-next-app` default).
 4. **Trace view.** PROJECT.md plans trace visualizations. A "How Sentinel
    reached this" tab on the expanded card is the natural place for them once
    tool-call traces exist.
+
+
+## Sarthak's overview contribution and integration rules
+
+![Dashboard overview wireframe](findings-dashboard.svg)
+
+This overview complements the expanded finding and review-action design above.
+It illustrates numeric confidence, severity totals, explicit review flags and
+coverage warnings. The prototype retains its existing confidence reading bands,
+severity-then-confidence sort and Unresolved status filter. The SVG's human-review
+flag filter is an additional design proposal, not an implemented prototype control.
+Confidence bands are provisional reading aids, not calibrated probabilities or
+automatic review thresholds. Neither a false review flag nor a reviewer action
+means the PR has been proven safe.
+
+Evaluate coverage before interpreting an empty findings list:
+
+| Condition | Required interpretation |
+| --- | --- |
+| No agents ran | No security conclusion is available, even if the report review flag is false. Do not infer why agents did not run. Findings with no agents indicate inconsistent report data. |
+| Any failed agents | Review incomplete; retain available findings and partial-agent warnings. If every attempted agent failed, distinguish “All checks failed”. |
+| Partial agents without failures | Review incomplete; show available findings. |
+| Completed checks, no findings | No findings reported by those completed checks; never a general safety guarantee. |
+| Filters hide findings | Distinguish filtered-empty from originally empty; keep coverage warnings visible and allow filters to be cleared. |
+| Missing/unreadable report | Report unavailable; the future data-loading page must not turn this into an empty successful report. |
+
+Summary counts cover the entire report, regardless of filters. The integrated
+page should expose repository identity, full commit SHA and timestamp timezone.
+`ReviewReport` has agent names but no failure reasons: show “Reason unavailable”
+instead of inventing a reason. Absence from `agents_run` does not establish that
+an agent was unsupported or intentionally skipped.
+
+Keep long titles and paths wrappable and stack regions on narrow screens.
+Evidence refers to head-commit lines for these synthetic fixtures; deleted-file
+evidence needs a separately agreed base-commit convention. Persistent decisions
+still require the identity and storage agreements described above. These design
+requirements do not add backend fields or persistence in Sprint 1.
