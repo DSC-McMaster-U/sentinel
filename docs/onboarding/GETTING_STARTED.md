@@ -101,7 +101,7 @@ Commit often and keep each commit focused. Don't commit secrets, `.env` files or
 1. On GitHub, open a pull request from your branch into `main`. Open it as a **Draft** if it's still a work in progress.
 2. Fill in the PR template and include `Closes #<issue-number>`.
 3. Self-review the diff, make sure tests pass, then mark it **Ready for review**.
-4. Address every review comment. After approval, the PR is squash-merged and the branch is deleted.
+4. Address every review comment. Once it's approved and CI passes, the PR is squash- or rebase-merged and the branch is deleted automatically.
 
 `main` is protected, so all changes go through pull requests.
 

@@ -131,7 +131,7 @@ python -m pytest
 - Reviewers aim to respond within **about 2 days**. If your PR has been waiting longer, ping the reviewer on Discord.
 - Authors should **address every comment**, either by making the change or by replying with an explanation. Resolve conversations once they're handled.
 - **Be kind and constructive.** Review the code, not the person. Explain *why* you suggest a change and say what's done well.
-- PRs are merged using **Squash and merge** to keep `main` history clean.
+- PRs are merged with **Squash and merge** or **Rebase and merge** (merge commits are turned off) to keep `main` history clean. CI must pass before merging.
 - **Delete your branch** after it's merged.
 
 ## Reporting Bugs and Suggesting Features
