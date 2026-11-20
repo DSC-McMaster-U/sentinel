@@ -5,7 +5,14 @@ from threading import Barrier
 
 import pytest
 
-from app.schemas import AgentInput, AgentOutput, ChangedFile, Evidence, PullRequestInput, SecurityFinding
+from app.schemas import (
+    AgentInput,
+    AgentOutput,
+    ChangedFile,
+    Evidence,
+    PullRequestInput,
+    SecurityFinding,
+)
 from app.schemas.review_report import ReviewReport, combine_findings
 from app.workflows.graph import build_review_graph, choose_agents, classify_files
 from app.workflows.state import AGENT_ORDER, ReviewState, SynthesisUpdate
