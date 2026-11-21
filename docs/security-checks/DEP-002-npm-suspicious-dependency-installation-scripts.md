@@ -67,7 +67,9 @@
   - **Suspicious behavior:** The specific operation and its inputs or destinations that support the finding, with the relevant code or artifact evidence. Include the before-and-after difference when available.
   - **Evidence gaps:** Any referenced target or behavior that could not be inspected, and where the verified execution path ends.
 
-- **Severity guidance:** Critical when evidence confirms that installation executes a malicious payload or steals credentials. An installation hook or suspicious code alone does not justify Critical. This is Sentinel's initial severity assessment for the documented malicious-release example.
+- **Severity guidance**:
+  - **Critical:** Evidence confirms that installation executes a malicious payload or steals credentials.
+  - **Low:** An installation hook is detected, but malicious behavior has not been established. Flag it for further review without describing it as confirmed malicious.
 
 - **Safe and unsafe examples**:
 
