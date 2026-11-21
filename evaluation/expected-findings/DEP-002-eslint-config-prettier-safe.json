@@ -1,0 +1,6 @@
+{
+  "fixture": "safe/DEP-002-eslint-config-prettier-safe.json",
+  "label": "safe",
+  "summary": "No installation hook or implicit node-gyp trigger in eslint-config-prettier 10.1.5; named package only, excluding peer dependency review.",
+  "findings": []
+}
