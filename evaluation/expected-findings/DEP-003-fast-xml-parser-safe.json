@@ -1,1 +1,6 @@
-[]
+{
+  "fixture": "safe/DEP-003-fast-xml-parser-safe.json",
+  "label": "safe",
+  "summary": "Resolved fast-xml-parser 4.2.4 is outside GHSA-6w63-h3fj-q4vw; this expectation is limited to that advisory.",
+  "findings": []
+}

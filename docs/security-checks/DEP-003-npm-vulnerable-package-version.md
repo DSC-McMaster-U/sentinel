@@ -54,6 +54,10 @@
     Result: No finding for this advisory.
     ```
 
+    **Fixture:** [Safe input](../../evaluation/fixtures/safe/DEP-003-fast-xml-parser-safe.json)
+
+    **Expected findings:** [Safe result](../../evaluation/expected-findings/DEP-003-fast-xml-parser-safe.json)
+
   - **Unsafe: `fast-xml-parser@4.2.3`**
 
     ```text
@@ -64,6 +68,10 @@
     Result: Known vulnerable package version detected.
     Patched version: 4.2.4
     ```
+
+    **Fixture:** [Unsafe input](../../evaluation/fixtures/risky/DEP-003-fast-xml-parser-risky.json)
+
+    **Expected findings:** [Unsafe result](../../evaluation/expected-findings/DEP-003-fast-xml-parser-risky.json)
 
 - **False-positive limitations**:
 

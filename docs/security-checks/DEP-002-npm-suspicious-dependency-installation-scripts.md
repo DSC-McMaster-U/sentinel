@@ -103,6 +103,10 @@
     }
     ```
 
+    **Fixture:** [Safe input](../../evaluation/fixtures/safe/DEP-002-eslint-config-prettier-safe.json)
+
+    **Expected findings:** [Safe result](../../evaluation/expected-findings/DEP-002-eslint-config-prettier-safe.json)
+
   - **Unsafe: `eslint-config-prettier@10.1.7`**
 
     **Command:**
@@ -131,6 +135,10 @@
     +    "install.js",
     +    "node-gyp.dll",
     ```
+
+    **Fixture:** [Unsafe input](../../evaluation/fixtures/risky/DEP-002-eslint-config-prettier-risky.json)
+
+    **Expected findings:** [Unsafe result](../../evaluation/expected-findings/DEP-002-eslint-config-prettier-risky.json)
 
 - **False-positive limitations**:
 
