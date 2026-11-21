@@ -1,0 +1,31 @@
+{
+  "fixture": "risky/cicd-unpinned-third-party-action.json",
+  "label": "risky",
+  "summary": "A production deployment workflow uses a mutable tag for a third-party action that receives a deployment secret.",
+  "findings": [
+    {
+      "agent": "cicd",
+      "title": "Third-party deployment action is not pinned to a commit SHA",
+      "description": "The workflow references example-org/deploy-to-cloud@v2 by a movable tag and passes it DEPLOY_TOKEN. If the tag or action source is compromised, the changed code could access the production credential.",
+      "severity": "high",
+      "recommendation": "Verify the action source and pin it to a reviewed full-length commit SHA. Rotate the deployment token if untrusted action code may already have run.",
+      "evidence": [
+        {
+          "file_path": ".github/workflows/deploy.yml",
+          "line_start": 11,
+          "line_end": 11,
+          "observation": "The external action is referenced by mutable tag v2."
+        },
+        {
+          "file_path": ".github/workflows/deploy.yml",
+          "line_start": 13,
+          "line_end": 13,
+          "observation": "The action receives the DEPLOY_TOKEN secret."
+        }
+      ],
+      "confidence": 0.95,
+      "uncertainty": [],
+      "requires_human_review": true
+    }
+  ]
+}

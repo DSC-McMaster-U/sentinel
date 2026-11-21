@@ -1,0 +1,30 @@
+{
+  "repository": {
+    "owner": "sentinel-fixtures",
+    "name": "demo-app",
+    "full_name": "sentinel-fixtures/demo-app",
+    "url": "https://github.com/sentinel-fixtures/demo-app",
+    "default_branch": "main"
+  },
+  "pr_number": 205,
+  "title": "Add test workflow with broad permissions",
+  "description": "Runs tests on every pull request.",
+  "author": "contributor-e",
+  "base_branch": "main",
+  "head_branch": "ci/test-write-all",
+  "base_sha": "205aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "head_sha": "205eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "url": "https://github.com/sentinel-fixtures/demo-app/pull/205",
+  "created_at": "2026-11-18T14:00:00Z",
+  "updated_at": "2026-11-18T14:30:00Z",
+  "files_changed": [
+    {
+      "path": ".github/workflows/test.yml",
+      "status": "added",
+      "additions": 9,
+      "deletions": 0,
+      "patch": "@@ -0,0 +1,9 @@\n+name: Test\n+on:\n+  pull_request:\n+permissions: write-all\n+jobs:\n+  test:\n+    runs-on: ubuntu-latest\n+    steps:\n+      - run: npm test",
+      "previous_path": null
+    }
+  ]
+}

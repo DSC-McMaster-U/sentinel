@@ -1,0 +1,6 @@
+{
+  "fixture": "safe/cicd-pull-request-target-labeler.json",
+  "label": "safe",
+  "summary": "pull_request_target workflow only labels the PR with a narrow pull-requests: write token; it never checks out or runs PR code and interpolates only the numeric PR number.",
+  "findings": []
+}
