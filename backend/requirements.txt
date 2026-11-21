@@ -13,3 +13,6 @@ pytest==9.2.0
 
 # Flags Python code issues such as unused imports.
 ruff==0.17.5
+
+# Provides the LLM and agent framework used by the backend.
+langgraph==1.2.22
