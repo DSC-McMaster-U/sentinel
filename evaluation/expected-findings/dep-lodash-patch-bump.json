@@ -1,0 +1,6 @@
+{
+  "fixture": "safe/dep-lodash-patch-bump.json",
+  "label": "safe",
+  "summary": "Routine patch bump of an existing, exactly pinned dependency with a matching lockfile update from the official registry.",
+  "findings": []
+}

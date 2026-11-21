@@ -1,0 +1,26 @@
+{
+  "fixture": "risky/dep-risky-http-tarball.json",
+  "label": "risky",
+  "summary": "Synthetic risky example for the proposed dependency fixture criteria. No real package or network operation is required.",
+  "score_human_review": false,
+  "findings": [
+    {
+      "agent": "dependency",
+      "title": "Dependency tarball uses unencrypted HTTP",
+      "description": "The manifest fetches a dependency archive over HTTP, exposing the download to network tampering without an independently verified integrity check.",
+      "severity": "medium",
+      "recommendation": "Use a trusted HTTPS source and commit a lockfile with reviewed integrity metadata.",
+      "evidence": [
+        {
+          "file_path": "package.json",
+          "line_start": 5,
+          "line_end": 5,
+          "observation": "http://example.invalid/fixture-helper-1.0.0.tgz"
+        }
+      ],
+      "confidence": 1.0,
+      "uncertainty": [],
+      "requires_human_review": false
+    }
+  ]
+}

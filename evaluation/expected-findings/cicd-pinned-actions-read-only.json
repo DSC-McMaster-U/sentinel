@@ -1,0 +1,6 @@
+{
+  "fixture": "safe/cicd-pinned-actions-read-only.json",
+  "label": "safe",
+  "summary": "New test workflow on pull_request with read-only token, SHA-pinned first-party actions and no persisted credentials.",
+  "findings": []
+}

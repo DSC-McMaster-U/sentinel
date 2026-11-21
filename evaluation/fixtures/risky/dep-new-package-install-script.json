@@ -1,0 +1,38 @@
+{
+  "repository": {
+    "owner": "sentinel-fixtures",
+    "name": "demo-app",
+    "full_name": "sentinel-fixtures/demo-app",
+    "url": "https://github.com/sentinel-fixtures/demo-app",
+    "default_branch": "main"
+  },
+  "pr_number": 203,
+  "title": "Add telemetry helper",
+  "description": "Adds usage telemetry.",
+  "author": "contributor-e",
+  "base_branch": "main",
+  "head_branch": "feat/telemetry",
+  "base_sha": "203aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "head_sha": "203eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "url": "https://github.com/sentinel-fixtures/demo-app/pull/203",
+  "created_at": "2026-11-18T14:00:00Z",
+  "updated_at": "2026-11-18T14:30:00Z",
+  "files_changed": [
+    {
+      "path": "package.json",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 0,
+      "patch": "@@ -10,5 +10,6 @@\n   \"dependencies\": {\n     \"express\": \"4.21.2\",\n     \"lodash\": \"4.17.21\",\n+    \"sentinel-fixture-telemetry\": \"^1.0.3\",\n     \"zod\": \"3.23.8\"\n   },",
+      "previous_path": null
+    },
+    {
+      "path": "package-lock.json",
+      "status": "modified",
+      "additions": 7,
+      "deletions": 0,
+      "patch": "@@ -1204,3 +1204,10 @@\n       \"license\": \"MIT\"\n     },\n+    \"node_modules/sentinel-fixture-telemetry\": {\n+      \"version\": \"1.0.3\",\n+      \"resolved\": \"https://registry.npmjs.org/sentinel-fixture-telemetry/-/sentinel-fixture-telemetry-1.0.3.tgz\",\n+      \"integrity\": \"sha512-FAKEFAKEFAKEFAKEFAKEFAKEFAKEFAKEFAKEFAKEFAKEFAKEFAKEFAKEFAKEFAKEFAKEFAKEFAKEFAKEFAKEFA==\",\n+      \"hasInstallScript\": true,\n+      \"license\": \"ISC\"\n+    },\n     \"node_modules/zod\": {",
+      "previous_path": null
+    }
+  ]
+}
