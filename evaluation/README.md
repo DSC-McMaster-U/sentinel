@@ -43,15 +43,18 @@ The harness tests run in backend CI (`backend/tests/unit/test_evaluation_harness
 | `safe/docs-readme-typo` | safe | none: docs-only change, no agent should run |
 | `safe/release-dockerfile-digest-bump` | safe | none: base image stays pinned by digest |
 | `safe/cicd-third-party-action-sha-bump` | safe | none: a third-party action that receives a secret moves to a newer release and stays pinned to a full SHA |
-| `risky/cicd-pull-request-target-head-checkout` | risky | **critical** (cicd): `pull_request_target` runs PR code with secrets; **medium** (cicd): `permissions: write-all` |
+| `safe/cicd-pull-request-target-labeler` | safe | none: `pull_request_target` only labels the PR with `pull-requests: write`; no checkout or PR code |
+| `risky/cicd-pull-request-target-head-checkout` | risky | **critical** (cicd): `pull_request_target` runs PR code with secrets; **high** (cicd): `permissions: write-all` |
+| `risky/cicd-write-all-permissions` | risky | **high** (cicd): `pull_request` test workflow sets `permissions: write-all` |
+| `risky/cicd-unpinned-third-party-action` | risky | **high** (cicd): third-party deploy action pinned to tag `v2` receives a secret |
 | `risky/dep-new-package-install-script` | risky | **high** (dependency): new dependency with `hasInstallScript: true` |
 | `risky/release-dockerfile-latest-and-curl-bash` | risky | **high** (release): `curl \| bash` during build; **medium** (release): `FROM node:latest` replaces a digest pin |
 | `safe/dep-safe-local-install-script` | safe | none: supplied local install script only prints a message |
 | `risky/dep-risky-remote-install-script` | risky | **high** (dependency): install hook downloads and executes remote code |
 | `risky/dep-risky-http-tarball` | risky | **medium** (dependency): manifest downloads a tarball over HTTP |
 
-That is 11 pull requests (6 safe, 5 risky) with 7 expected findings across
-all three agents. The CI/CD set is 2 safe + 1 risky. The safe cases are deliberately close to the risky ones
+That is 14 pull requests (7 safe, 7 risky) with 9 expected findings across
+all three agents. The CI/CD set is 3 safe + 3 risky. The safe cases are deliberately close to the risky ones
 (the same files and agents), so a check that only looks at file names
 produces false positives.
 
@@ -78,7 +81,7 @@ Sentinel should report, as `SecurityFinding` objects:
       "agent": "cicd",
       "title": "Workflow grants write-all token permissions",
       "description": "...",
-      "severity": "medium",
+      "severity": "high",
       "recommendation": "...",
       "evidence": [
         {
@@ -187,8 +190,8 @@ Notes:
 - `score_human_review: false` on an expected-file envelope excludes that case
   from human-review agreement. Sarthak's three fixtures use this because their
   expected flags are placeholders; no shared schema fields are changed.
-- With all 11 cases evaluated, one safe case changes FPR by about 16.7 points;
-  one risky case changes PR-level miss rate by 20 points. This is a small
+- With all 14 cases evaluated, one safe case changes FPR by about 14.3 points;
+  one risky case changes PR-level miss rate by about 14.3 points. This is a small
   regression dataset, not a reliable accuracy estimate.
 
 ### Current baseline
@@ -198,7 +201,7 @@ The default runner is the mock review from #3
 change to the root `package.json` at line 1 and nothing else:
 
 Against the current mock, the combined exact-mode baseline is TP=0, FP=5,
-FN=7, precision=0, recall=0, F1=0, FPR=2/6 and PR-level miss rate=5/5.
+FN=9, precision=0, recall=0, F1=0, FPR=2/7 and PR-level miss rate=7/7.
 This measures mock behavior, not security-agent accuracy. Replaying expected
 files against themselves is only a wiring check.
 

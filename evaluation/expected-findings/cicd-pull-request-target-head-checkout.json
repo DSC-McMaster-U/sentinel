@@ -37,7 +37,7 @@
       "agent": "cicd",
       "title": "Workflow grants write-all token permissions",
       "description": "permissions: write-all gives the GITHUB_TOKEN write access to every scope, far more than a preview build needs.",
-      "severity": "medium",
+      "severity": "high",
       "recommendation": "Set permissions to the minimum required, for example contents: read, and grant extra scopes per job.",
       "evidence": [
         {
