@@ -1,7 +1,7 @@
 # ID and Title
 
 - **ID:** DEP-001
-- **Title:** Unintended Package Installation - Package Typosquatting
+- **Title:** NPM - Unintended Package Installation - Package Typosquatting
 - **Why it matters**:
 
   A person or an AI assistant may mistake a similarly named npm package for the intended package. Attackers can exploit this confusion by publishing malicious packages with names resembling legitimate libraries.
@@ -35,8 +35,6 @@
 
   - **Authorized source:** Verify that the package is the authentic distribution from the authorized source, rather than a personal or attacker-controlled fork presented as the original.
   - **Name and project link:** Check the package name and the link provided by the project's official website.
-    - **Sentinel verification procedure:** Start from an independently verified project repository or official documentation and follow its package distribution link. Compare the destination's exact npm package identifier, including its scope, with the dependency being inspected.
-    - Do not establish authenticity solely from website or repository links supplied by the package being inspected. If the project's official source cannot be independently verified, record the result as **Unverified**.
   - **Fork relationship:** Verify the repository's fork relationship on GitHub or GitLab.
   - **Foundation affiliation:** Check whether the project is affiliated with a foundation.
   - **Creation time and popularity:** Check the project's creation time and popularity.
@@ -63,23 +61,17 @@
 
 - **Safe and unsafe examples**:
 
-  These synthetic PR inputs follow `PullRequestInput` and contain unified diffs. Both explicitly intend to use the cross-env project. Source verification remains part of the check; the inputs do not contain pre-filled verdicts or source observations. The examples assess identity, not current malware or merge decisions.
+  Both examples intend to use the cross-env project and assess package identity.
 
   - **Safe change: `cross-env`**
     - **Input:** Add `cross-env` as a dependency in `package.json`.
     - **Verification:** Follow the creator-site link to the project repository, then check its installation guide and npm distribution link. They identify `cross-env`, matching the added dependency.
     - **Expected result:** No DEP-001 finding. This does not certify the package's overall safety.
-    - **Fixture:** [DEP-001-cross-env-safe.json](../../evaluation/fixtures/safe/DEP-001-cross-env-safe.json)
-    - **Expected output:** [DEP-001-cross-env-safe.json](../../evaluation/expected-findings/DEP-001-cross-env-safe.json)
 
   - **Unsafe change: `crossenv`**
     - **Input:** Add `crossenv` as a dependency in `package.json`.
     - **Verification:** The official distribution identifies `cross-env`; `crossenv` is a different package identifier with the hyphen removed.
     - **Expected result:** Flag the package identity mismatch with the selected name, official name, and source links. Do not infer current malware or a final approval/rejection decision.
-    - **Fixture:** [DEP-001-cross-env-risky.json](../../evaluation/fixtures/risky/DEP-001-cross-env-risky.json)
-    - **Expected output:** [Pending expected finding](../../evaluation/expected-findings/DEP-001-cross-env-risky.md)
-
-  The safe expectation is an empty findings list. The risky expectation remains a Markdown note until severity and the required `SecurityFinding` fields are agreed. No custom output fields are defined here. The evaluation harness and fixed source-response integration are still pending.
 
 - **False-positive limitations**:
 
