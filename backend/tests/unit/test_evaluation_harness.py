@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pytest
 
-from app.schemas import Evidence, SecurityFinding
+from app.schemas import Evidence, FindingSubject, SecurityFinding
 from app.schemas.review_report import ReviewReport
 
 EVALUATION_DIR = Path(__file__).resolve().parents[3] / "evaluation"
@@ -41,6 +41,8 @@ def _finding(
 ) -> SecurityFinding:
     return SecurityFinding(
         agent=agent,
+        check_id="test.evaluation",
+        subject=FindingSubject(file_path=file_path, key="test-subject"),
         title=title,
         description="A description.",
         severity=severity,

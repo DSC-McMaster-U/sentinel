@@ -20,6 +20,8 @@ from app.schemas import Evidence, PullRequestInput, SecurityFinding
 def finding(**changes):
     payload = {
         "agent": "dependency",
+        "check_id": "test.remote-install-script",
+        "subject": {"file_path": "package.json", "key": "scripts/postinstall"},
         "title": "Install script executes remote code",
         "description": "An install hook downloads and executes a script.",
         "severity": "high",

@@ -5,6 +5,11 @@
   "findings": [
     {
       "agent": "dependency",
+      "check_id": "fixture.dependency.new-install-script",
+      "subject": {
+        "file_path": "package.json",
+        "key": "dependencies/sentinel-fixture-telemetry"
+      },
       "title": "New dependency runs an install script",
       "description": "sentinel-fixture-telemetry is a new direct dependency and its lockfile entry sets hasInstallScript: true, so npm install will run code from this package on developer machines and CI runners.",
       "severity": "high",

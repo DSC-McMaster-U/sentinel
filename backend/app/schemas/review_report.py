@@ -44,15 +44,8 @@ class ReviewReport(BaseModel):
 
 
 def _same_finding(a: SecurityFinding, b: SecurityFinding) -> bool:
-    """Two findings are the same claim if they're from the same agent, have
-    the same title, and point at the same evidence locations.
-    """
-    if a.agent != b.agent or a.title != b.title:
-        return False
-
-    a_locations = {(e.file_path, e.line_start, e.line_end) for e in a.evidence}
-    b_locations = {(e.file_path, e.line_start, e.line_end) for e in b.evidence}
-    return a_locations == b_locations
+    """Match the same agent, check and logical subject, regardless of wording or lines."""
+    return a.id == b.id
 
 
 def combine_findings(
@@ -67,8 +60,8 @@ def combine_findings(
 
     An agent that failed entirely contributes no findings; one that reported
     "partial" still contributes whatever findings it managed to produce.
-    Duplicate findings (same agent, title and evidence locations) are kept
-    once. The report requires human review if any individual finding asks
+    Duplicate findings (same ID) keep their first occurrence.
+    The report requires human review if any individual finding asks
     for it, or if any agent didn't fully succeed.
     """
     merged: list[SecurityFinding] = []

@@ -6,6 +6,11 @@
     {
       "agent": "cicd",
       "title": "Untrusted pull request code runs in a privileged pull_request_target job",
+      "check_id": "fixture.cicd.privileged-pr-code",
+      "subject": {
+        "file_path": ".github/workflows/preview.yml",
+        "key": "jobs/preview"
+      },
       "description": "The workflow is triggered by pull_request_target, which runs with the base repository's secrets and token, then checks out the pull request head and runs npm ci and a build script from it. A fork PR can execute arbitrary code with PREVIEW_DEPLOY_KEY and a write token.",
       "severity": "critical",
       "recommendation": "Use the pull_request trigger for building untrusted code, or split the job so the privileged part never checks out or runs PR code.",
@@ -36,6 +41,11 @@
     {
       "agent": "cicd",
       "title": "Workflow grants write-all token permissions",
+      "check_id": "fixture.cicd.write-all-permissions",
+      "subject": {
+        "file_path": ".github/workflows/preview.yml",
+        "key": "permissions"
+      },
       "description": "permissions: write-all gives the GITHUB_TOKEN write access to every scope, far more than a preview build needs.",
       "severity": "medium",
       "recommendation": "Set permissions to the minimum required, for example contents: read, and grant extra scopes per job.",

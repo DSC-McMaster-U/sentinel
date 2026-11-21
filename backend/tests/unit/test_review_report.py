@@ -2,8 +2,10 @@
 
 from datetime import UTC, datetime
 
+import pytest
+
 from app.schemas.agent import AgentOutput
-from app.schemas.finding import Evidence, SecurityFinding
+from app.schemas.finding import Evidence, FindingSubject, SecurityFinding
 from app.schemas.review_report import combine_findings
 
 
@@ -14,9 +16,13 @@ def _finding(
     file_path: str = "src/app.py",
     line_start: int = 10,
     requires_human_review: bool = False,
+    check_id: str = "test.check",
+    subject_key: str = "test-subject",
 ) -> SecurityFinding:
     return SecurityFinding(
         agent=agent,
+        check_id=check_id,
+        subject=FindingSubject(file_path=file_path, key=subject_key),
         title=title,
         description="A representative description of the issue.",
         severity=severity,
@@ -126,7 +132,7 @@ def test_duplicate_findings_from_the_same_agent_are_deduplicated():
     assert len(report.findings) == 1
 
 
-def test_same_title_different_evidence_is_not_deduplicated():
+def test_same_title_different_subject_files_are_not_deduplicated():
     outputs = [
         AgentOutput(
             agent_name="dependency",
@@ -167,3 +173,34 @@ def test_no_review_required_when_everything_succeeds_cleanly():
 
     assert report.requires_human_review is False
     assert report.generated_at == datetime(2026, 11, 11, tzinfo=UTC)
+
+
+def test_same_subject_with_new_wording_and_lines_is_deduplicated():
+    first = _finding("dependency", "Original title", line_start=10)
+    revised = _finding("dependency", "Reworded title", line_start=20)
+    report = combine_findings(
+        [AgentOutput(agent_name="dependency", findings=[first, revised], status="success")],
+        pr_number=1, repo_url="https://github.com/example/repo", commit_sha="abc123",
+    )
+
+    assert report.findings == [first]
+    assert first.evidence[0].line_start == 10
+    assert revised.evidence[0].line_start == 20
+
+
+@pytest.mark.parametrize("change", [
+    {"subject_key": "dependencies/package-b"},
+    {"check_id": "test.another-check"},
+])
+def test_distinct_checks_or_packages_at_the_same_location_are_kept(change):
+    first = _finding("dependency", "Install script", subject_key="dependencies/package-a")
+    second = _finding(
+        "dependency", "Install script",
+        **{"subject_key": "dependencies/package-a", **change},
+    )
+    report = combine_findings(
+        [AgentOutput(agent_name="dependency", findings=[first, second], status="success")],
+        pr_number=1, repo_url="https://github.com/example/repo", commit_sha="abc123",
+    )
+
+    assert report.findings == [first, second]

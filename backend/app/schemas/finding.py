@@ -1,6 +1,8 @@
+import json
+from hashlib import sha256
 from typing import Literal
 
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, Field, computed_field, field_validator, model_validator
 
 
 class Evidence(BaseModel):
@@ -18,10 +20,25 @@ class Evidence(BaseModel):
         return self
 
 
+class FindingSubject(BaseModel):
+    """The logical object a check flags, independent of evidence line numbers."""
+
+    file_path: str = Field(min_length=1, pattern=r"\S")
+    key: str = Field(
+        min_length=1,
+        pattern=r"\S",
+        description="Stable check-specific key, e.g. dependencies/lodash or jobs/build.",
+    )
+
+
 class SecurityFinding(BaseModel):
     """A security claim with supporting evidence and explicit review needs."""
 
     agent: str = Field(min_length=1)
+    check_id: str = Field(
+        min_length=1, pattern=r"\S", description="Fixed identifier of the check that ran."
+    )
+    subject: FindingSubject
     title: str = Field(min_length=1)
     description: str = Field(
         min_length=1, description="The security issue and how it occurs in the code."
@@ -45,6 +62,16 @@ class SecurityFinding(BaseModel):
     requires_human_review: bool = Field(
         description="Explicit review decision, independent of any confidence threshold."
     )
+
+    @computed_field
+    @property
+    def id(self) -> str:
+        """Stable within a repository and PR; changing the subject starts a new identity."""
+        identity = json.dumps(
+            [self.agent, self.check_id, self.subject.file_path, self.subject.key],
+            separators=(",", ":"),
+        )
+        return f"fnd_v1_{sha256(identity.encode('utf-8')).hexdigest()}"
 
     @field_validator("severity", mode="before")
     @classmethod

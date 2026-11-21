@@ -10,6 +10,7 @@ from app.schemas import (
     AgentOutput,
     ChangedFile,
     Evidence,
+    FindingSubject,
     PullRequestInput,
     SecurityFinding,
 )
@@ -118,6 +119,8 @@ def test_intake_filters_and_isolates_branch_inputs(sample_pr):
 def finding_for(name, path):
     return SecurityFinding(
         agent=name, title=f"Test finding from {name}",
+        check_id="test.graph-transport",
+        subject=FindingSubject(file_path=path, key="test-subject"),
         description="Synthetic finding used only to verify graph transport.",
         severity="high", recommendation="Review the test observation.",
         evidence=[Evidence(file_path=path, line_start=1, observation="Test evidence")],

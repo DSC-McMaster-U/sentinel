@@ -122,12 +122,38 @@ normalized to lowercase). `status` is one of `success`, `failure`,
 `partial`; `error_message` must be set whenever `status` isn't `success`,
 and every finding's `agent` must match `agent_name`.
 
+Every finding requires a fixed `check_id` and a `subject` with a repository-relative
+`file_path` and a check-specific `key`. Examples of keys are
+`dependencies/lodash`, `scripts/postinstall`, `jobs/build/steps/checkout`, and
+`stage/build/base-image`. Checks must provide consistent keys from the objects
+they inspect, not generated descriptions or line numbers. Separate occurrences
+need distinct subject keys; one check on one subject represents one finding.
+
+`id` is computed by the backend and included in serialized findings. Agents do
+not assign it; any supplied `id` is ignored and recomputed. The format is
+`fnd_v1_` plus the SHA-256 hex digest of the UTF-8 JSON array
+`[agent, check_id, subject.file_path, subject.key]`, serialized with Python's
+default ASCII escaping and compact separators. Wording, evidence, severity and
+commit changes do not affect the ID. Renaming the subject or its file creates a
+new identity; rename reconciliation is not implemented.
+
+IDs are scoped to a repository and PR. Future storage must use
+`(repository, pr_number, finding.id)` for history and retain the commit on each
+decision. An ID persists after resolution; it does not encode review status.
+This contract adds no persistence or automatic closure. `example.*`, `mock.*`
+and `fixture.*` check IDs in this repo are illustrative, not approved #2 rules.
+
 ```json
 {
   "agent_name": "dependency",
   "findings": [
     {
       "agent": "dependency",
+      "check_id": "example.dependency.changelog-review",
+      "subject": {
+        "file_path": "package.json",
+        "key": "dependencies/lodash"
+      },
       "title": "Dependency version bump has no changelog review",
       "description": "package.json bumps lodash from 4.17.20 to 4.17.21 with no changelog or release notes link in the PR.",
       "severity": "low",
@@ -144,7 +170,8 @@ and every finding's `agent` must match `agent_name`.
       "uncertainty": [
         "Did not check whether CI already pins a lockfile hash for this package."
       ],
-      "requires_human_review": false
+      "requires_human_review": false,
+      "id": "fnd_v1_97519b8d85c01e6d470060e411c9aa3a333e1bd933ecc63a0f345742d4fe69ba"
     }
   ],
   "status": "success",
@@ -157,8 +184,8 @@ and every finding's `agent` must match `agent_name`.
 Defined in `backend/app/schemas/review_report.py`. Built by
 `combine_findings(outputs, pr_number=..., repo_url=..., commit_sha=...)`,
 which takes the `AgentOutput` from every agent that ran, merges their
-findings, drops exact duplicates (same agent, title, and evidence
-locations), sorts by severity, and flags `requires_human_review` whenever
+findings, keeps the first occurrence of each finding ID, sorts by severity,
+and flags `requires_human_review` whenever
 any individual finding needs it, or any agent failed or only partially
 completed.
 
@@ -171,6 +198,11 @@ completed.
   "findings": [
     {
       "agent": "dependency",
+      "check_id": "example.dependency.changelog-review",
+      "subject": {
+        "file_path": "package.json",
+        "key": "dependencies/lodash"
+      },
       "title": "Dependency version bump has no changelog review",
       "description": "package.json bumps lodash from 4.17.20 to 4.17.21 with no changelog or release notes link in the PR.",
       "severity": "low",
@@ -187,7 +219,8 @@ completed.
       "uncertainty": [
         "Did not check whether CI already pins a lockfile hash for this package."
       ],
-      "requires_human_review": false
+      "requires_human_review": false,
+      "id": "fnd_v1_97519b8d85c01e6d470060e411c9aa3a333e1bd933ecc63a0f345742d4fe69ba"
     }
   ],
   "agents_run": ["dependency"],
