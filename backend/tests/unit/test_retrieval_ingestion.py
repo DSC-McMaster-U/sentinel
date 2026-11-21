@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pytest
+
 from app.retrieval.ingestion import ingest_repository
 from app.retrieval.ingestion.pipeline import classify_file
 
