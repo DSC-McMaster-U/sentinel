@@ -1,0 +1,9 @@
+name: Example release policy
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Example fixture; no release is published"
