@@ -3,7 +3,7 @@
  * (#7). Field names stay snake_case so API responses can be used as-is.
  *
  * Keep these in sync with:
- * - Evidence, SecurityFinding  -> backend/app/schemas/finding.py
+ * - Evidence, FindingSubject, SecurityFinding -> backend/app/schemas/finding.py
  * - AgentOutput                -> backend/app/schemas/agent.py
  * - ReviewReport               -> backend/app/schemas/review_report.py
  *
@@ -26,10 +26,21 @@ export interface Evidence {
   observation: string;
 }
 
+/** A logical object identified by a check, independent of evidence line numbers. */
+export interface FindingSubject {
+  file_path: string;
+  /** Stable check-specific key, e.g. dependencies/lodash or jobs/build. */
+  key: string;
+}
+
 /** A security claim with supporting evidence and explicit review needs. */
 export interface SecurityFinding {
+  /** Backend-derived identity. Scope stored history by repository + PR + id. */
+  readonly id: string;
   /** Name of the agent that produced the finding, e.g. "dependency". */
   agent: string;
+  check_id: string;
+  subject: FindingSubject;
   title: string;
   description: string;
   severity: Severity;

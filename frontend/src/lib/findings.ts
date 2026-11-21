@@ -63,16 +63,11 @@ export function evidenceUrl(repoUrl: string, commitSha: string, evidence: Eviden
 }
 
 /**
- * Stable identity for a finding. SecurityFinding has no id field, so this
- * uses the same rule combine_findings() uses for duplicates: agent, title and
- * the set of evidence locations. Review decisions are keyed on it.
+ * Backend identity within a repository and PR. The parent must scope saved
+ * review history to that repository and PR, and decisions to their commit.
  */
 export function findingKey(finding: SecurityFinding): string {
-  const locations = finding.evidence
-    .map((e) => `${e.file_path}:${e.line_start}:${e.line_end ?? ""}`)
-    .sort()
-    .join("|");
-  return `${finding.agent}::${finding.title}::${locations}`;
+  return finding.id;
 }
 
 export interface CoverageNotice {
