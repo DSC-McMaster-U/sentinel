@@ -57,21 +57,27 @@
 
   For each item, record the observed facts and their sources. If the information cannot be verified, mark it as **Unverified**.
 
-- **Severity guidance:** Pending.
+- **Severity guidance:** Medium when the selected package is confirmed to differ from the intended official distribution. Name similarity alone is insufficient for a finding.
 
 - **Safe and unsafe examples**:
 
   Both examples intend to use the cross-env project and assess package identity.
 
+  Fixture outputs assume the official-source verification succeeds. The expected confidence value is an illustrative label, not a measured score.
+
   - **Safe change: `cross-env`**
     - **Input:** Add `cross-env` as a dependency in `package.json`.
     - **Verification:** Follow the creator-site link to the project repository, then check its installation guide and npm distribution link. They identify `cross-env`, matching the added dependency.
     - **Expected result:** No DEP-001 finding. This does not certify the package's overall safety.
+    - **Fixture:** [Safe input](../../evaluation/fixtures/safe/DEP-001-cross-env-safe.json)
+    - **Expected findings:** [Empty findings list](../../evaluation/expected-findings/DEP-001-cross-env-safe.json)
 
   - **Unsafe change: `crossenv`**
     - **Input:** Add `crossenv` as a dependency in `package.json`.
     - **Verification:** The official distribution identifies `cross-env`; `crossenv` is a different package identifier with the hyphen removed.
     - **Expected result:** Flag the package identity mismatch with the selected name, official name, and source links. Do not infer current malware or a final approval/rejection decision.
+    - **Fixture:** [Risky input](../../evaluation/fixtures/risky/DEP-001-cross-env-risky.json)
+    - **Expected findings:** [Medium-severity identity mismatch](../../evaluation/expected-findings/DEP-001-cross-env-risky.json)
 
 - **False-positive limitations**:
 

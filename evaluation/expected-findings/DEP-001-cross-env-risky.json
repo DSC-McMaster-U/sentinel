@@ -1,0 +1,22 @@
+[
+  {
+    "agent": "dependency",
+    "title": "DEP-001: Unintended package selection — crossenv instead of cross-env",
+    "description": "The PR intends to use the cross-env project but adds crossenv in package.json. The official project identifies cross-env as its npm distribution, so the selected package does not match the stated intent.",
+    "severity": "medium",
+    "recommendation": "Replace crossenv with the intended cross-env package after verifying the official distribution and selecting a suitable version.",
+    "evidence": [
+      {
+        "file_path": "package.json",
+        "line_start": 5,
+        "line_end": 5,
+        "observation": "The added devDependency is crossenv with range *. The PR title explicitly names cross-env. The official installation guide at https://github.com/kentcdodds/cross-env#installation identifies cross-env and links to https://www.npmjs.com/package/cross-env."
+      }
+    ],
+    "confidence": 0.95,
+    "uncertainty": [
+      "No resolved version or package payload was inspected; this finding establishes an identity mismatch, not current malicious behavior."
+    ],
+    "requires_human_review": true
+  }
+]
