@@ -38,7 +38,7 @@
   - **Version comparison:** The matching package entry's `ecosystem`, `name`, and `vulnerable_version_range`; the application's resolved version; and the comparison result. Include `first_patched_version` when provided.
   - **Applicability:** Any verified usage conditions or mitigations relevant to the application. Distinguish affected-version evidence from confirmed exploitation.
 
-- **Severity guidance:** Pending.
+- **Severity guidance:** Use the matched security advisory's published severity. The documented CVE-2023-34104 example is High (CVSS 7.5). Record application-specific usage conditions and mitigations separately; a version match does not establish exploitation.
 
 - **Safe and unsafe examples**:
 
