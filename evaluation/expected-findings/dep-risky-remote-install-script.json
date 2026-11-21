@@ -6,6 +6,11 @@
   "findings": [
     {
       "agent": "dependency",
+      "check_id": "fixture.dependency.remote-install-script",
+      "subject": {
+        "file_path": "package.json",
+        "key": "scripts/postinstall"
+      },
       "title": "Install script executes remote code",
       "description": "An npm postinstall hook pipes a downloaded script into a shell during installation.",
       "severity": "high",

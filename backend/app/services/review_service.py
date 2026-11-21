@@ -1,6 +1,12 @@
 """Build mock review reports for submitted pull requests."""
 
-from app.schemas import AgentOutput, Evidence, PullRequestInput, SecurityFinding
+from app.schemas import (
+    AgentOutput,
+    Evidence,
+    FindingSubject,
+    PullRequestInput,
+    SecurityFinding,
+)
 from app.schemas.review_report import ReviewReport, combine_findings
 
 
@@ -26,6 +32,8 @@ def build_mock_review_report(pull_request: PullRequestInput) -> ReviewReport:
     if manifest is not None:
         finding = SecurityFinding(
             agent="dependency",
+            check_id="mock.manifest-changed",
+            subject=FindingSubject(file_path=manifest.path, key="manifest"),
             title="Mock finding: dependency manifest changed",
             description="This sample finding shows how Sentinel reports a dependency change.",
             severity="low",

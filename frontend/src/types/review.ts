@@ -23,7 +23,7 @@ export type DismissReason =
   | "not_applicable";
 
 export interface ReviewDecision {
-  /** Stable finding identity; see findingKey() in src/lib/findings.ts. */
+  /** SecurityFinding.id; store in the context of its repository and PR. */
   finding_key: string;
   /** The commit the decision was made against (ReviewReport.commit_sha). */
   commit_sha: string;

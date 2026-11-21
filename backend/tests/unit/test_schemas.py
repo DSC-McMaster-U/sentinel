@@ -10,6 +10,8 @@ from app.schemas import AgentInput, AgentOutput, ChangedFile, Evidence, Security
 def finding_payload():
     return {
         "agent": "cicd",
+        "check_id": "test.shell-interpolation",
+        "subject": {"file_path": ".github/workflows/build.yml", "key": "jobs/build/steps/echo"},
         "title": "Untrusted input in a shell command",
         "description": "A workflow interpolates the PR title into a shell command.",
         "severity": "critical",
@@ -60,6 +62,7 @@ def test_agent_output_example_round_trip(finding_payload):
     assert isinstance(output.findings[0], SecurityFinding)
     assert isinstance(output.findings[0].evidence[0], Evidence)
     serialized_finding = output.model_dump(mode="json")["findings"][0]
+    assert serialized_finding["id"] == output.findings[0].id
     assert serialized_finding["severity"] == "critical"
     assert serialized_finding["recommendation"] == finding_payload["recommendation"]
     assert "risks" not in serialized_finding
@@ -78,7 +81,7 @@ def test_agent_output_statuses(status):
     assert output.status == status
 
 
-@pytest.mark.parametrize("field", ["agent", "title", "description", "recommendation"])
+@pytest.mark.parametrize("field", ["agent", "check_id", "title", "description", "recommendation"])
 def test_finding_rejects_empty_required_strings(finding_payload, field):
     finding_payload[field] = ""
     with pytest.raises(ValidationError) as exc:
@@ -249,3 +252,63 @@ def test_partial_output_preserves_findings_and_error(finding_payload):
     assert len(output.findings) == 1
     assert output.error_message == "Could not retrieve another file."
     assert AgentOutput.model_validate_json(output.model_dump_json()) == output
+
+
+def test_finding_id_survives_new_wording_and_shifted_evidence(finding_payload):
+    original = SecurityFinding.model_validate(finding_payload)
+    finding_payload.update(
+        title="Reworded finding", description="Updated explanation.",
+        recommendation="Updated guidance.", severity="high", confidence=0.9,
+        uncertainty=[], requires_human_review=False,
+    )
+    finding_payload["evidence"][0].update(
+        line_start=20, line_end=22, observation="Updated evidence wording.",
+    )
+    finding_payload["evidence"].append({
+        "file_path": "another-file.yml", "line_start": 1, "observation": "More context.",
+    })
+    revised = SecurityFinding.model_validate(finding_payload)
+    finding_payload["evidence"].reverse()
+    reordered = SecurityFinding.model_validate(finding_payload)
+
+    assert original.id == revised.id == reordered.id
+
+
+@pytest.mark.parametrize("change", ["agent", "check_id", "file_path", "key"])
+def test_finding_id_distinguishes_checks_and_subjects(finding_payload, change):
+    original = SecurityFinding.model_validate(finding_payload)
+    if change in {"agent", "check_id"}:
+        finding_payload[change] = "another-check-or-agent"
+    else:
+        finding_payload["subject"][change] = "another-subject"
+
+    assert SecurityFinding.model_validate(finding_payload).id != original.id
+
+
+def test_finding_id_is_backend_derived_on_round_trip(finding_payload):
+    original = SecurityFinding.model_validate(finding_payload)
+    # Pin the format so a refactor cannot silently orphan stored decision history.
+    assert original.id == "fnd_v1_0fb9af962c2830e77e204147b4bf5921a03eb7ed545676e0bc1036c5282ed06d"
+    payload = original.model_dump(mode="json")
+    payload["id"] = "caller-supplied-id"
+
+    restored = SecurityFinding.model_validate(payload)
+    assert restored.id == original.id
+    assert SecurityFinding.model_validate_json(restored.model_dump_json()).id == original.id
+
+
+@pytest.mark.parametrize("field", ["check_id", "subject"])
+def test_finding_requires_identity_inputs(finding_payload, field):
+    del finding_payload[field]
+    with pytest.raises(ValidationError) as exc:
+        SecurityFinding.model_validate(finding_payload)
+    assert exc.value.errors()[0]["loc"] == (field,)
+
+
+@pytest.mark.parametrize("field", ["file_path", "key"])
+@pytest.mark.parametrize("value", ["", " \t"])
+def test_finding_rejects_blank_subject_fields(finding_payload, field, value):
+    finding_payload["subject"][field] = value
+    with pytest.raises(ValidationError) as exc:
+        SecurityFinding.model_validate(finding_payload)
+    assert exc.value.errors()[0]["loc"] == ("subject", field)

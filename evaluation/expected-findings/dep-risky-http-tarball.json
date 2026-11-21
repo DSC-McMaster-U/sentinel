@@ -6,6 +6,11 @@
   "findings": [
     {
       "agent": "dependency",
+      "check_id": "fixture.dependency.http-tarball",
+      "subject": {
+        "file_path": "package.json",
+        "key": "dependencies/fixture-helper"
+      },
       "title": "Dependency tarball uses unencrypted HTTP",
       "description": "The manifest fetches a dependency archive over HTTP, exposing the download to network tampering without an independently verified integrity check.",
       "severity": "medium",
