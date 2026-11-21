@@ -1,0 +1,30 @@
+{
+  "repository": {
+    "owner": "sentinel-fixtures",
+    "name": "demo-app",
+    "full_name": "sentinel-fixtures/demo-app",
+    "url": "https://github.com/sentinel-fixtures/demo-app",
+    "default_branch": "main"
+  },
+  "pr_number": 206,
+  "title": "Add cloud deploy action",
+  "description": "Deploys production after changes merge.",
+  "author": "maintainer-b",
+  "base_branch": "main",
+  "head_branch": "ci/add-deploy-action",
+  "base_sha": "206aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "head_sha": "206eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "url": "https://github.com/sentinel-fixtures/demo-app/pull/206",
+  "created_at": "2026-11-18T14:00:00Z",
+  "updated_at": "2026-11-18T14:30:00Z",
+  "files_changed": [
+    {
+      "path": ".github/workflows/deploy.yml",
+      "status": "added",
+      "additions": 13,
+      "deletions": 0,
+      "patch": "@@ -0,0 +1,13 @@\n+name: Deploy\n+on:\n+  push:\n+    branches: [main]\n+permissions:\n+  contents: read\n+jobs:\n+  deploy:\n+    runs-on: ubuntu-latest\n+    steps:\n+      - uses: example-org/deploy-to-cloud@v2\n+        with:\n+          api-token: ${{ secrets.DEPLOY_TOKEN }}",
+      "previous_path": null
+    }
+  ]
+}

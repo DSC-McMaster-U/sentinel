@@ -1,0 +1,28 @@
+{
+  "fixture": "risky/cicd-write-all-permissions.json",
+  "label": "risky",
+  "summary": "A pull request test workflow grants GITHUB_TOKEN write access to every permission scope.",
+  "findings": [
+    {
+      "agent": "cicd",
+      "title": "Workflow grants write-all token permissions",
+      "description": "The workflow grants GITHUB_TOKEN write access to every permission scope even though the job only runs tests. If a workflow step or action is compromised, the token can modify repository resources.",
+      "severity": "high",
+      "recommendation": "Declare only the permissions required by the workflow, such as contents: read, and grant additional scopes only to jobs that need them.",
+      "evidence": [
+        {
+          "file_path": ".github/workflows/test.yml",
+          "line_start": 4,
+          "line_end": 4,
+          "observation": "The workflow sets permissions to write-all."
+        }
+      ],
+      "confidence": 0.95,
+      "uncertainty": [
+        "Repository or organization policy may further restrict the effective token permissions.",
+        "For pull requests from forks, GitHub issues a read-only GITHUB_TOKEN regardless of the requested permissions; the write scope applies to same-repository branches."
+      ],
+      "requires_human_review": false
+    }
+  ]
+}

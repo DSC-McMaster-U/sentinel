@@ -1,0 +1,30 @@
+{
+  "repository": {
+    "owner": "sentinel-fixtures",
+    "name": "demo-app",
+    "full_name": "sentinel-fixtures/demo-app",
+    "url": "https://github.com/sentinel-fixtures/demo-app",
+    "default_branch": "main"
+  },
+  "pr_number": 106,
+  "title": "Label new pull requests for triage",
+  "description": "Adds a needs-triage label to every new PR, including forks. Does not check out or run PR code.",
+  "author": "maintainer-a",
+  "base_branch": "main",
+  "head_branch": "ci/triage-label",
+  "base_sha": "106aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "head_sha": "106eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "url": "https://github.com/sentinel-fixtures/demo-app/pull/106",
+  "created_at": "2026-11-18T14:00:00Z",
+  "updated_at": "2026-11-18T14:30:00Z",
+  "files_changed": [
+    {
+      "path": ".github/workflows/triage.yml",
+      "status": "added",
+      "additions": 14,
+      "deletions": 0,
+      "patch": "@@ -0,0 +1,14 @@\n+name: Triage\n+on:\n+  pull_request_target:\n+    types: [opened]\n+permissions:\n+  pull-requests: write\n+jobs:\n+  label:\n+    runs-on: ubuntu-latest\n+    steps:\n+      - run: gh pr edit \"$PR_NUMBER\" --repo \"$GITHUB_REPOSITORY\" --add-label needs-triage\n+        env:\n+          GH_TOKEN: ${{ github.token }}\n+          PR_NUMBER: ${{ github.event.pull_request.number }}",
+      "previous_path": null
+    }
+  ]
+}
