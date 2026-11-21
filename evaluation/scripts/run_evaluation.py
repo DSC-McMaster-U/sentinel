@@ -36,14 +36,13 @@ BACKEND_DIR = REPO_ROOT / "backend"
 if str(BACKEND_DIR) not in sys.path:
     sys.path.insert(0, str(BACKEND_DIR))
 
-from pydantic import TypeAdapter, ValidationError  # noqa: E402 - imports follow standalone path setup
-
-from app.schemas import PullRequestInput, SecurityFinding  # noqa: E402 - imports follow standalone path setup
-from app.schemas.review_report import ReviewReport  # noqa: E402 - imports follow standalone path setup
+from app.schemas import PullRequestInput, SecurityFinding
+from app.schemas.review_report import ReviewReport
+from pydantic import TypeAdapter, ValidationError
 
 if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
-from matching import compare_findings  # noqa: E402 - imports follow standalone path setup
+from matching import compare_findings
 
 DEFAULT_RUNNER = "app.services.review_service:build_mock_review_report"
 LABELS = ("safe", "risky")

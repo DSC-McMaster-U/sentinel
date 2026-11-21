@@ -1,6 +1,7 @@
 """Deterministic Sprint 1 finding comparison; see evaluation/README.md."""
 
 from dataclasses import dataclass, field
+
 from app.schemas import SecurityFinding
 
 
