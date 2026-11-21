@@ -1,4 +1,4 @@
-"""Run from the repository root: python -m pytest evaluation/tests -q."""
+"""Run from backend/: python -m pytest tests/unit/test_evaluation_matching.py -q."""
 
 import json
 import sys
@@ -12,18 +12,19 @@ if not (ROOT / "evaluation/scripts/matching.py").exists():
 sys.path.insert(0, str(ROOT / "backend"))
 sys.path.insert(0, str(ROOT / "evaluation" / "scripts"))
 
-from app.schemas import Evidence, PullRequestInput, SecurityFinding  # noqa: E402 - imports follow standalone path setup
-from matching import compare_findings  # noqa: E402 - imports follow standalone path setup
+from matching import compare_findings
+
+from app.schemas import Evidence, PullRequestInput, SecurityFinding
 
 
 def finding(**changes):
-    payload = dict(
-        agent="dependency",
-        title="Install script executes remote code",
-        description="An install hook downloads and executes a script.",
-        severity="high",
-        recommendation="Remove the remote execution hook.",
-        evidence=[
+    payload = {
+        "agent": "dependency",
+        "title": "Install script executes remote code",
+        "description": "An install hook downloads and executes a script.",
+        "severity": "high",
+        "recommendation": "Remove the remote execution hook.",
+        "evidence": [
             Evidence(
                 file_path="package.json",
                 line_start=5,
@@ -31,10 +32,10 @@ def finding(**changes):
                 observation="Remote script is piped into sh.",
             )
         ],
-        confidence=0.9,
-        uncertainty=[],
-        requires_human_review=True,
-    )
+        "confidence": 0.9,
+        "uncertainty": [],
+        "requires_human_review": True,
+    }
     payload.update(changes)
     return SecurityFinding(**payload)
 
