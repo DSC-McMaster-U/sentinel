@@ -29,6 +29,11 @@
 
   https://docs.github.com/en/rest/security-advisories/global-advisories#list-global-security-advisories
 
+- **Implementation approach:** Deterministic.
+  - Match the resolved package name, ecosystem, and version against published advisory ranges.
+  - Return **Unverified** when required version or advisory data cannot be established.
+  - Application-specific exploitability assessment is separate from this version-matching check.
+
 - **Evidence**:
 
   - **Package and change:** Package name, exact resolved version, and the manifest or lockfile change, with file and line references. Cite the resolved dependency record rather than treating a declared version range as an installed version.

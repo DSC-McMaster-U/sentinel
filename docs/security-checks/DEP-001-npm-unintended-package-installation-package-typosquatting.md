@@ -46,6 +46,10 @@
 
   https://best.openssf.org/Concise-Guide-for-Evaluating-Open-Source-Software.html
 
+- **Implementation approach:** Hybrid.
+  - **Deterministic:** Compare package identifiers against a verified intended package.
+  - **Agent-assisted:** Investigate intended package selection and official distribution sources when unclear.
+
 - **Evidence**:
 
   - **Authorized source:** Record the verified official source URL and how it identifies the package as an authorized distribution.

@@ -54,6 +54,10 @@
 
   https://docs.npmjs.com/cli/v12/configuring-npm/package-lock-json/#description
 
+- **Implementation approach:** Hybrid.
+  - **Deterministic:** Identify installation hooks, compare changes, and match known malicious indicators.
+  - **Agent-assisted:** Trace referenced code and assess whether installation behavior is suspicious in context.
+
 - **Evidence**:
 
   - **Package and change:** Package name, exact resolved version, artifact source, and the manifest or lockfile diff showing the addition or update. Include the previous version when available.
