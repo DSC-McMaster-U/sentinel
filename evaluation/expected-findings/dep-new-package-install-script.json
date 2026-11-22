@@ -1,0 +1,33 @@
+{
+  "fixture": "risky/dep-new-package-install-script.json",
+  "label": "risky",
+  "summary": "Adds a new, unfamiliar dependency with a caret range whose lockfile entry declares an install script.",
+  "findings": [
+    {
+      "agent": "dependency",
+      "title": "New dependency runs an install script",
+      "description": "sentinel-fixture-telemetry is a new direct dependency and its lockfile entry sets hasInstallScript: true, so npm install will run code from this package on developer machines and CI runners.",
+      "severity": "high",
+      "recommendation": "Review the package's install script and publisher before merging, or install with --ignore-scripts and allowlist scripts that are needed.",
+      "evidence": [
+        {
+          "file_path": "package.json",
+          "line_start": 13,
+          "line_end": null,
+          "observation": "New direct dependency sentinel-fixture-telemetry added with range ^1.0.3."
+        },
+        {
+          "file_path": "package-lock.json",
+          "line_start": 1210,
+          "line_end": null,
+          "observation": "Lockfile entry for sentinel-fixture-telemetry declares an install script."
+        }
+      ],
+      "confidence": 0.8,
+      "uncertainty": [
+        "Did not inspect the contents of the install script."
+      ],
+      "requires_human_review": true
+    }
+  ]
+}

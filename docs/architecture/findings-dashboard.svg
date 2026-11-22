@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="720" viewBox="0 0 1120 720" role="img" aria-labelledby="title desc"><title id="title">Sentinel findings dashboard wireframe</title><desc id="desc">Overview, incomplete review warning, severity counts and findings list, with a placeholder detail panel.</desc><rect width="1120" height="720" fill="#f5f6f8"/>
+<text x="30" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#202733">SENTINEL / PR security review</text>
+<text x="30" y="70" font-family="Arial, sans-serif" font-size="14" font-weight="normal" fill="#202733">example/repository  /  PR #42  /  commit abc1234  /  Generated 2026-11-15 00:00 UTC</text>
+<rect x="30" y="94" width="1060" height="86" rx="6" fill="#fff3da" stroke="#aeb4be"/>
+<text x="48" y="121" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#202733">REVIEW INCOMPLETE — CI/CD check completed partially</text>
+<text x="48" y="147" font-family="Arial, sans-serif" font-size="15" font-weight="normal" fill="#202733">Dependency: Complete    CI/CD: Partial    •    Report: Human review requested</text>
+<text x="48" y="167" font-family="Arial, sans-serif" font-size="13" font-weight="normal" fill="#202733">Available findings are shown below. Coverage is incomplete; this is not a safety verdict.</text>
+<rect x="30" y="200" width="250" height="56" rx="6" fill="#fff" stroke="#aeb4be"/>
+<text x="48" y="235" font-family="Arial, sans-serif" font-size="19" font-weight="bold" fill="#202733">Critical  0</text>
+<rect x="300" y="200" width="250" height="56" rx="6" fill="#fff" stroke="#aeb4be"/>
+<text x="318" y="235" font-family="Arial, sans-serif" font-size="19" font-weight="bold" fill="#202733">High  1</text>
+<rect x="570" y="200" width="250" height="56" rx="6" fill="#fff" stroke="#aeb4be"/>
+<text x="588" y="235" font-family="Arial, sans-serif" font-size="19" font-weight="bold" fill="#202733">Medium  0</text>
+<rect x="840" y="200" width="250" height="56" rx="6" fill="#fff" stroke="#aeb4be"/>
+<text x="858" y="235" font-family="Arial, sans-serif" font-size="19" font-weight="bold" fill="#202733">Low  0</text>
+<text x="30" y="291" font-family="Arial, sans-serif" font-size="16" font-weight="normal" fill="#202733">Severity: All ▾     Human review: All ▾</text>
+<text x="30" y="318" font-family="Arial, sans-serif" font-size="14" font-weight="normal" fill="#202733">1 finding • highest severity first</text>
+<rect x="30" y="337" width="650" height="150" rx="6" fill="#fff" stroke="#aeb4be"/>
+<text x="48" y="366" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#202733">HIGH   |   90% confidence   |   dependency</text>
+<text x="48" y="399" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#202733">Install script executes remote code</text>
+<text x="48" y="429" font-family="Arial, sans-serif" font-size="15" font-weight="normal" fill="#202733">Human review requested</text>
+<rect x="48" y="445" width="140" height="28" rx="6" fill="#edf0f5" stroke="#aeb4be"/>
+<text x="61" y="465" font-family="Arial, sans-serif" font-size="14" font-weight="normal" fill="#202733">View details →</text>
+<rect x="704" y="337" width="386" height="270" rx="6" fill="#fff" stroke="#aeb4be"/>
+<text x="725" y="369" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#202733">Selected finding</text>
+<text x="725" y="403" font-family="Arial, sans-serif" font-size="16" font-weight="normal" fill="#202733">Rohit’s detail-view handoff</text>
+<text x="725" y="441" font-family="Arial, sans-serif" font-size="15" font-weight="normal" fill="#202733">Description and recommendation</text>
+<text x="725" y="474" font-family="Arial, sans-serif" font-size="15" font-weight="normal" fill="#202733">Evidence: file, lines, observation</text>
+<text x="725" y="507" font-family="Arial, sans-serif" font-size="15" font-weight="normal" fill="#202733">Uncertainty and missing context</text>
+<text x="725" y="540" font-family="Arial, sans-serif" font-size="15" font-weight="normal" fill="#202733">Confirm / Dismiss / Investigate</text>
+<rect x="30" y="513" width="650" height="94" rx="6" fill="#edf0f5" stroke="#aeb4be"/>
+<text x="48" y="541" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#202733">Other coverage states (specified in the document)</text>
+<text x="48" y="566" font-family="Arial, sans-serif" font-size="15" font-weight="normal" fill="#202733">Failed checks • No checks ran • Completed with no findings</text>
+<text x="48" y="589" font-family="Arial, sans-serif" font-size="14" font-weight="normal" fill="#202733">Warnings remain visible when filtering the list.</text>
+<text x="30" y="654" font-family="Arial, sans-serif" font-size="15" font-weight="normal" fill="#202733">Sprint 1 wireframe — illustrative data, no functional actions or backend integration</text>
+<text x="30" y="682" font-family="Arial, sans-serif" font-size="14" font-weight="normal" fill="#202733">Severity = impact. Confidence = agent assessment. Review flag ≠ reviewer approval.</text>
+</svg>

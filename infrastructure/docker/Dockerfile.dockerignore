@@ -1,0 +1,11 @@
+# Send only the backend files needed to build the development image.
+**
+!backend/
+!backend/requirements.txt
+!backend/ruff.toml
+!backend/app/
+!backend/app/**/
+!backend/app/**/*.py
+!backend/tests/
+!backend/tests/**/
+!backend/tests/**

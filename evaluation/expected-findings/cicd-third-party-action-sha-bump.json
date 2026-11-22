@@ -1,0 +1,6 @@
+{
+  "fixture": "safe/cicd-third-party-action-sha-bump.json",
+  "label": "safe",
+  "summary": "A third-party deploy action that receives a production secret moves to a newer release and stays pinned to a full commit SHA.",
+  "findings": []
+}
