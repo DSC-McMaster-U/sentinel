@@ -28,8 +28,8 @@ for skipped in result.skipped_files:
 
 The fixture's `SECURITY.md:1-4` includes the signing policy relevant to
 “How must release artifacts be protected?” This demonstrates the source material
-available to search; query ranking is in `search/` (below) and the LangGraph adapter remains separate work
-owned by Alex. The fixture workflow is data, not an active
+available to search; query ranking is in `search/` (below) and the LangGraph adapter is in `adapter.py`
+(see "LangGraph retrieval adapter"). The fixture workflow is data, not an active
 GitHub Actions workflow.
 
 ### Search handoff
@@ -106,6 +106,26 @@ Run the tests from `backend/`:
 
 ```bash
 python -m pytest tests/unit/test_retrieval.py -q
+```
+
+## LangGraph retrieval adapter
+
+`adapter.py` lets workflow nodes ask for repository context. Send a `RetrievalRequest(query, limit, kinds)`
+and receive a `RetrievalResponse` whose `RetrievalResult` items carry `file_path`, `line_start` and
+`line_end` (usable as `Evidence`), plus `content`, `kind` and `score`.
+
+```python
+from app.retrieval.adapter import RetrievalAdapter, RetrievalRequest
+
+adapter = RetrievalAdapter.from_repository("tests/fixtures/sample-repo")
+response = adapter.retrieve(RetrievalRequest(query="release artifacts", kinds=["documentation"]))
+```
+
+`RetrievalAdapter(retriever)` accepts any object with `search(query, limit, *, kinds)`, so tests use a mock
+retriever. It is not yet called from the graph; agents will receive it when real checks replace the placeholders.
+
+```bash
+python -m pytest tests/unit/test_retrieval_adapter.py -q
 ```
 
 ### Limitations
