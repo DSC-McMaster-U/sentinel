@@ -45,7 +45,7 @@ Copy-Item .env.example .env       # Windows PowerShell
 
 ### Backend (FastAPI)
 
-- **`BACKEND_HOST`**, **`BACKEND_PORT`**: where the backend listens. The backend does not read these yet. When you start it by hand it uses uvicorn's defaults, `127.0.0.1` and port `8000` (the dev Dockerfile proposed in PR #19 passes `--host 0.0.0.0 --port 8000` on the command line instead):
+- **`BACKEND_HOST`**, **`BACKEND_PORT`**: where the backend listens. The backend does not read these yet. When you start it by hand it uses uvicorn's defaults, `127.0.0.1` and port `8000` (the dev Dockerfile in `infrastructure/docker/` passes `--host 0.0.0.0` and uses `${PORT:-8000}` as the port instead):
 
   ```bash
   cd backend
