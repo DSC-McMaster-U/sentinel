@@ -1,0 +1,28 @@
+{
+  "fixture": "risky/DEP-003-fast-xml-parser-risky.json",
+  "label": "risky",
+  "summary": "Resolved fast-xml-parser 4.2.3 matches GHSA-6w63-h3fj-q4vw; this expectation is limited to that advisory.",
+  "findings": [
+    {
+      "agent": "dependency",
+      "title": "DEP-003: fast-xml-parser 4.2.3 is affected by CVE-2023-34104",
+      "description": "The added dependency resolves to fast-xml-parser 4.2.3, within the affected range >=4.1.3, <4.2.4 for GHSA-6w63-h3fj-q4vw / CVE-2023-34104. Crafted XML entity names can cause denial of service during parsing.",
+      "severity": "high",
+      "recommendation": "Upgrade to a version outside the affected range; 4.2.4 fixes this advisory. Check other advisories before selecting a target version.",
+      "evidence": [
+        {
+          "file_path": "package-lock.json",
+          "line_start": 12,
+          "line_end": 12,
+          "observation": "The node_modules/fast-xml-parser entry resolves to 4.2.3. https://github.com/advisories/GHSA-6w63-h3fj-q4vw identifies npm fast-xml-parser >=4.1.3, <4.2.4 as affected, with 4.2.4 patched and High severity (CVSS 7.5)."
+        }
+      ],
+      "confidence": 0.99,
+      "uncertainty": [
+        "Whether untrusted XML reaches the parser and whether processEntities is disabled are unknown.",
+        "This is an affected-version match, not evidence of exploitation."
+      ],
+      "requires_human_review": true
+    }
+  ]
+}

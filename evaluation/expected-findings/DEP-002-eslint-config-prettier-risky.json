@@ -1,0 +1,29 @@
+{
+  "fixture": "risky/DEP-002-eslint-config-prettier-risky.json",
+  "label": "risky",
+  "summary": "The selected historical release contains an installation hook launching a malicious bundled DLL, as documented in the incident sources.",
+  "findings": [
+    {
+      "agent": "dependency",
+      "title": "DEP-002: Malicious installation payload in eslint-config-prettier 10.1.7",
+      "description": "The PR adds eslint-config-prettier 10.1.7. Published incident evidence documents an install hook invoking node install.js and a Windows launcher invoking the bundled node-gyp.dll through rundll32.",
+      "severity": "critical",
+      "recommendation": "Remove the compromised release and select a verified unaffected version. If it was installed, assess potential execution and credential exposure.",
+      "evidence": [
+        {
+          "file_path": "package.json",
+          "line_start": 5,
+          "line_end": 5,
+          "observation": "Adds eslint-config-prettier 10.1.7. The version diff and launcher are preserved at https://github.com/prettier/eslint-config-prettier/issues/339. The install hook and added DLL are also documented at https://safedep.io/blog/eslint-config-prettier-major-npm-supply-chain-hack."
+        }
+      ],
+      "confidence": 0.95,
+      "uncertainty": [
+        "Historical incident evidence is used; the package was not installed or executed during fixture creation.",
+        "The application operating system and whether installation occurred are unknown.",
+        "This isolated fixture does not resolve or assess the eslint peer dependency."
+      ],
+      "requires_human_review": true
+    }
+  ]
+}
