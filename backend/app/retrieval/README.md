@@ -28,8 +28,8 @@ for skipped in result.skipped_files:
 
 The fixture's `SECURITY.md:1-4` includes the signing policy relevant to
 “How must release artifacts be protected?” This demonstrates the source material
-available to search; query ranking and the LangGraph adapter remain separate work
-owned by Nana and Alex respectively. The fixture workflow is data, not an active
+available to search; query ranking is in `search/` (below) and the LangGraph adapter remains separate work
+owned by Alex. The fixture workflow is data, not an active
 GitHub Actions workflow.
 
 ### Search handoff
@@ -80,3 +80,45 @@ Run the ingestion tests from `backend/`:
 ```bash
 python -m pytest tests/unit/test_retrieval_ingestion.py -q
 ```
+
+## Keyword search prototype
+
+BM25 keyword retrieval over the ingested chunks, standard library only. From `backend/`:
+
+```python
+from app.retrieval.search import search_repository
+
+for r in search_repository("tests/fixtures/sample-repo", "How must release artifacts be protected?"):
+    print(f"{r.file_path}:{r.line_start}-{r.line_end} [{r.kind}] score={r.score}")
+```
+
+The top hit is `SECURITY.md:1-4` ("Release artifacts must be signed before publication").
+
+- `search_repository(root, query, limit=5, *, kinds=None)`: ingest, index and search in one call.
+- `KeywordIndex(chunks).search(query, limit=5, *, kinds=None)`: build the index once and reuse it.
+  `kinds` limits results, e.g. `{"workflow"}` for the CI/CD agent or `{"dependency"}`.
+- `SearchResult(file_path, line_start, line_end, content, kind, score)`: location fields match
+  `Evidence` (inclusive, one-based) so a result can become finding evidence.
+- Empty or all-stopword queries and queries with no matches return `[]`. Ties break by path then
+  line, so output is repeatable. An invalid `limit` raises `ValueError`.
+
+Run the tests from `backend/`:
+
+```bash
+python -m pytest tests/unit/test_retrieval.py -q
+```
+
+### Limitations
+
+- Exact-term matching only: no stemming, synonyms or typo tolerance ("signing" does not match "signed").
+- Identifiers are not split ("GITHUB_TOKEN" is one token, "release-artifacts" is two).
+- The index is in memory and rebuilt per call; nothing is persisted.
+- Chunks are fixed line windows, so a long file can dilute a match.
+- Scores rank within one query and are not comparable across queries.
+
+### Future RAG improvements
+
+- Stemming and identifier splitting, then embeddings for semantic matches.
+- Hybrid ranking that fuses BM25 with vector search, plus optional reranking.
+- Structure-aware chunks (YAML jobs, Markdown headings) with overlap.
+- Persisted indexes, and exposing retrieval as an MCP tool (#3).
