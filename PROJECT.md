@@ -162,13 +162,13 @@ This prevents the model from guessing when security analysis is required.
 
 ## Project Timeline
 
-Sentinel will follow six two-week sprints beginning November 9, 2026, with an optional holiday buffer. Dates and deliverables are planning targets and may be adjusted based on team capacity, exams, integration progress, and technical discoveries.
+Sentinel will follow six sprints beginning November 9, 2026, with an optional holiday buffer. Most sprints are two weeks; Sprint 2 runs three weeks and Sprint 3 is a lighter one-week sprint during December exams. Dates and deliverables are planning targets and may be adjusted based on team capacity, exams, integration progress, and technical discoveries.
 
 | Period | Dates | Primary focus | Target outcome |
 |---|---|---|---|
 | Sprint 1 | Nov 9–22, 2026 | Foundation and shared contracts | Sample PR flows through FastAPI, mock LangGraph agents, and structured findings |
-| Sprint 2 | Nov 23–Dec 6, 2026 | Real dependency and CI/CD checks; GitHub intake | First deterministic security findings with evidence on real or representative PR inputs |
-| Sprint 3 | Dec 7–20, 2026 | End-to-end MVP integration | Working PR-to-report flow, with core checks and reproducible tests |
+| Sprint 2 | Nov 23–Dec 12, 2026 | Real dependency and CI/CD checks; GitHub intake | First deterministic security findings with evidence on real or representative PR inputs |
+| Sprint 3 | Dec 13–20, 2026 | End-to-end MVP integration | Working PR-to-report flow, with core checks and reproducible tests |
 | Holiday buffer | Dec 21, 2026–Jan 3, 2027 | Optional async fixes, documentation and rest | No mandatory sprint commitments |
 | Sprint 4 | Jan 4–17, 2027 | Human review, dashboard and release risk | Reviewable findings, reviewer decisions, initial release checks |
 | Sprint 5 | Jan 18–31, 2027 | Security hardening and evaluation | Prompt-injection safeguards, tracing, improved precision and reliability |
@@ -186,7 +186,7 @@ Sentinel will follow six two-week sprints beginning November 9, 2026, with an op
 
 **Out of scope for Sprint 1:** production-grade LLM analysis, full vulnerability intelligence, live GitHub publication, production deployment, and a fully integrated frontend. Mock data is acceptable for the first vertical slice.
 
-### Sprint 2: Security Checks and GitHub Intake (November 23–December 6)
+### Sprint 2: Security Checks and GitHub Intake (November 23–December 12)
 
 - Receive and validate GitHub webhook events; retrieve PR metadata and diffs with least-privilege access.
 - Implement initial deterministic dependency and GitHub Actions checks using Sprint 1 rules and fixtures.
@@ -195,14 +195,14 @@ Sentinel will follow six two-week sprints beginning November 9, 2026, with an op
 - Attach source paths, line references, tool evidence and uncertainty to findings.
 - Extend integration tests to exercise realistic PR changes.
 
-### Sprint 3: End-to-End MVP (December 7–20)
+### Sprint 3: End-to-End MVP (December 13–20)
 
 - Connect GitHub intake, file classification, real security checks, repository context and risk synthesis.
 - Normalize findings, deduplicate repeated results, and distinguish verified facts from inferred risks.
 - Produce an evidence-backed review report from a representative pull request.
 - Add failure handling, timeouts and basic workflow tracing.
 - Test safe and unsafe PR examples; document known limitations.
-- Keep commitments flexible during December exams.
+- Keep commitments flexible during December exams. This is a one-week sprint; MVP work that doesn't fit continues when Sprint 4 starts on January 4.
 
 ### Holiday Buffer (December 21–January 3)
 
