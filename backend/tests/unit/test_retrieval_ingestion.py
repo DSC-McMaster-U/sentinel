@@ -5,7 +5,6 @@ import pytest
 from app.retrieval.ingestion import ingest_repository
 from app.retrieval.ingestion.pipeline import classify_file
 
-
 FIXTURE = Path(__file__).parents[1] / "fixtures" / "sample-repo"
 
 
@@ -48,8 +47,11 @@ def test_unsafe_and_generated_files_are_excluded(tmp_path):
     (outside / "README.md").write_text("outside")
     root = tmp_path / "repo"
     root.mkdir()
-    (root / "SECURITY.md").symlink_to(outside / "README.md")
-    (root / "linked").symlink_to(outside, target_is_directory=True)
+    try:
+        (root / "SECURITY.md").symlink_to(outside / "README.md")
+        (root / "linked").symlink_to(outside, target_is_directory=True)
+    except (OSError, NotImplementedError) as error:
+        pytest.skip(f"Symlink creation is unavailable: {error}")
     for directory in [".git", "node_modules", ".venv", "dist"]:
         (root / directory).mkdir()
         (root / directory / "README.md").write_text("excluded")

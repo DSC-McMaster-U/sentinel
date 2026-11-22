@@ -1,0 +1,18 @@
+# Validates backend data such as pull request payloads.
+pydantic==2.14.3
+
+# Provides the API framework and runs the API server.
+fastapi==0.163.1
+uvicorn==0.54.0
+
+# Provides the HTTP client used by FastAPI's TestClient.
+httpx2==2.14.0
+
+# Finds and runs the backend tests.
+pytest==9.2.0
+
+# Flags Python code issues such as unused imports.
+ruff==0.17.5
+
+# Provides the LLM and agent framework used by the backend.
+langgraph==1.2.22

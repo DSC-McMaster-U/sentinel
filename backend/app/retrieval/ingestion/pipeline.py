@@ -1,7 +1,7 @@
 """Local, read-only repository ingestion with source-preserving line chunks."""
 
-from dataclasses import dataclass
 import os
+from dataclasses import dataclass
 from pathlib import Path
 
 
@@ -89,7 +89,7 @@ def ingest_repository(
         base = Path(directory)
         dirs[:] = sorted(d for d in dirs if d not in _EXCLUDED_DIRS and not (base / d).is_symlink())
         candidates.extend(base / name for name in files)
-    for file in sorted(candidates):
+    for file in sorted(candidates, key=lambda p: p.relative_to(root).as_posix()):
         relative = file.relative_to(root).as_posix()
         kind = classify_file(relative)
         if kind is None:

@@ -2,7 +2,7 @@
 
 | Path | What goes here |
 | --- | --- |
-| `architecture/` | System design docs, including [REPOSITORY_STRUCTURE.md](architecture/REPOSITORY_STRUCTURE.md) |
+| `architecture/` | System design docs, including [REPOSITORY_STRUCTURE.md](architecture/REPOSITORY_STRUCTURE.md), [CONTRACTS.md](architecture/CONTRACTS.md) and the [findings dashboard design](architecture/findings-dashboard.md) |
 | `security-checks/` | One document per security check Sentinel performs |
 | `decisions/` | Architecture Decision Records (ADRs) |
 | `onboarding/` | Contributor onboarding, starting with [GETTING_STARTED.md](onboarding/GETTING_STARTED.md) |

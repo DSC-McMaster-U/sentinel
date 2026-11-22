@@ -1,0 +1,30 @@
+{
+  "repository": {
+    "owner": "sentinel-fixtures",
+    "name": "demo-app",
+    "full_name": "sentinel-fixtures/demo-app",
+    "url": "https://github.com/sentinel-fixtures/demo-app",
+    "default_branch": "main"
+  },
+  "pr_number": 202,
+  "title": "Add PR preview builds",
+  "description": "Builds a preview for every PR, including forks.",
+  "author": "contributor-d",
+  "base_branch": "main",
+  "head_branch": "ci/pr-previews",
+  "base_sha": "202aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "head_sha": "202eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "url": "https://github.com/sentinel-fixtures/demo-app/pull/202",
+  "created_at": "2026-11-18T14:00:00Z",
+  "updated_at": "2026-11-18T14:30:00Z",
+  "files_changed": [
+    {
+      "path": ".github/workflows/preview.yml",
+      "status": "added",
+      "additions": 18,
+      "deletions": 0,
+      "patch": "@@ -0,0 +1,18 @@\n+name: PR preview\n+\n+on:\n+  pull_request_target:\n+    types: [opened, synchronize]\n+\n+permissions: write-all\n+\n+jobs:\n+  preview:\n+    runs-on: ubuntu-latest\n+    steps:\n+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2\n+        with:\n+          ref: ${{ github.event.pull_request.head.sha }}\n+      - run: npm ci && npm run build:preview\n+        env:\n+          PREVIEW_DEPLOY_KEY: ${{ secrets.PREVIEW_DEPLOY_KEY }}",
+      "previous_path": null
+    }
+  ]
+}
