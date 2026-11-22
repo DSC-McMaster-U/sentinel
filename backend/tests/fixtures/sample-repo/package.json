@@ -1,0 +1,5 @@
+{
+  "name": "sentinel-ingestion-example",
+  "private": true,
+  "dependencies": {"example-library": "1.0.0"}
+}
