@@ -18,7 +18,7 @@ cd sentinel
 ```
 
 The backend lint and unit tests can run without a `.env` file. If you are
-setting up an integration that needs one, copy `.env.example` to `.env`.
+setting up an integration that needs one, copy `.env.example` to `.env`. See [ENVIRONMENT_VARIABLES.md](ENVIRONMENT_VARIABLES.md) for what each variable does.
 **Never commit `.env`.**
 
 ```bash

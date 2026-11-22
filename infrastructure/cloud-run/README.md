@@ -44,8 +44,8 @@ The tradeoff is cold starts after idle periods. For the beta, setting a minimum 
 
 ### Backend
 
-- Image built from the backend source and started with `uvicorn`. The dev Dockerfile proposed in PR #19 (`infrastructure/docker/Dockerfile`) already does this, with `--host 0.0.0.0 --port 8000` written into the command.
-- **Cloud Run tells the container which port to listen on through the `PORT` environment variable** (8080 by default). The container must listen on `$PORT`, so a hardcoded `8000` will not work as is. The command needs to read `PORT` (for example through a shell-form `CMD`), with 8000 as the local fallback. See "Decisions" below, because this affects how we use `BACKEND_PORT`.
+- Image built from the backend source and started with `uvicorn`. The dev Dockerfile (`infrastructure/docker/Dockerfile`) already does this, with `--host 0.0.0.0` written into the command.
+- **Cloud Run tells the container which port to listen on through the `PORT` environment variable** (8080 by default). The container must listen on `$PORT`. The dev Dockerfile already does this through a shell-form `CMD` that uses `${PORT:-8000}`, so 8000 is only the local fallback. See "Decisions" below, because this affects how we use `BACKEND_PORT`.
 - Public, so it can receive GitHub webhooks and serve the dashboard's API calls. Webhook requests are verified with `GITHUB_WEBHOOK_SECRET`, and the app must still check that signature itself.
 
 ### MCP server
@@ -122,7 +122,7 @@ Start with a single Google Cloud project for the beta if cost or admin overhead 
 2. **Frontend on Cloud Run or Vercel?**
 3. **Public or private backend?** Public is needed for GitHub webhooks, but the dashboard API may want its own authentication.
 4. **One cloud project or two (staging and production)?**
-5. **Port convention.** Cloud Run provides `PORT`. The repository's `.env.example` uses `BACKEND_PORT`. Proposal: read `PORT` first, fall back to `BACKEND_PORT`, then to 8000 for local runs, and update the environment docs when this lands.
+5. **Port convention.** Cloud Run provides `PORT`. The repository's `.env.example` uses `BACKEND_PORT`. The Dockerfile already reads `PORT` and falls back to 8000. Proposal: also fall back to `BACKEND_PORT` in the app, and update the environment docs when this lands.
 6. **MCP transport.** Moving the MCP server from stdio to Streamable HTTP is required before it can be deployed, and it affects the MCP server's owners (#3).
 
 ## Risks
