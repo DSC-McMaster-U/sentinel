@@ -12,6 +12,12 @@ Each check should document:
 - **Safe and unsafe examples**, linked to `evaluation/fixtures/`
 - **False-positive limitations**
 
+## Initial dependency checks (#2)
+
+- [DEP-001: npm unintended package installation (typosquatting)](DEP-001-npm-unintended-package-installation-package-typosquatting.md)
+- [DEP-002: npm suspicious dependency installation scripts](DEP-002-npm-suspicious-dependency-installation-scripts.md)
+- [DEP-003: npm vulnerable package version](DEP-003-npm-vulnerable-package-version.md)
+
 ## Initial CI/CD checks (#2)
 
 - [CICD-001: Minimize `GITHUB_TOKEN` permissions](CICD-001-minimum-token-permissions.md)
@@ -21,5 +27,3 @@ Each check should document:
 The representative safe and risky PR fixtures are linked from each check. These checks target changed GitHub Actions workflow YAML. They do not establish repository-wide effective permissions, action provenance, or complete data flow through custom actions and reusable workflows.
 
 **Primary owners:** Jin + Behzad (#2)
-
-> **Dependency follow-up:** Jin's DEP-001–003 specifications are being delivered in [PR #25](https://github.com/DSC-McMaster-U/sentinel/pull/25); combine them with the CI/CD checks above to complete #2.

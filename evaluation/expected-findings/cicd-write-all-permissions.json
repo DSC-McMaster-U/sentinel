@@ -7,7 +7,7 @@
       "agent": "cicd",
       "title": "Workflow grants write-all token permissions",
       "description": "The workflow grants GITHUB_TOKEN write access to every permission scope even though the job only runs tests. If a workflow step or action is compromised, the token can modify repository resources.",
-      "severity": "high",
+      "severity": "medium",
       "recommendation": "Declare only the permissions required by the workflow, such as contents: read, and grant additional scopes only to jobs that need them.",
       "evidence": [
         {
