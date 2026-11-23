@@ -6,6 +6,11 @@
     {
       "agent": "release",
       "title": "Remote script piped to a shell during image build",
+      "check_id": "fixture.release.remote-script",
+      "subject": {
+        "file_path": "Dockerfile",
+        "key": "stage/default/remote-script/https://get.example.invalid/build-tools.sh"
+      },
       "description": "The Dockerfile downloads build-tools.sh over the network and pipes it straight into bash. Whoever controls that URL controls code that runs inside the release image build, and the script is not verified.",
       "severity": "high",
       "recommendation": "Vendor the script or download a pinned version and verify its checksum before running it.",
@@ -26,6 +31,11 @@
     {
       "agent": "release",
       "title": "Base image changed from a digest pin to the latest tag",
+      "check_id": "fixture.release.unpinned-base-image",
+      "subject": {
+        "file_path": "Dockerfile",
+        "key": "stage/default/base-image"
+      },
       "description": "FROM node:latest replaces a digest-pinned base image, so release builds are no longer reproducible and pick up whatever image the tag points to at build time.",
       "severity": "medium",
       "recommendation": "Pin the base image to a specific version and digest, and update it through reviewed bumps.",

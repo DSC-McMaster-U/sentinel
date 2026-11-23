@@ -1,6 +1,7 @@
 """Deterministic Sprint 1 finding comparison; see evaluation/README.md."""
 
 from dataclasses import dataclass, field
+
 from app.schemas import SecurityFinding
 
 
@@ -19,7 +20,7 @@ class MatchResult:
 
 
 def _key(finding: SecurityFinding) -> tuple:
-    # Match the existing combine_findings identity rule. Evidence order is irrelevant.
+    # Exact regression matching, separate from stable finding IDs. Evidence order is irrelevant.
     locations = frozenset(
         (e.file_path, e.line_start, e.line_end) for e in finding.evidence
     )

@@ -1,6 +1,12 @@
 """Shared builder for Sprint 1 placeholder agents; real checks come from #2."""
 
-from app.schemas import AgentInput, AgentOutput, Evidence, SecurityFinding
+from app.schemas import (
+    AgentInput,
+    AgentOutput,
+    Evidence,
+    FindingSubject,
+    SecurityFinding,
+)
 
 
 def build_placeholder_output(
@@ -13,6 +19,8 @@ def build_placeholder_output(
     findings = [
         SecurityFinding(
             agent=agent_name,
+            check_id=f"mock.{agent_name}.file-changed",
+            subject=FindingSubject(file_path=file.path, key="file"),
             title=f"Mock finding: {label} changed",
             description=f"Placeholder finding showing how the {agent_name} agent reports a change.",
             severity="low",

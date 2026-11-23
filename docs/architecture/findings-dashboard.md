@@ -187,7 +187,7 @@ are persisted in Sprint 4:
 
 ```json
 {
-  "finding_key": "cicd::Workflow grants write-all token permissions::.github/workflows/preview.yml:7:",
+  "finding_key": "fnd_v1_505e3962e4efe1ce569a1c8e4b123e4d7ed0789ad2d77c5b5f13c695f6ac363d",
   "commit_sha": "202eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
   "action": "dismiss",
   "dismiss_reason": "accepted_risk",
@@ -197,13 +197,17 @@ are persisted in Sprint 4:
 }
 ```
 
-**Finding identity.** `SecurityFinding` has no `id`, so decisions are keyed
-by `findingKey()`: the agent, the title and the sorted evidence locations.
-This is the same rule `combine_findings()` uses to drop duplicates. It
-breaks when a new commit shifts line numbers or an LLM rewords a title, so a
-decision would not carry over to the next run. **Proposal for #7:** add a
-stable `id` (or a `check_id` such as `CICD-001`, plus a location
-fingerprint) to `SecurityFinding` before decisions are persisted.
+**Finding identity.** `findingKey()` returns the backend's `SecurityFinding.id`,
+derived from the agent, fixed `check_id` and structured subject (`file_path`
+plus a logical `key`, such as a package or workflow job). `combine_findings()`
+uses the same ID for duplicates. Moving evidence lines or rewording a title
+preserves the ID; changing the subject or its path creates a new one.
+See [Shared Contracts](CONTRACTS.md#agentoutput-containing-a-securityfinding).
+
+History must be stored under repository + PR + finding ID; the ID alone does
+not distinguish repositories or PRs. The example above uses the write-all
+permissions fixture's ID. Identity remains available after resolution and is
+separate from status. Decision persistence is still future work.
 
 **Commits.** Decisions record the `commit_sha` they were made against. When
 a new commit produces the same finding key, the earlier decision is shown in
@@ -250,8 +254,9 @@ import alias should map to `./src/*` (the `create-next-app` default).
 
 ## Open questions
 
-1. **Finding identity.** Should #7 add `id` or `check_id` to
-   `SecurityFinding`? See above.
+1. **Subject conventions.** Agents must define stable subject keys for each
+   check, including distinct steps or packages in the same file. The contract
+   supports this; production check definitions remain with #2.
 2. **Where decisions live.** In the backend database, or as GitHub PR review
    comments, or both? This decides whether the GitHub check status can depend
    on open findings.
@@ -296,5 +301,5 @@ an agent was unsupported or intentionally skipped.
 Keep long titles and paths wrappable and stack regions on narrow screens.
 Evidence refers to head-commit lines for these synthetic fixtures; deleted-file
 evidence needs a separately agreed base-commit convention. Persistent decisions
-still require the identity and storage agreements described above. These design
-requirements do not add backend fields or persistence in Sprint 1.
+still require storage and must use the identity scope described above.
+The identity contract is implemented; decision persistence remains future work.

@@ -125,9 +125,9 @@ must not flag. Pairs are what measure false positives.
 The default `--matching-mode exact` uses Sarthak's
 `scripts/matching.py:compare_findings(expected, actual)`. It matches exact agent,
 title and the **set** of evidence `(file_path, line_start, line_end)` locations,
-the same identity used by `combine_findings`. Evidence order and repeated
-locations do not matter; case, whitespace and line ranges do. Duplicate expected
-identities are rejected as annotation errors. Inputs are not mutated.
+separately from the stable ID used by `combine_findings`. Evidence order and
+repeated locations do not matter; case, whitespace and line ranges do.
+Duplicate expected identities are rejected as annotation errors. Inputs are not mutated.
 
 The helper returns `matched` (expected/actual pairs), `missed`, `unexpected`,
 `duplicates` and `passed`. The runner includes duplicate actual occurrences in
@@ -145,6 +145,12 @@ This mode is exploratory: an unrelated claim at the same location can match.
 Do not compare scores across modes. Console output and JSON configuration
 identify the mode. Agree check IDs with #2/#7 before interpreting flexible
 matching as claim accuracy.
+
+Expected findings also supply the required `check_id` and `subject` fields.
+The `fixture.*` check IDs are provisional fixture labels, not approved #2 rules.
+The backend derives `id` from agent/check/subject; neither evaluation matching
+mode uses that ID. Stable history identity and evaluation accuracy are separate
+contracts, so adding identity fields does not change scoring.
 
 After matching:
 

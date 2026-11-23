@@ -47,6 +47,17 @@ def test_review_returns_mock_dependency_finding(sample_pr: dict) -> None:
     assert len(report.findings) == 1
     assert report.findings[0].agent == "dependency"
     assert report.findings[0].evidence[0].file_path == "package.json"
+    assert response.json()["findings"][0]["id"] == report.findings[0].id
+
+
+def test_review_keeps_finding_id_across_requests_and_commits(sample_pr: dict) -> None:
+    first = client.post("/reviews", json=sample_pr)
+    sample_pr["head_sha"] = "new-commit"
+    later = client.post("/reviews", json=sample_pr)
+
+    assert first.status_code == later.status_code == 200
+    assert first.json()["findings"][0]["id"] == later.json()["findings"][0]["id"]
+    assert first.json()["commit_sha"] != later.json()["commit_sha"]
 
 
 def test_review_returns_no_findings_for_unrelated_file(sample_pr: dict) -> None:
