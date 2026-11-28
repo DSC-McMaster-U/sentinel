@@ -1,0 +1,25 @@
+{
+  "fixture": "risky/release-add-unverified.json",
+  "label": "risky",
+  "summary": "Add a mutable release archive.",
+  "findings": [
+    {
+      "agent": "release",
+      "title": "REL-003: Remote release archive lacks a checksum",
+      "description": "The release server can change the bytes included by ADD.",
+      "severity": "medium",
+      "recommendation": "Pin the trusted archive digest with --checksum.",
+      "evidence": [
+        {
+          "file_path": "Dockerfile",
+          "line_start": 2,
+          "line_end": 2,
+          "observation": "The remote ADD has no checksum option."
+        }
+      ],
+      "confidence": 0.95,
+      "uncertainty": [],
+      "requires_human_review": false
+    }
+  ]
+}

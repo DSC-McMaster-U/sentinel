@@ -1,0 +1,6 @@
+{
+  "fixture": "safe/release-add-verified.json",
+  "label": "safe",
+  "summary": "Add a checksum-pinned release archive.",
+  "findings": []
+}

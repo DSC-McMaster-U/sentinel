@@ -5,7 +5,7 @@
   "findings": [
     {
       "agent": "release",
-      "title": "Remote script piped to a shell during image build",
+      "title": "REL-002: Remote script piped to a shell during image build",
       "description": "The Dockerfile downloads build-tools.sh over the network and pipes it straight into bash. Whoever controls that URL controls code that runs inside the release image build, and the script is not verified.",
       "severity": "high",
       "recommendation": "Vendor the script or download a pinned version and verify its checksum before running it.",
@@ -25,7 +25,7 @@
     },
     {
       "agent": "release",
-      "title": "Base image changed from a digest pin to the latest tag",
+      "title": "REL-001: Base image changed from a digest pin to the latest tag",
       "description": "FROM node:latest replaces a digest-pinned base image, so release builds are no longer reproducible and pick up whatever image the tag points to at build time.",
       "severity": "medium",
       "recommendation": "Pin the base image to a specific version and digest, and update it through reviewed bumps.",
